@@ -1,0 +1,54 @@
+/*
+ * This file is part of MatterOverdrive: Legacy Edition
+ * Copyright (C) 2019, Horizon Studio <contact@hrznstudio.com>, All rights reserved.
+ *
+ * MatterOverdrive: Legacy Edition is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MatterOverdrive: Legacy Edition is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Matter Overdrive.  If not, see <http://www.gnu.org/licenses>.
+ */
+
+package matteroverdrive.init;
+
+import matteroverdrive.MatterOverdrive;
+import matteroverdrive.data.recipes.InscriberRecipeManager;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import org.apache.commons.io.IOUtils;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+public class MatterOverdriveRecipes {
+    public static final InscriberRecipeManager INSCRIBER = new InscriberRecipeManager();
+
+    public static void registerMachineRecipes(FMLInitializationEvent event) {
+
+        //Furnace
+        GameRegistry.addSmelting(new ItemStack(MatterOverdrive.ITEMS.tritanium_dust), new ItemStack(MatterOverdrive.ITEMS.tritanium_ingot), 5);
+        GameRegistry.addSmelting(new ItemStack(MatterOverdrive.BLOCKS.tritaniumOre), new ItemStack(MatterOverdrive.ITEMS.tritanium_ingot), 10);
+
+        //Inscriber
+        File file = new File(MatterOverdrive.CONFIG_HANDLER.configDir, "MatterOverdrive/recipes/inscriber.xml");
+        if (!file.exists()) {
+            try {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+                IOUtils.copy(MatterOverdriveRecipes.class.getResourceAsStream("/assets/matteroverdrive/recipes/inscriber.xml"), new FileOutputStream(file));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        INSCRIBER.load(file);
+    }
+}
