@@ -138,7 +138,7 @@ configurations {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    compile fg.deobf("com.hrznstudio:titanium:${titanium_version}")
+    compile fg.deobf("com.hrznstudio:titanium:${minecraft_version}-${titanium_version}")
     compileOnly fg.deobf("mezz.jei:jei-1.16.3:${jei_version}:api")
     // at runtime, use the full JEI jar
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.3:${jei_version}")
