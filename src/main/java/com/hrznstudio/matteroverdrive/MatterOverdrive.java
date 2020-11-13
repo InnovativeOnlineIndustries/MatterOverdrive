@@ -21,7 +21,7 @@ public class MatterOverdrive {
 
     public static final String MOD_ID = "matteroverdrive";
     public static final Logger LOGGER = LogManager.getLogger("Matter Overdrive");
-    public static NetworkHandler HANDLER;
+    public static final NetworkHandler HANDLER = new NetworkHandler(MOD_ID);
 
     public MatterOverdrive() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -29,7 +29,6 @@ public class MatterOverdrive {
         eventBus.addListener(this::setup);
         MOItems.register(eventBus);
         MOBlocks.register(eventBus);
-        HANDLER = new NetworkHandler(MOD_ID);
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {

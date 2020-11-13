@@ -1,0 +1,7 @@
+{
+  "android_teleport": {
+    "category": "neutral",
+    "sounds": ["matteroverdrive:android_teleport"],
+    "subtitle": "matteroverdrive.subtitle.android_teleport"
+  }
+}
