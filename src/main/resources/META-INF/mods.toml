@@ -1,16 +1,17 @@
 modLoader="javafml"
 loaderVersion="[35,)"
 issueTrackerURL="https://github.com/InnovativeOnlineIndustries/MatterOverdrive/issues"
-license="All rights reserved"
+license="MIT"
 [[mods]]
     modId="matteroverdrive"
     version="${file.jarVersion}"
     displayName="Matter Overdrive"
     displayURL="https://www.curseforge.com/minecraft/mc-mods/matter-overdrive"
     authors="HRZNStudio, Sekwah41, Lanse505"
+    logoFile="mo_logo.png"
     description='''
-        Tinky Winky says "No" - Lanse505
-        '''
+Tinky Winky says "No" - Lanse505
+'''
 
 [[dependencies.matteroverdrive]]
     modId="forge"
