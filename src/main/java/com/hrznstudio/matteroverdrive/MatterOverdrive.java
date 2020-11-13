@@ -1,8 +1,11 @@
 package com.hrznstudio.matteroverdrive;
 
+import com.hrznstudio.matteroverdrive.client.renderer.entity.MORenderers;
+import com.hrznstudio.matteroverdrive.entity.MOEntities;
 import com.hrznstudio.matteroverdrive.network.PacketHandler;
 import com.hrznstudio.matteroverdrive.block.MOBlocks;
 import com.hrznstudio.matteroverdrive.item.MOItems;
+import com.hrznstudio.matteroverdrive.sounds.MOSounds;
 import com.hrznstudio.titanium.module.ModuleController;
 import com.hrznstudio.titanium.network.NetworkHandler;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -29,10 +32,12 @@ public class MatterOverdrive {
         eventBus.addListener(this::setup);
         MOItems.register(eventBus);
         MOBlocks.register(eventBus);
+        MOEntities.register(eventBus);
+        MOSounds.register(eventBus);
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
-
+        MORenderers.register();
     }
 
     private void setup(final FMLCommonSetupEvent event) {

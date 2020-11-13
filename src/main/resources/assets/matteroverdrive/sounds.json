@@ -3,5 +3,10 @@
     "category": "neutral",
     "sounds": ["matteroverdrive:android_teleport"],
     "subtitle": "matteroverdrive.subtitle.android_teleport"
+  },
+  "kunai_thud": {
+    "category": "neutral",
+    "sounds": ["matteroverdrive:projectiles/kunai_thud"],
+    "subtitle": "matteroverdrive.subtitle.kunai_thud"
   }
 }

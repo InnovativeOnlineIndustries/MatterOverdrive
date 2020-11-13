@@ -1,3 +1,6 @@
 {
-  "matteroverdrive.subtitle.android_teleport": "Android Teleport"
+  "matteroverdrive.subtitle.android_teleport": "Android Teleport",
+  "item.matteroverdrive.kunai":"Kunai",
+  "matteroverdrive.subtitle.kunai_thud": "Kunai Thud",
+  "itemGroup.matteroverdrive": "Ninja Weapons"
 }

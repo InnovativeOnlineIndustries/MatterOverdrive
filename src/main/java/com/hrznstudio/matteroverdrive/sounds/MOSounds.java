@@ -11,6 +11,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class MOSounds {
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, MatterOverdrive.MOD_ID);
 
+    public static final RegistryObject<SoundEvent> KUNAI_THUD = register("kunai_thud");
     public static final RegistryObject<SoundEvent> ANDROID_TELEPORT = register("android_teleport");
 
     private static RegistryObject<SoundEvent> register(String key) {
