@@ -1,5 +1,7 @@
 package com.hrznstudio.matteroverdrive.capabilities;
 
+import com.hrznstudio.matteroverdrive.capabilities.android.AndroidData;
+import com.hrznstudio.matteroverdrive.capabilities.android.IAndroidData;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
