@@ -1,6 +1,11 @@
 {
   "matteroverdrive.subtitle.android_teleport": "Android Teleport",
+  "itemGroup.matteroverdrive": "Matter Overdrive",
   "item.matteroverdrive.kunai":"Kunai",
   "matteroverdrive.subtitle.kunai_thud": "Kunai Thud",
-  "itemGroup.matteroverdrive": "Ninja Weapons"
+  "item.matteroverdrive.android_pill_red": "Red Pill",
+  "item.matteroverdrive.android_pill_blue": "Blue Pill",
+  "item.matteroverdrive.android_pill_yellow": "Yellow Pill",
+  "death.attack.nanites": "%1$s tried to ingest nanites",
+  "death.attack.nanites.player": "%1$s tried to ingest nanites whilst fighting %2$s"
 }
