@@ -4,43 +4,31 @@ import net.minecraft.nbt.CompoundNBT;
 
 public class AndroidData implements IAndroidData {
 
-    private float chakra;
-    private float stamina;
-
-    private static final String CHAKRA_NBT = "CHAKRA";
-    private static final String STAMINA_NBT = "STAMINA";
-
-    @Override
-    public float getChakra() {
-        return this.chakra;
+    public boolean isAndroid() {
+        return isAndroid;
     }
 
-    @Override
-    public float getStamina() {
-        return this.stamina;
+    public void setAndroid(boolean android) {
+        isAndroid = android;
     }
 
-    @Override
-    public void setChakra(float chakra) {
-        this.chakra = chakra;
-    }
+    private boolean isAndroid;
+    private int transformationTime;
 
-    @Override
-    public void setStamina(float stamina) {
-        this.stamina = stamina;
-    }
+    private static final String IS_ANDROID_NBT = "IsAndroid";
+    private static final String TRANSFORMATION_TIME_NBT = "TransformationTime";
 
     @Override
     public CompoundNBT serializeNBT() {
         final CompoundNBT nbt = new CompoundNBT();
-        nbt.putFloat(CHAKRA_NBT, this.chakra);
-        nbt.putFloat(STAMINA_NBT, this.stamina);
+        nbt.putBoolean(IS_ANDROID_NBT, this.isAndroid);
+        nbt.putInt(TRANSFORMATION_TIME_NBT, this.transformationTime);
         return nbt;
     }
 
     @Override
     public void deserializeNBT(CompoundNBT nbt) {
-        this.chakra = nbt.getFloat(CHAKRA_NBT);
-        this.stamina = nbt.getFloat(STAMINA_NBT);
+        this.isAndroid = nbt.getBoolean(IS_ANDROID_NBT);
+        this.transformationTime = nbt.getInt(TRANSFORMATION_TIME_NBT);
     }
 }

@@ -1,5 +1,6 @@
 package com.hrznstudio.matteroverdrive;
 
+import com.hrznstudio.matteroverdrive.capabilities.MOCapabilityHandler;
 import com.hrznstudio.matteroverdrive.client.renderer.entity.MORenderers;
 import com.hrznstudio.matteroverdrive.entity.MOEntities;
 import com.hrznstudio.matteroverdrive.network.PacketHandler;
@@ -30,6 +31,7 @@ public class MatterOverdrive {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         eventBus.addListener(this::clientSetup);
         eventBus.addListener(this::setup);
+
         MOItems.register(eventBus);
         MOBlocks.register(eventBus);
         MOEntities.register(eventBus);
@@ -42,6 +44,7 @@ public class MatterOverdrive {
 
     private void setup(final FMLCommonSetupEvent event) {
         PacketHandler.init();
+        MOCapabilityHandler.register();
     }
 
     @SubscribeEvent
