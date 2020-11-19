@@ -12,6 +12,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+
 import java.awt.*;
 
 import static com.hrznstudio.matteroverdrive.MatterOverdrive.MOD_ID;
@@ -33,22 +34,23 @@ public class MOItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID);
 
     public static final RegistryObject<Item> ANDROID_PILL_RED = ITEMS.register("android_pill_red", ()
-            -> new AndroidRedPillItem(new Item.Properties().food(PILLS).group(MATTER_OVERDRIVE),
-            toMCColor(new Color(208, 0, 0, 255))));
+        -> new AndroidRedPillItem(new Item.Properties().food(PILLS).group(MATTER_OVERDRIVE),
+        toMCColor(new Color(208, 0, 0, 255))));
 
     public static final RegistryObject<Item> ANDROID_PILL_BLUE = ITEMS.register("android_pill_blue", ()
-            -> new AndroidBluePillItem(new Item.Properties().food(PILLS).group(MATTER_OVERDRIVE),
-            toMCColor(new Color(1, 159, 234))));
+        -> new AndroidBluePillItem(new Item.Properties().food(PILLS).group(MATTER_OVERDRIVE),
+        toMCColor(new Color(1, 159, 234))));
 
     public static final RegistryObject<Item> ANDROID_PILL_YELLOW = ITEMS.register("android_pill_yellow", ()
-            -> new AndroidYellowPillItem(new Item.Properties().food(PILLS).group(MATTER_OVERDRIVE),
-            toMCColor(new Color(255, 228, 0))));
+        -> new AndroidYellowPillItem(new Item.Properties().food(PILLS).group(MATTER_OVERDRIVE),
+        toMCColor(new Color(255, 228, 0))));
 
     public static final RegistryObject<Item> KUNAI = ITEMS.register("kunai", ()
-            -> new KunaiItem(new Item.Properties().group(ItemGroup.COMBAT).group(MATTER_OVERDRIVE)));
+        -> new KunaiItem(new Item.Properties().group(ItemGroup.COMBAT).group(MATTER_OVERDRIVE)));
 
     /**
      * Basically just because i wanted to enable the intellij color picker >:)
+     *
      * @param color
      * @return
      */

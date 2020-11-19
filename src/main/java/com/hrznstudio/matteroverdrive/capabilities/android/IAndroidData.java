@@ -5,5 +5,6 @@ import net.minecraftforge.common.util.INBTSerializable;
 
 public interface IAndroidData extends INBTSerializable<CompoundNBT> {
     boolean isAndroid();
+
     void setAndroid(boolean android);
 }

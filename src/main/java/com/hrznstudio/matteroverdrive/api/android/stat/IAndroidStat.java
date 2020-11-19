@@ -1,4 +1,4 @@
-package com.hrznstudio.matteroverdrive.api.android;
+package com.hrznstudio.matteroverdrive.api.android.stat;
 
 import com.google.common.collect.Multimap;
 import com.hrznstudio.matteroverdrive.capabilities.android.PlayerAndroid;
@@ -15,13 +15,17 @@ import java.util.List;
 public interface IAndroidStat extends IForgeRegistryEntry<IAndroidStat> {
 
     void onAndroidTick(PlayerAndroid player, int statLevel);
+
     void onUnlock(PlayerAndroid player, int statLevel);
+
     void onUnlearn(PlayerAndroid player, int statLevel);
 
     boolean canBeUnlocked(PlayerAndroid player, int statLevel);
+
     boolean showOnPlayerHUD(PlayerAndroid player, int statLevel);
 
     int getMaxLevel();
+
     int getRequiredXP(PlayerAndroid player, int statLevel);
 
     String getDisplayName(PlayerAndroid player, int statLevel);

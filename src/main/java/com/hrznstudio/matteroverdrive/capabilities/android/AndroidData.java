@@ -15,8 +15,8 @@ public class AndroidData implements IAndroidData {
     private boolean isAndroid;
     private int transformationTime;
 
-    private static final String IS_ANDROID_NBT = "IsAndroid";
-    private static final String TRANSFORMATION_TIME_NBT = "TransformationTime";
+    private static final String IS_ANDROID_NBT = "isAndroid";
+    private static final String TRANSFORMATION_TIME_NBT = "transformationTime";
 
     @Override
     public CompoundNBT serializeNBT() {

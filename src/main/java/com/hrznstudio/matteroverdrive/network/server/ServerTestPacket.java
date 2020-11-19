@@ -2,6 +2,7 @@ package com.hrznstudio.matteroverdrive.network.server;
 
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
+
 import java.util.function.Supplier;
 
 /**

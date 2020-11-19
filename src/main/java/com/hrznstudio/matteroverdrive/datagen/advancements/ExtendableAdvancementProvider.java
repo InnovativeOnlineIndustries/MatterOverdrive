@@ -37,7 +37,8 @@ public class ExtendableAdvancementProvider extends AdvancementProvider {
         addAdvancements(consumer);
     }
 
-    protected void addAdvancements(Consumer<Advancement> consumer) {}
+    protected void addAdvancements(Consumer<Advancement> consumer) {
+    }
 
 
     @Override

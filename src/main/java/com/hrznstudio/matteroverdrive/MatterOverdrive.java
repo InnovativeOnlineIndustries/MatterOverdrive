@@ -1,13 +1,12 @@
 package com.hrznstudio.matteroverdrive;
 
+import com.hrznstudio.matteroverdrive.block.MOBlocks;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilityHandler;
 import com.hrznstudio.matteroverdrive.client.renderer.entity.MORenderers;
 import com.hrznstudio.matteroverdrive.entity.MOEntities;
-import com.hrznstudio.matteroverdrive.network.PacketHandler;
-import com.hrznstudio.matteroverdrive.block.MOBlocks;
 import com.hrznstudio.matteroverdrive.item.MOItems;
+import com.hrznstudio.matteroverdrive.network.PacketHandler;
 import com.hrznstudio.matteroverdrive.sounds.MOSounds;
-import com.hrznstudio.titanium.module.ModuleController;
 import com.hrznstudio.titanium.network.NetworkHandler;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -48,7 +47,8 @@ public class MatterOverdrive {
     }
 
     @SubscribeEvent
-    public static void onServerStarting(RegisterCommandsEvent event) {}
+    public static void onServerStarting(RegisterCommandsEvent event) {
+    }
 
     @SubscribeEvent
     public static void onDataGather(GatherDataEvent event) {

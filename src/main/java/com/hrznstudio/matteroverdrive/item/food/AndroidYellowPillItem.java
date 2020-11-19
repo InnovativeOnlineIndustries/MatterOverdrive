@@ -1,10 +1,7 @@
 package com.hrznstudio.matteroverdrive.item.food;
 
-import com.hrznstudio.matteroverdrive.item.MOItems;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.Color;
 import net.minecraft.world.World;
 

@@ -18,6 +18,6 @@ public class AndroidPillItem extends Item implements IHasColor {
 
     @Override
     public int getColor(int i) {
-        return i == 0 ? pillWhite : this.pillColor ;
+        return i == 0 ? pillWhite : this.pillColor;
     }
 }

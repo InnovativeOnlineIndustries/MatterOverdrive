@@ -1,29 +1,29 @@
-modLoader="javafml"
-loaderVersion="[35,)"
-issueTrackerURL="https://github.com/InnovativeOnlineIndustries/MatterOverdrive/issues"
-license="MIT"
+modLoader = "javafml"
+loaderVersion = "[35,)"
+issueTrackerURL = "https://github.com/InnovativeOnlineIndustries/MatterOverdrive/issues"
+license = "MIT"
 [[mods]]
-    modId="matteroverdrive"
-    version="${file.jarVersion}"
-    displayName="Matter Overdrive"
-    displayURL="https://www.curseforge.com/minecraft/mc-mods/matter-overdrive"
-    authors="HRZNStudio, Sekwah41, Lanse505"
-    logoFile="mo_logo.png"
-    description='''
+modId = "matteroverdrive"
+version = "${file.jarVersion}"
+displayName = "Matter Overdrive"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/matter-overdrive"
+authors = "HRZNStudio, Sekwah41, Lanse505"
+logoFile = "mo_logo.png"
+description = '''
 "Tinky Winky says 'No'" - Lanse505
 '''
 
 [[dependencies.matteroverdrive]]
-    modId="forge"
-    mandatory=true
-    versionRange="[35,)"
-    ordering="NONE"
-    side="BOTH"
+modId = "forge"
+mandatory = true
+versionRange = "[35,)"
+ordering = "NONE"
+side = "BOTH"
 
 # https://maven.apache.org/enforcer/enforcer-rules/versionRanges.html
 [[dependencies.matteroverdrive]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[1.16.3,)"
-    ordering="NONE"
-    side="BOTH"
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.16.3,)"
+ordering = "NONE"
+side = "BOTH"

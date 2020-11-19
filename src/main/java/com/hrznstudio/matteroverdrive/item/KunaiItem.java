@@ -39,7 +39,7 @@ public class KunaiItem extends Item {
             kunaiEntity.func_234612_a_(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 3.0F, 1.0F);
 
             kunaiEntity.pickupStatus = playerIn.abilities.isCreativeMode ?
-                    AbstractArrowEntity.PickupStatus.CREATIVE_ONLY: AbstractArrowEntity.PickupStatus.ALLOWED;
+                AbstractArrowEntity.PickupStatus.CREATIVE_ONLY : AbstractArrowEntity.PickupStatus.ALLOWED;
 
             worldIn.addEntity(kunaiEntity);
         }

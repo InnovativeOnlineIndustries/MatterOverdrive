@@ -19,7 +19,7 @@ public class MOClientModEvents {
         ItemColors itemColorRegistry = event.getItemColors();
 
         itemColorRegistry.register((stack, tint) -> ((IHasColor) stack.getItem()).getColor(tint),
-                MOItems.ANDROID_PILL_RED.get(), MOItems.ANDROID_PILL_BLUE.get(), MOItems.ANDROID_PILL_YELLOW.get());
+            MOItems.ANDROID_PILL_RED.get(), MOItems.ANDROID_PILL_BLUE.get(), MOItems.ANDROID_PILL_YELLOW.get());
     }
 
 }

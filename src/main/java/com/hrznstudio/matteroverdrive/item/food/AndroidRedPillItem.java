@@ -17,14 +17,13 @@ public class AndroidRedPillItem extends AndroidPillItem {
     public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
         ItemStack itemstack = super.onItemUseFinish(stack, worldIn, entityLiving);
         if (!worldIn.isRemote) {
-            if(entityLiving instanceof PlayerEntity) {
+            if (entityLiving instanceof PlayerEntity) {
                 PlayerEntity player = (PlayerEntity) entityLiving;
 
                 player.getCapability(MOCapabilities.ANDROID_DATA, null).ifPresent(androidData -> {
 
                 });
-            }
-            else {
+            } else {
                 // In case a fox or something eats it >:)
                 entityLiving.attackEntityFrom(MOItems.NANITES, 30);
             }

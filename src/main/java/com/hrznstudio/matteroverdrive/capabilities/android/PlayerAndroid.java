@@ -1,14 +1,8 @@
 package com.hrznstudio.matteroverdrive.capabilities.android;
 
-import com.hrznstudio.matteroverdrive.MatterOverdrive;
-import com.hrznstudio.matteroverdrive.api.android.IAndroid;
-import com.hrznstudio.titanium.network.NetworkHandler;
+import com.hrznstudio.matteroverdrive.api.android.stat.IAndroid;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

@@ -1,4 +1,4 @@
-package com.hrznstudio.matteroverdrive.api.android;
+package com.hrznstudio.matteroverdrive.api.android.stat;
 
 import net.minecraft.util.ResourceLocation;
 
