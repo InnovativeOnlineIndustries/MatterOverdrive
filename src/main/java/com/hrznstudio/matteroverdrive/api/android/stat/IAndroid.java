@@ -15,6 +15,13 @@ public interface IAndroid extends ICapabilitySerializable<CompoundNBT> {
     boolean isAndroid();
 
     /**
+     * Sets if the {@link net.minecraft.entity.Entity} is currently and android or not
+     *
+     * @return true if the player is an android
+     */
+    void setAndroid(boolean android);
+
+    /**
      * Checks if the {@link net.minecraft.entity.Entity} is turning into an android
      *
      * @return true if the player is currently turning into an android
