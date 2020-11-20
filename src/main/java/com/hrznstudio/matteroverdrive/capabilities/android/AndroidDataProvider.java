@@ -1,5 +1,6 @@
 package com.hrznstudio.matteroverdrive.capabilities.android;
 
+import com.hrznstudio.matteroverdrive.api.android.stat.IAndroid;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
@@ -13,9 +14,9 @@ import javax.annotation.Nullable;
 
 public class AndroidDataProvider implements ICapabilityProvider, ICapabilitySerializable<CompoundNBT> {
 
-    private final IAndroidData androidData = MOCapabilities.ANDROID_DATA.getDefaultInstance();
+    private final IAndroid androidData = MOCapabilities.ANDROID_DATA.getDefaultInstance();
 
-    private final LazyOptional<IAndroidData> optional = LazyOptional.of(() -> androidData);
+    private final LazyOptional<IAndroid> optional = LazyOptional.of(() -> androidData);
 
     @Nonnull
     @Override

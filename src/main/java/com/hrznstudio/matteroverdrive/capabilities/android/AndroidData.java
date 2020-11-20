@@ -1,8 +1,30 @@
 package com.hrznstudio.matteroverdrive.capabilities.android;
 
+import com.hrznstudio.matteroverdrive.api.android.stat.IAndroid;
+import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 
-public class AndroidData implements IAndroidData {
+public class AndroidData implements IAndroid {
+
+    public static final int TURNING_TIME = 30 * 21;
+
+    private static final String IS_ANDROID_NBT = "IsAndroid";
+    private static final String TRANSFORMATION_TIME_NBT = "TransformationTime";
+
+    private boolean isAndroid;
+    private int transformationTime;
+    private boolean needsUpdate;
+
+    public AndroidData() {
+        this.isAndroid = false;
+        this.transformationTime = 0;
+        this.needsUpdate = false;
+    }
 
     public boolean isAndroid() {
         return isAndroid;
@@ -12,11 +34,40 @@ public class AndroidData implements IAndroidData {
         isAndroid = android;
     }
 
-    private boolean isAndroid;
-    private int transformationTime;
+    @Override
+    public boolean isTurning() {
+        return transformationTime > 0 && !isAndroid;
+    }
 
-    private static final String IS_ANDROID_NBT = "isAndroid";
-    private static final String TRANSFORMATION_TIME_NBT = "transformationTime";
+    public int getTurningTime() {
+        return transformationTime;
+    }
+
+    public void setTurningTime(int turningTime) {
+        this.transformationTime = turningTime;
+    }
+
+    @Override
+    public void requestUpdate() {
+        this.needsUpdate = true;
+    }
+
+    @Override
+    public void tickClient(Entity entity) {
+
+    }
+
+    @Override
+    public void tickServer(Entity entity) {
+        if (needsUpdate){
+            sync();
+        }
+    }
+
+    public void sync(){
+
+    }
+
 
     @Override
     public CompoundNBT serializeNBT() {
@@ -30,5 +81,10 @@ public class AndroidData implements IAndroidData {
     public void deserializeNBT(CompoundNBT nbt) {
         this.isAndroid = nbt.getBoolean(IS_ANDROID_NBT);
         this.transformationTime = nbt.getInt(TRANSFORMATION_TIME_NBT);
+    }
+
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
+        return cap == MOCapabilities.ANDROID_DATA ? LazyOptional.of(() -> this).cast() : LazyOptional.empty();
     }
 }
