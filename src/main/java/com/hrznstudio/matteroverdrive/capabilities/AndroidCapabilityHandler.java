@@ -1,9 +1,9 @@
 package com.hrznstudio.matteroverdrive.capabilities;
 
 import com.hrznstudio.matteroverdrive.MatterOverdrive;
+import com.hrznstudio.matteroverdrive.api.android.stat.IAndroid;
 import com.hrznstudio.matteroverdrive.capabilities.android.AndroidData;
 import com.hrznstudio.matteroverdrive.capabilities.android.AndroidDataProvider;
-import com.hrznstudio.matteroverdrive.capabilities.android.IAndroidData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.Mod;
 public class AndroidCapabilityHandler {
 
     public static void register() {
-        CapabilityManager.INSTANCE.register(IAndroidData.class, NBTCapabilityStorage.create(CompoundNBT.class), AndroidData::new);
+        CapabilityManager.INSTANCE.register(IAndroid.class, NBTCapabilityStorage.create(CompoundNBT.class), AndroidData::new);
     }
 
     @SubscribeEvent

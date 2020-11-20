@@ -1,7 +1,7 @@
 package com.hrznstudio.matteroverdrive.api.android.stat;
 
 import com.google.common.collect.Multimap;
-import com.hrznstudio.matteroverdrive.capabilities.android.PlayerAndroid;
+import com.hrznstudio.matteroverdrive.capabilities.android.AndroidData;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -14,23 +14,23 @@ import java.util.List;
 
 public interface IAndroidStat extends IForgeRegistryEntry<IAndroidStat> {
 
-    void onAndroidTick(PlayerAndroid player, int statLevel);
+    void onAndroidTick(AndroidData player, int statLevel);
 
-    void onUnlock(PlayerAndroid player, int statLevel);
+    void onUnlock(AndroidData player, int statLevel);
 
-    void onUnlearn(PlayerAndroid player, int statLevel);
+    void onUnlearn(AndroidData player, int statLevel);
 
-    boolean canBeUnlocked(PlayerAndroid player, int statLevel);
+    boolean canBeUnlocked(AndroidData player, int statLevel);
 
-    boolean showOnPlayerHUD(PlayerAndroid player, int statLevel);
+    boolean showOnPlayerHUD(AndroidData player, int statLevel);
 
     int getMaxLevel();
 
-    int getRequiredXP(PlayerAndroid player, int statLevel);
+    int getRequiredXP(AndroidData player, int statLevel);
 
-    String getDisplayName(PlayerAndroid player, int statLevel);
+    String getDisplayName(AndroidData player, int statLevel);
 
-    Multimap<String, AttributeModifier> getAttributeModifiers(PlayerAndroid player, int stateLevel);
+    Multimap<String, AttributeModifier> getAttributeModifiers(AndroidData player, int stateLevel);
 
     List<ItemStack> getRequiredItems();
 
@@ -39,7 +39,7 @@ public interface IAndroidStat extends IForgeRegistryEntry<IAndroidStat> {
 
     // Client-Side Methods
     @OnlyIn(Dist.CLIENT)
-    void onKeyPress(PlayerAndroid player, int statLevel, int key, boolean down);
+    void onKeyPress(AndroidData player, int statLevel, int key, boolean down);
 
     //@OnlyIn(Dist.CLIENT)
     // TODO: Implement This
