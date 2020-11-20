@@ -18,10 +18,12 @@ public class AndroidData implements IAndroid {
 
     private boolean isAndroid;
     private int transformationTime;
+    private boolean needsUpdate;
 
     public AndroidData() {
         this.isAndroid = false;
         this.transformationTime = 0;
+        this.needsUpdate = false;
     }
 
     public boolean isAndroid() {
@@ -44,6 +46,28 @@ public class AndroidData implements IAndroid {
     public void setTurningTime(int turningTime) {
         this.transformationTime = turningTime;
     }
+
+    @Override
+    public void requestUpdate() {
+        this.needsUpdate = true;
+    }
+
+    @Override
+    public void tickClient(Entity entity) {
+
+    }
+
+    @Override
+    public void tickServer(Entity entity) {
+        if (needsUpdate){
+            sync();
+        }
+    }
+
+    public void sync(){
+
+    }
+
 
     @Override
     public CompoundNBT serializeNBT() {
