@@ -1,6 +1,7 @@
 package com.hrznstudio.matteroverdrive.item.food;
 
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
+import com.hrznstudio.matteroverdrive.capabilities.android.AndroidData;
 import com.hrznstudio.matteroverdrive.item.MOItems;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,9 +20,8 @@ public class AndroidRedPillItem extends AndroidPillItem {
         if (!worldIn.isRemote) {
             if (entityLiving instanceof PlayerEntity) {
                 PlayerEntity player = (PlayerEntity) entityLiving;
-
-                player.getCapability(MOCapabilities.ANDROID_DATA, null).ifPresent(androidData -> {
-
+                player.getCapability(MOCapabilities.ANDROID_DATA).ifPresent(androidData -> {
+                    androidData.setTurningTime(AndroidData.TURNING_TIME);
                 });
             } else {
                 // In case a fox or something eats it >:)
