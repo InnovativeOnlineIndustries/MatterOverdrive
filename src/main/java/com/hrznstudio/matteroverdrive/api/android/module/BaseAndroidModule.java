@@ -1,17 +1,28 @@
 package com.hrznstudio.matteroverdrive.api.android.module;
 
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistryEntry;
+
+import javax.annotation.Nonnull;
+import java.util.List;
 
 public abstract class BaseAndroidModule extends ForgeRegistryEntry<BaseAndroidModule> implements IAndroidModule {
 
     private final int maxTier;
     private final int minTier;
+
+    private String translationKey;
+    private ITextComponent name;
+    private List<ITextComponent> tooltip;
 
     public BaseAndroidModule() {
         this.maxTier = 1;
@@ -35,10 +46,34 @@ public abstract class BaseAndroidModule extends ForgeRegistryEntry<BaseAndroidMo
     /**
      * @return Returns the Translation Key for the Modifier.
      */
-    @OnlyIn(Dist.CLIENT)
+    @Nonnull
     public String getTranslationName() {
-        final ResourceLocation id = this.getRegistryName();
-        return "module." + id.getNamespace() + "." + id.getPath();
+        if (translationKey == null) {
+            translationKey = Util.makeTranslationKey("android.module", this.getRegistryName());
+        }
+        return translationKey;
+    }
+
+    /**
+     * @return Returns the translated Name for the Modifier.
+     */
+    @Nonnull
+    public ITextComponent getName() {
+        if (name == null) {
+            name = new TranslationTextComponent(this.getTranslationName());
+        }
+        return name;
+    }
+
+    /**
+     * @return Returns the translated Name for the Modifier.
+     */
+    @Nonnull
+    public List<ITextComponent> getTooltip() {
+        if (tooltip == null) {
+            tooltip = Lists.newArrayList();
+        }
+        return tooltip;
     }
 
     /**
