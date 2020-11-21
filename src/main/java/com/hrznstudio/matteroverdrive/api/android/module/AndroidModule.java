@@ -45,7 +45,9 @@ public abstract class AndroidModule extends ForgeRegistryEntry<AndroidModule> {
      * @param module The module being passed to check against this.
      * @return Returns if the passed module can be applied with this.
      */
-    abstract boolean canApplyTogether(AndroidModule module);
+    public boolean canApplyTogether(AndroidModule module) {
+        return module != this;
+    };
 
     /**
      * This is used to set the stored data using a NBT-tag on Install.
