@@ -2,15 +2,18 @@ package com.hrznstudio.matteroverdrive;
 
 import com.hrznstudio.matteroverdrive.block.MOBlocks;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilityHandler;
+import com.hrznstudio.matteroverdrive.client.gui.AndroidHudScreen;
 import com.hrznstudio.matteroverdrive.client.renderer.entity.MORenderers;
 import com.hrznstudio.matteroverdrive.entity.MOEntities;
 import com.hrznstudio.matteroverdrive.item.MOItems;
 import com.hrznstudio.matteroverdrive.network.PacketHandler;
 import com.hrznstudio.matteroverdrive.sounds.MOSounds;
 import com.hrznstudio.titanium.network.NetworkHandler;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -34,6 +37,8 @@ public class MatterOverdrive {
         MOBlocks.register(eventBus);
         MOEntities.register(eventBus);
         MOSounds.register(eventBus);
+
+        DistExecutor.safeCallWhenOn(Dist.CLIENT, () -> AndroidHudScreen::new);
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {

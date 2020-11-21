@@ -6,6 +6,7 @@ import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import com.hrznstudio.matteroverdrive.network.PacketHandler;
 import com.hrznstudio.matteroverdrive.network.server.AndroidSyncAllPacket;
 import com.hrznstudio.matteroverdrive.network.server.AndroidTurningTimeSyncPacket;
+import com.hrznstudio.matteroverdrive.sounds.MOSounds;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,11 +18,13 @@ import net.minecraft.potion.Effects;
 import net.minecraft.potion.Potions;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
+import net.minecraft.util.SoundCategory;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Random;
 
 public class AndroidData implements IAndroid {
 
@@ -70,8 +73,15 @@ public class AndroidData implements IAndroid {
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void tickClient(Entity entity) {
+        if (isTurning() && transformationTime % 40 == 0) {
+            playGlitchSound(entity, entity.world.rand, 0.2f);
+        }
+    }
 
+    private void playGlitchSound(Entity player, Random random, float amount) {
+        player.world.playSound(player.getPosX(), player.getPosY(), player.getPosZ(), MOSounds.GLITCH.get(), SoundCategory.PLAYERS, amount, 0.9f + random.nextFloat() * 0.2f, false);
     }
 
     @Override

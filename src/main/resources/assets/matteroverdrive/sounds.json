@@ -12,5 +12,54 @@
             "matteroverdrive:projectiles/kunai_thud"
         ],
         "subtitle": "matteroverdrive.subtitle.kunai_thud"
+    },
+    "gui.glitch": {
+        "category": "master",
+        "sounds": [
+            {
+                "name": "matteroverdrive:gui/glitch_0",
+                "stream": false
+            },
+            {
+                "name": "matteroverdrive:gui/glitch_1",
+                "stream": false
+            },
+            {
+                "name": "matteroverdrive:gui/glitch_2",
+                "stream": false
+            },
+            {
+                "name": "matteroverdrive:gui/glitch_3",
+                "stream": false
+            },
+            {
+                "name": "matteroverdrive:gui/glitch_4",
+                "stream": false
+            },
+            {
+                "name": "matteroverdrive:gui/glitch_5",
+                "stream": false
+            },
+            {
+                "name": "matteroverdrive:gui/glitch_6",
+                "stream": false
+            },
+            {
+                "name": "matteroverdrive:gui/glitch_7",
+                "stream": false
+            },
+            {
+                "name": "matteroverdrive:gui/glitch_8",
+                "stream": false
+            },
+            {
+                "name": "matteroverdrive:gui/glitch_9",
+                "stream": false
+            },
+            {
+                "name": "matteroverdrive:gui/glitch_10",
+                "stream": false
+            }
+        ]
     }
 }
