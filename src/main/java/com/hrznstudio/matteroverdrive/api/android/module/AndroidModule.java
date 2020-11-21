@@ -3,19 +3,19 @@ package com.hrznstudio.matteroverdrive.api.android.module;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
+import com.hrznstudio.matteroverdrive.capabilities.android.AndroidData;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public abstract class BaseAndroidModule extends ForgeRegistryEntry<BaseAndroidModule> implements IAndroidModule {
+public abstract class AndroidModule extends ForgeRegistryEntry<AndroidModule> {
 
     private final int maxTier;
     private final int minTier;
@@ -24,21 +24,63 @@ public abstract class BaseAndroidModule extends ForgeRegistryEntry<BaseAndroidMo
     private ITextComponent name;
     private List<ITextComponent> tooltip;
 
-    public BaseAndroidModule() {
+    public AndroidModule() {
         this.maxTier = 1;
         this.minTier = 0;
     }
 
-    public BaseAndroidModule(int maxTier) {
+    public AndroidModule(int maxTier) {
         this.maxTier = maxTier;
         this.minTier = 0;
     }
 
-    public BaseAndroidModule(int maxTier, int minTier) {
+    public AndroidModule(int maxTier, int minTier) {
         this.maxTier = maxTier;
         this.minTier = minTier;
     }
 
+    /**
+     * This returns a boolean check against this modifier.
+     *
+     * @param module The module being passed to check against this.
+     * @return Returns if the passed module can be applied with this.
+     */
+    abstract boolean canApplyTogether(AndroidModule module);
+
+    /**
+     * This is used to set the stored data using a NBT-tag on Install.
+     *
+     * @param nbt The NBT being passed for updating the Module.
+     */
+    public void onInstall(LivingEntity entity, AndroidData data, CompoundNBT nbt) {}
+
+    /**
+     * This is used to update the Modules internal data using passed NBT-Data.
+     *
+     * @param nbt The NBT being passed for updating the Module.
+     */
+    public void onUpdate(LivingEntity entity, AndroidData data, CompoundNBT nbt) {}
+
+    /**
+     * This is used to set the stored data using a NBT-tag on Removal.
+     *
+     * @param nbt The NBT being passed for updating the Module.
+     */
+    public void onRemoval(LivingEntity entity, AndroidData data, CompoundNBT nbt) {}
+
+    /**
+     * This returns a boolean check against both Modifiers not just this Modifier.
+     *
+     * @param module Modifier to check against.
+     * @return Returns the final value if this can be applied together with the other Modifier.
+     */
+    public boolean isCompatibleWith(AndroidModule module) {
+        return this.canApplyTogether(module) && module.canApplyTogether(this);
+    }
+
+    /**
+     * @return Returns the list of AttributeModifiers, that this module should apply.
+     */
     public Multimap<String, AttributeModifier> getAttributeModifiers() {
         return HashMultimap.create();
     }

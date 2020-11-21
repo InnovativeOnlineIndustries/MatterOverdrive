@@ -1,5 +1,6 @@
 package com.hrznstudio.matteroverdrive.capabilities.android;
 
+import com.hrznstudio.matteroverdrive.api.android.module.AndroidModule;
 import com.hrznstudio.matteroverdrive.api.android.stat.IAndroid;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import net.minecraft.entity.Entity;
@@ -9,38 +10,44 @@ import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class AndroidData implements IAndroid {
 
     public static final int TURNING_TIME = 30 * 21;
 
-    private static final String IS_ANDROID_NBT = "IsAndroid";
-    private static final String TRANSFORMATION_TIME_NBT = "TransformationTime";
+    private static final String IS_ANDROID_NBT = "isAndroid";
+    private static final String TRANSFORMATION_TIME_NBT = "transformationTime";
 
     private boolean isAndroid;
     private int transformationTime;
     private boolean needsUpdate;
 
+    public final Map<AndroidModule, Boolean> installedModules;
+
     public AndroidData() {
         this.isAndroid = false;
         this.transformationTime = 0;
         this.needsUpdate = false;
+        this.installedModules = new HashMap<>();
     }
 
     public boolean isAndroid() {
-        return isAndroid;
+        return this.isAndroid;
     }
 
     public void setAndroid(boolean android) {
-        isAndroid = android;
+        this.isAndroid = android;
     }
 
     @Override
     public boolean isTurning() {
-        return transformationTime > 0 && !isAndroid;
+        return this.transformationTime > 0 && !this.isAndroid;
     }
 
     public int getTurningTime() {
-        return transformationTime;
+        return this.transformationTime;
     }
 
     public void setTurningTime(int turningTime) {
@@ -59,9 +66,14 @@ public class AndroidData implements IAndroid {
 
     @Override
     public void tickServer(Entity entity) {
-        if (needsUpdate){
+        if (this.needsUpdate){
             sync();
         }
+    }
+
+    @Override
+    public Map<AndroidModule, Boolean> getModules() {
+        return this.installedModules;
     }
 
     public void sync(){
