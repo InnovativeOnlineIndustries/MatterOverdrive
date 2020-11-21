@@ -19,24 +19,29 @@ public abstract class AndroidModule extends ForgeRegistryEntry<AndroidModule> {
 
     private final int maxTier;
     private final int minTier;
+    private final boolean shouldAllowStackingModules;
 
     private String translationKey;
     private ITextComponent name;
     private List<ITextComponent> tooltip;
+    private int currentTier;
 
     public AndroidModule() {
         this.maxTier = 1;
         this.minTier = 0;
+        this.shouldAllowStackingModules = false;
     }
 
     public AndroidModule(int maxTier) {
         this.maxTier = maxTier;
         this.minTier = 0;
+        this.shouldAllowStackingModules = true;
     }
 
     public AndroidModule(int maxTier, int minTier) {
         this.maxTier = maxTier;
         this.minTier = minTier;
+        this.shouldAllowStackingModules = true;
     }
 
     /**
@@ -46,7 +51,7 @@ public abstract class AndroidModule extends ForgeRegistryEntry<AndroidModule> {
      * @return Returns if the passed module can be applied with this.
      */
     public boolean canApplyTogether(AndroidModule module) {
-        return module != this;
+        return shouldAllowStackingModules ? this.getCurrentTier() + 1 <= this.getMaxTier() : module != this;
     };
 
     /**
@@ -140,5 +145,12 @@ public abstract class AndroidModule extends ForgeRegistryEntry<AndroidModule> {
      */
     public int getTierInRange(int level) {
         return Math.max(Math.min(level, this.getMaxTier()), this.getMinTier());
+    }
+
+    /**
+     * @return Gets the current Tier-Level
+     */
+    public int getCurrentTier() {
+        return currentTier;
     }
 }
