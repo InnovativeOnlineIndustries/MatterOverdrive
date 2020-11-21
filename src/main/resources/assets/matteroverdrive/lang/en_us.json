@@ -7,5 +7,16 @@
     "item.matteroverdrive.android_pill_blue": "Blue Pill",
     "item.matteroverdrive.android_pill_yellow": "Yellow Pill",
     "death.attack.nanites": "%1$s tried to ingest nanites",
-    "death.attack.nanites.player": "%1$s tried to ingest nanites whilst fighting %2$s"
+    "death.attack.nanites.player": "%1$s tried to ingest nanites whilst fighting %2$s",
+    "gui.android_hud.transforming.line.0": "Booting up system",
+    "gui.android_hud.transforming.line.1": "$gre[~program/artificial/init/android-neural-bypass]$res$ hrzn run 'android init' > stderr",
+    "gui.android_hud.transforming.line.2": "Preprocessing executable 'android init' for android-neural-bypass ($forge) ...",
+    "gui.android_hud.transforming.line.3": "Running 'android init' ...",
+    "gui.android_hud.transforming.line.4": "Constructing neuronal pathways: $bar[10,20]",
+    "gui.android_hud.transforming.line.5": "Configuring neuronal databases: $bar[6,20]",
+    "gui.android_hud.transforming.line.6": "Installing subsystem2 drivers: $bar[8,20]",
+    "gui.android_hud.transforming.line.7": "Updating Privacy Policy",
+    "gui.android_hud.transforming.line.8": "Type [Y/N] to consent to the privacy policy",
+    "gui.android_hud.transforming.line.9": "> Y",
+    "gui.android_hud.transforming.line.final": "Transformation in Progress"
 }

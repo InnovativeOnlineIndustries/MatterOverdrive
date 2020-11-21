@@ -44,7 +44,7 @@ public class AndroidCapabilityHandler {
     }
 
     @SubscribeEvent
-    public static void onServerTick(TickEvent.WorldTickEvent event) {
+    public static void onServerTick(TickEvent.ServerTickEvent event) {
         if (event.phase == TickEvent.Phase.START) return;
         for (PlayerEntity playerEntity : ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers()) {
             playerEntity.getCapability(MOCapabilities.ANDROID_DATA).ifPresent(iAndroid -> iAndroid.tickServer(playerEntity));
@@ -57,6 +57,11 @@ public class AndroidCapabilityHandler {
         if (Minecraft.getInstance().player != null) {
             Minecraft.getInstance().player.getCapability(MOCapabilities.ANDROID_DATA).ifPresent(iAndroid -> iAndroid.tickClient(Minecraft.getInstance().player));
         }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+        event.getPlayer().getCapability(MOCapabilities.ANDROID_DATA).ifPresent(IAndroid::requestUpdate);
     }
 
 }
