@@ -10,12 +10,13 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public abstract class AndroidModule extends ForgeRegistryEntry<AndroidModule> {
+public abstract class AndroidModule extends ForgeRegistryEntry<AndroidModule> implements INBTSerializable<CompoundNBT> {
 
     private final int maxTier;
     private final int minTier;
@@ -26,22 +27,27 @@ public abstract class AndroidModule extends ForgeRegistryEntry<AndroidModule> {
     private List<ITextComponent> tooltip;
     private int currentTier;
 
+    public static final String CURRENT_TIER = "currentTier";
+
     public AndroidModule() {
         this.maxTier = 1;
         this.minTier = 0;
         this.shouldAllowStackingModules = false;
+        this.currentTier = this.minTier;
     }
 
     public AndroidModule(int maxTier) {
         this.maxTier = maxTier;
         this.minTier = 0;
         this.shouldAllowStackingModules = true;
+        this.currentTier = this.minTier;
     }
 
-    public AndroidModule(int maxTier, int minTier) {
+    public AndroidModule(int maxTier, int minTier, int initTier) {
         this.maxTier = maxTier;
         this.minTier = minTier;
         this.shouldAllowStackingModules = true;
+        this.currentTier = initTier;
     }
 
     /**
@@ -152,5 +158,32 @@ public abstract class AndroidModule extends ForgeRegistryEntry<AndroidModule> {
      */
     public int getCurrentTier() {
         return currentTier;
+    }
+
+    /**
+     * @param currentTier Returns the current Tier of the installed Module
+     */
+    public void setCurrentTier(int currentTier) {
+        this.currentTier = currentTier;
+    }
+
+    /**
+     * @return Returns the Serialized Data of the Module
+     */
+    @Override
+    public CompoundNBT serializeNBT() {
+        CompoundNBT nbt = new CompoundNBT();
+        nbt.putInt(CURRENT_TIER, this.getCurrentTier());
+        return nbt;
+    }
+
+    /**
+     * Deserializes the Data from NBT to actual data the Module can use.
+     *
+     * @param nbt The serialized Data of the Module
+     */
+    @Override
+    public void deserializeNBT(CompoundNBT nbt) {
+        this.setCurrentTier(nbt.getInt(CURRENT_TIER));
     }
 }
