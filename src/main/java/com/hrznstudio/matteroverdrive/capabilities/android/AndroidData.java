@@ -1,13 +1,8 @@
 package com.hrznstudio.matteroverdrive.capabilities.android;
 
-<<<<<<< refs/remotes/origin/master
-import com.hrznstudio.matteroverdrive.api.android.module.AndroidModule;
-import com.hrznstudio.matteroverdrive.api.android.stat.IAndroid;
-=======
 import com.hrznstudio.matteroverdrive.api.android.IAndroid;
 import com.hrznstudio.matteroverdrive.api.android.perk.AndroidPerkManager;
 import com.hrznstudio.matteroverdrive.api.android.perk.IAndroidPerk;
->>>>>>> Added Android Station and Basic Android Perks
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import com.hrznstudio.matteroverdrive.network.PacketHandler;
 import com.hrznstudio.matteroverdrive.network.server.AndroidSyncAllPacket;
@@ -50,11 +45,7 @@ public class AndroidData implements IAndroid {
         this.isAndroid = false;
         this.transformationTime = 0;
         this.needsUpdate = false;
-<<<<<<< refs/remotes/origin/master
-        this.installedModules = new HashMap<>();
-=======
         this.perkManager = new AndroidPerkManager();
->>>>>>> Added Android Station and Basic Android Perks
     }
 
     public boolean isAndroid() {
