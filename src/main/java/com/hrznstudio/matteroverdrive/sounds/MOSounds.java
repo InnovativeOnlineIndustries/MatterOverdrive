@@ -13,6 +13,8 @@ public class MOSounds {
 
     public static final RegistryObject<SoundEvent> KUNAI_THUD = register("kunai_thud");
     public static final RegistryObject<SoundEvent> ANDROID_TELEPORT = register("android_teleport");
+    public static final RegistryObject<SoundEvent> GLITCH = register("gui.glitch");
+    public static final RegistryObject<SoundEvent> PERK_UNLOCK = register("perk_unlock");
 
     private static RegistryObject<SoundEvent> register(String key) {
         return SOUNDS.register(key, () -> new SoundEvent(new ResourceLocation(MatterOverdrive.MOD_ID, key)));

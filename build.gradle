@@ -1,16 +1,20 @@
 buildscript {
     repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
-        maven { url = "https://repo.spongepowered.org/maven" }
-        maven {url "https://plugins.gradle.org/m2/"}
-        // Only temporary
-        jcenter()
         mavenCentral()
+        maven { url = 'https://maven.minecraftforge.net' }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    configurations {
+        classpath.resolutionStrategy {
+            cacheDynamicVersionsFor 10, 'seconds'
+            cacheChangingModulesFor 0, 'seconds'
+        }
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        //classpath "org.spongepowered:mixingradle:0.7-SNAPSHOT"
-        classpath "com.wynprice.cursemaven:CurseMaven:2.1.5"
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.4.0"
     }
 }
 
@@ -20,7 +24,7 @@ apply plugin: "idea"
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 //apply plugin: "org.spongepowered.mixin"
-apply plugin: "com.wynprice.cursemaven"
+//apply plugin: "com.wynprice.cursemaven"
 
 version = project.version
 group = project.package // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -28,18 +32,6 @@ archivesBaseName = project.modid
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
-repositories {
-    mavenCentral()
-    maven {
-        url 'https://dvs1.progwml6.com/files/maven'
-    }
-    maven {
-        url "https://minecraft.curseforge.com/api/maven/"
-    }
-    maven {
-        url 'https://www.dogforce-games.com/maven/'
-    }
-}
 
 minecraft {
     // The mappings can be changed at any time, and must be in the following format.
@@ -58,6 +50,7 @@ minecraft {
 
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     runs {
         client {
             workingDirectory project.file('run')
@@ -102,7 +95,7 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
-            args '--mod', 'matteroverdrive', '--all', '--output', file('src/generated/resources/')
+            args '--mod', 'matteroverdrive', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
                 matteroverdrive {
@@ -113,12 +106,14 @@ minecraft {
     }
 }
 
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+}
+
 repositories {
     maven {
-        url "http://repo.spongepowered.org/maven/"
-    }
-    maven {
-        url 'https://cdn.hrzn.studio/maven/'
+        name 'jared maven'
+        url "https://maven.blamejared.com/"
     }
     maven {
         url 'https://dvs1.progwml6.com/files/maven'
@@ -126,19 +121,10 @@ repositories {
 }
 
 
-
-configurations {
-    include {
-        compile.extendsFrom(include)
-    }
-    includePlusMeta {
-        include.extendsFrom(includePlusMeta)
-    }
-}
-
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    compile fg.deobf("com.hrznstudio:titanium:${minecraft_version}-${titanium_version}")
+    compileOnly fg.deobf("com.hrznstudio:titanium:${minecraft_version}-${titanium_version}")
+    runtimeOnly fg.deobf("com.hrznstudio:titanium:${minecraft_version}-${titanium_version}")
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
     // at runtime, use the full JEI jar
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")

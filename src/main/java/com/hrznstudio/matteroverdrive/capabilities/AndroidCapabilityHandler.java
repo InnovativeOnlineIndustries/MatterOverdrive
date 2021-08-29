@@ -1,16 +1,14 @@
 package com.hrznstudio.matteroverdrive.capabilities;
 
 import com.hrznstudio.matteroverdrive.MatterOverdrive;
-import com.hrznstudio.matteroverdrive.api.android.stat.IAndroid;
+import com.hrznstudio.matteroverdrive.api.android.IAndroid;
 import com.hrznstudio.matteroverdrive.capabilities.android.AndroidData;
 import com.hrznstudio.matteroverdrive.capabilities.android.AndroidDataProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
@@ -44,10 +42,10 @@ public class AndroidCapabilityHandler {
     }
 
     @SubscribeEvent
-    public static void onServerTick(TickEvent.WorldTickEvent event) {
+    public static void onServerTick(TickEvent.ServerTickEvent event) {
         if (event.phase == TickEvent.Phase.START) return;
         for (PlayerEntity playerEntity : ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers()) {
-            playerEntity.getCapability(MOCapabilities.ANDROID_DATA).ifPresent(iAndroid -> iAndroid.tickClient(Minecraft.getInstance().player));
+            playerEntity.getCapability(MOCapabilities.ANDROID_DATA).ifPresent(iAndroid -> iAndroid.tickServer(playerEntity));
         }
     }
 
@@ -57,6 +55,11 @@ public class AndroidCapabilityHandler {
         if (Minecraft.getInstance().player != null) {
             Minecraft.getInstance().player.getCapability(MOCapabilities.ANDROID_DATA).ifPresent(iAndroid -> iAndroid.tickClient(Minecraft.getInstance().player));
         }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+        event.getPlayer().getCapability(MOCapabilities.ANDROID_DATA).ifPresent(IAndroid::requestUpdate);
     }
 
 }
