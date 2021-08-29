@@ -1,7 +1,9 @@
-package com.hrznstudio.matteroverdrive.api.android.stat;
+package com.hrznstudio.matteroverdrive.api.android;
 
 
+import com.hrznstudio.matteroverdrive.api.android.perk.AndroidPerkManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
@@ -58,4 +60,8 @@ public interface IAndroid extends ICapabilitySerializable<CompoundNBT> {
      * @param entity to be ticked
      */
     void tickServer(Entity entity);
+
+    AndroidPerkManager getPerkManager();
+
+    LivingEntity getHolder();
 }

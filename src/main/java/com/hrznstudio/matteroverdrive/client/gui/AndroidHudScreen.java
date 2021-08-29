@@ -1,8 +1,9 @@
 package com.hrznstudio.matteroverdrive.client.gui;
 
 import com.hrznstudio.matteroverdrive.MatterOverdrive;
+import com.hrznstudio.matteroverdrive.android.perks.PerkTree;
 import com.hrznstudio.matteroverdrive.api.android.gui.IHudElement;
-import com.hrznstudio.matteroverdrive.api.android.stat.IAndroid;
+import com.hrznstudio.matteroverdrive.api.android.IAndroid;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import com.hrznstudio.matteroverdrive.capabilities.android.AndroidData;
 import com.hrznstudio.matteroverdrive.client.animation.AnimationConsole;
@@ -14,24 +15,18 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -101,9 +96,10 @@ public class AndroidHudScreen{
     private void onAndroid(RenderGameOverlayEvent event, IAndroid data){
         if (event.getType() == RenderGameOverlayEvent.ElementType.CROSSHAIRS) event.setCanceled(true);
         if (event.getType() == RenderGameOverlayEvent.ElementType.POTION_ICONS) event.setCanceled(true);
-        if (event.getType() == RenderGameOverlayEvent.ElementType.EXPERIENCE ||
-                event.getType() == RenderGameOverlayEvent.ElementType.HEALTH ||
-                event.getType() == RenderGameOverlayEvent.ElementType.FOOD) event.setCanceled(true);
+        if (event.getType() == RenderGameOverlayEvent.ElementType.HEALTH) event.setCanceled(true);
+        if (event.getType() == RenderGameOverlayEvent.ElementType.FOOD && data.getPerkManager().hasPerk(PerkTree.ZERO_CALORIES)){
+            event.setCanceled(true);
+        }
         if (event.getType() == RenderGameOverlayEvent.ElementType.TEXT){
             MatrixStack stack = event.getMatrixStack();
             int centerX = event.getWindow().getScaledWidth() / 2;
@@ -154,7 +150,7 @@ public class AndroidHudScreen{
         String[] split = infos.split("\n");
         stack.push();
         stack.translate(10, 40, 0);
-        stack.scale(0.5f, 0.5f, 0.5f);
+        //stack.scale(0.75f, 0.75f, 0.75f);
         for (int i = 0; i < split.length; i++) {
             String info = split[i];
             Minecraft.getInstance().fontRenderer.drawStringWithShadow(stack, info, 0, i * 9, ReferenceClient.Colors.HOLO.getRGB());
