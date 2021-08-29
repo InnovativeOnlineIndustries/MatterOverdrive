@@ -22,7 +22,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import org.apache.logging.log4j.core.jmx.Server;
 
 import java.util.Random;
 
@@ -38,8 +37,6 @@ public class AndroidData implements IAndroid {
     private boolean needsUpdate;
     private LivingEntity holder;
     private AndroidPerkManager perkManager;
-
-    public final Map<AndroidModule, Boolean> installedModules;
 
     public AndroidData() {
         this.isAndroid = false;
