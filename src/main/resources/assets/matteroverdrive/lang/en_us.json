@@ -50,5 +50,9 @@
     "matteroverdrive.perk.emergency_shield.name": "Emergency Shield",
     "matteroverdrive.perk.emergency_shield.desc": "Automatically activates the Shield Ability when attacked at range",
     "matteroverdrive.perk.cloak.name": "Cloak",
-    "matteroverdrive.perk.cloak.desc": "Allows the player to go invisible. While active drains §e128FE§r per tick"
+    "matteroverdrive.perk.cloak.desc": "Allows the player to go invisible. While active drains §e128FE§r per tick",
+    "matteroverdrive.perk.respirocytes.name": "Respirocytes",
+    "matteroverdrive.perk.respirocytes.desc": "Removes the need for oxygen",
+    "matteroverdrive.perk.air_bags.name": "Air Bags",
+    "matteroverdrive.perk.air_bags.desc": "Enables floating when in water"
 }

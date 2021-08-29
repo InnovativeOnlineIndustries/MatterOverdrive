@@ -116,6 +116,7 @@ public class AndroidData implements IAndroid {
     public void sync(Entity entity){
         if (entity instanceof ServerPlayerEntity){
             PacketHandler.sendToPlayer(new AndroidSyncAllPacket(serializeNBT()), (ServerPlayerEntity) entity);
+            this.needsUpdate = false;
         }
     }
 
@@ -174,6 +175,7 @@ public class AndroidData implements IAndroid {
         nbt.putBoolean(IS_ANDROID_NBT, this.isAndroid);
         nbt.putInt(TRANSFORMATION_TIME_NBT, this.transformationTime);
         nbt.put("PerkManager", perkManager.serializeNBT());
+        System.out.println(nbt);
         return nbt;
     }
 

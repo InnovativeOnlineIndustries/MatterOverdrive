@@ -1,7 +1,6 @@
 package com.hrznstudio.matteroverdrive.android.perks;
 
 import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimaps;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import com.hrznstudio.matteroverdrive.item.food.AndroidPillItem;
 import com.hrznstudio.titanium.event.handler.EventManager;
@@ -20,18 +19,31 @@ import java.util.UUID;
 
 public class PerkTree {
 
-        public static BasePerkBuilder NANONOTS = new BasePerkBuilder("nanobots")
-            .point(new Point(0,0))
+    //NANOBOTS - Implemented
+    //ATTACK BOOST - Implemented
+    //FLASH COOLING - Waiting for guns
+    //SONIC SHOCKWAVE -
+    //NANO ARMOR - Implemented
+    //PLASMA SHIELD -
+    //EMERGENCY SHIELD -
+    //CLOAK -
+    //ZERO CALORIES - Implemented
+    //RESPIROCYTES - Implemented
+    //AIR BAGS -
+
+    public static BasePerkBuilder NANONOTS = new BasePerkBuilder("nanobots")
+            .point(new Point(0, 0))
             .xpNeeded(26)
             .maxLevel(4)
             .onAndroidTick((iAndroid, integer) -> {
-                if (iAndroid.getHolder().getEntityWorld().getGameTime() % 20 == 0) iAndroid.getHolder().heal(1); //TODO Check for energy
+                if (iAndroid.getHolder().getEntityWorld().getGameTime() % 20 == 0)
+                    iAndroid.getHolder().heal(1); //TODO Check for energy
             })
             .attributeModifierMultimap((iAndroid, integer) -> ImmutableMultimap.of(Attributes.MAX_HEALTH, new AttributeModifier(UUID.fromString("d28b7061-fb92-4064-90fb-7e02b95a72a0"), "Nanobots", 5 * integer, AttributeModifier.Operation.ADDITION)))
             .child(new BasePerkBuilder("attack_boost")
                     .maxLevel(4)
                     .xpNeeded(30)
-                    .attributeModifierMultimap((iAndroid, integer) -> ImmutableMultimap.of(Attributes.ATTACK_DAMAGE, new AttributeModifier(UUID.fromString("d28b7061-fb92-4064-90fb-7e02b95a72a1"),"Attack Boost", 1 + 0.05 + 0.05 * integer, AttributeModifier.Operation.MULTIPLY_TOTAL)))
+                    .attributeModifierMultimap((iAndroid, integer) -> ImmutableMultimap.of(Attributes.ATTACK_DAMAGE, new AttributeModifier(UUID.fromString("d28b7061-fb92-4064-90fb-7e02b95a72a1"), "Attack Boost", 1 + 0.05 + 0.05 * integer, AttributeModifier.Operation.MULTIPLY_TOTAL)))
                     .child(new BasePerkBuilder("flash_cooling")
                             .xpNeeded(28)
                             .child(new BasePerkBuilder("sonic_shockwave")
@@ -42,7 +54,7 @@ public class PerkTree {
             .child(new BasePerkBuilder("nano_armor")
                     .maxLevel(4)
                     .xpNeeded(30)
-                    .attributeModifierMultimap((iAndroid, integer) -> ImmutableMultimap.of(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString("d28b7061-fb92-4064-90fb-7e02b95a72a2"),"Nano Armor", 1 + 0.12 * integer, AttributeModifier.Operation.MULTIPLY_TOTAL)))
+                    .attributeModifierMultimap((iAndroid, integer) -> ImmutableMultimap.of(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString("d28b7061-fb92-4064-90fb-7e02b95a72a2"), "Nano Armor", 1 + 0.12 * integer, AttributeModifier.Operation.MULTIPLY_TOTAL)))
                     .child(new BasePerkBuilder("plasma_shield")
                             .xpNeeded(36)
                             .requiredItems(Collections.singletonList(new ItemStack(Items.SHIELD)))
@@ -56,32 +68,43 @@ public class PerkTree {
                     )
             );
 
-        public static BasePerkBuilder ZERO_CALORIES = new BasePerkBuilder("zero_calories")
-                .point(new Point(0, 2))
-                .xpNeeded(18)
-                .onAndroidTick((iAndroid, integer) -> {
-                    if (iAndroid.getHolder() instanceof ServerPlayerEntity){
-                        if (((ServerPlayerEntity) iAndroid.getHolder()).getFoodStats().getFoodLevel() < 8){
-                            ((ServerPlayerEntity) iAndroid.getHolder()).getFoodStats().setFoodLevel(10);
-                        }if (((ServerPlayerEntity) iAndroid.getHolder()).getFoodStats().getFoodLevel() > 12){
-                            ((ServerPlayerEntity) iAndroid.getHolder()).getFoodStats().setFoodLevel(10);
-                        }
-                    }
-                });
+    public static BasePerkBuilder RESPIROCYTES;
 
-        public static void poke(){
-            //Cancel healing when android
-            EventManager.forge(LivingHealEvent.class).process(livingHealEvent -> {
-                //livingHealEvent.getEntityLiving().getCapability(MOCapabilities.ANDROID_DATA).ifPresent(iAndroid -> livingHealEvent.setCanceled(true));
-            }).subscribe();
-            EventManager.forge(LivingEntityUseItemEvent.Start.class).process(livingEntityUseItemEvent -> {
-                livingEntityUseItemEvent.getEntity().getCapability(MOCapabilities.ANDROID_DATA).ifPresent(iAndroid -> {
-                    if (iAndroid.getPerkManager().hasPerk(ZERO_CALORIES) && !(livingEntityUseItemEvent.getItem().getItem() instanceof AndroidPillItem)){
-                        livingEntityUseItemEvent.setCanceled(true);
-                        livingEntityUseItemEvent.setDuration(0);
+    public static BasePerkBuilder ZERO_CALORIES = new BasePerkBuilder("zero_calories")
+            .point(new Point(0, 3))
+            .xpNeeded(18)
+            .onAndroidTick((iAndroid, integer) -> {
+                if (iAndroid.getHolder() instanceof ServerPlayerEntity) {
+                    if (((ServerPlayerEntity) iAndroid.getHolder()).getFoodStats().getFoodLevel() < 8) {
+                        ((ServerPlayerEntity) iAndroid.getHolder()).getFoodStats().setFoodLevel(10);
                     }
-                });
-            }).subscribe();
-        }
+                    if (((ServerPlayerEntity) iAndroid.getHolder()).getFoodStats().getFoodLevel() > 12) {
+                        ((ServerPlayerEntity) iAndroid.getHolder()).getFoodStats().setFoodLevel(10);
+                    }
+                }
+            })
+            .child(RESPIROCYTES = new BasePerkBuilder("respirocytes")
+                    .xpNeeded(12)
+                    .onAndroidTick((iAndroid, integer) -> iAndroid.getHolder().setAir(iAndroid.getHolder().getMaxAir()))
+                    .child(new BasePerkBuilder("air_bags")
+                            .xpNeeded(14)
+                    )
+            );
+
+    public static void poke() {
+        //Cancel healing when android
+        EventManager.forge(LivingHealEvent.class).process(livingHealEvent -> {
+            //livingHealEvent.getEntityLiving().getCapability(MOCapabilities.ANDROID_DATA).ifPresent(iAndroid -> livingHealEvent.setCanceled(true));
+        }).subscribe();
+        EventManager.forge(LivingEntityUseItemEvent.Start.class).process(livingEntityUseItemEvent -> {
+            livingEntityUseItemEvent.getEntity().getCapability(MOCapabilities.ANDROID_DATA).ifPresent(iAndroid -> {
+                if (iAndroid.getPerkManager().hasPerk(ZERO_CALORIES) && !(livingEntityUseItemEvent.getItem().getItem() instanceof AndroidPillItem)) {
+                    livingEntityUseItemEvent.setCanceled(true);
+                    livingEntityUseItemEvent.setDuration(0);
+                }
+            });
+        }).subscribe();
+        //TODO Make androids drown
+    }
 
 }

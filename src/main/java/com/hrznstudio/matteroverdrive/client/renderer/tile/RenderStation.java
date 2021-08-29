@@ -13,13 +13,14 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderState;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3f;
 
@@ -44,6 +45,7 @@ public class RenderStation<T extends BaseStationTile> extends TileEntityRenderer
             RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
         }, () -> {
             RenderSystem.disableBlend();
+            RenderSystem.defaultBlendFunc();
         })).build(true);
         return RenderType.makeType("render_station", DefaultVertexFormats.POSITION_TEX_COLOR, 7, 256, false, true, state);
     }
@@ -120,7 +122,6 @@ public class RenderStation<T extends BaseStationTile> extends TileEntityRenderer
             stack.rotate(Vector3f.YP.rotationDegrees(tile.getWorld().getGameTime() % 360));
 
             RenderSystem.disableCull();
-            RenderSystem.disableLighting();
 
             stack.rotate(Vector3f.XP.rotationDegrees(180));
 
@@ -134,7 +135,6 @@ public class RenderStation<T extends BaseStationTile> extends TileEntityRenderer
                 stack.pop();
             }
 
-            RenderSystem.enableLighting();
             RenderSystem.disableBlend();
             RenderSystem.enableCull();
             stack.pop();

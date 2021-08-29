@@ -1,7 +1,6 @@
 package com.hrznstudio.matteroverdrive.item.food;
 
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
-import com.hrznstudio.matteroverdrive.capabilities.android.AndroidData;
 import com.hrznstudio.matteroverdrive.item.MOItems;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,6 +22,8 @@ public class AndroidBluePillItem extends AndroidPillItem {
                 PlayerEntity player = (PlayerEntity) entityLiving;
                 player.getCapability(MOCapabilities.ANDROID_DATA).ifPresent(androidData -> {
                     androidData.setAndroid(false);
+                    androidData.getPerkManager().getEnabled().clear();
+                    androidData.getPerkManager().getOwned().clear();
                     DamageSource fake = new DamageSource("android_transformation");
                     fake.setDamageIsAbsolute();
                     fake.setDamageBypassesArmor();

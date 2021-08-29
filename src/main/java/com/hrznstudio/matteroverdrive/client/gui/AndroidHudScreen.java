@@ -2,8 +2,8 @@ package com.hrznstudio.matteroverdrive.client.gui;
 
 import com.hrznstudio.matteroverdrive.MatterOverdrive;
 import com.hrznstudio.matteroverdrive.android.perks.PerkTree;
-import com.hrznstudio.matteroverdrive.api.android.gui.IHudElement;
 import com.hrznstudio.matteroverdrive.api.android.IAndroid;
+import com.hrznstudio.matteroverdrive.api.android.gui.IHudElement;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import com.hrznstudio.matteroverdrive.capabilities.android.AndroidData;
 import com.hrznstudio.matteroverdrive.client.animation.AnimationConsole;
@@ -93,14 +93,17 @@ public class AndroidHudScreen{
         }
     }
 
-    private void onAndroid(RenderGameOverlayEvent event, IAndroid data){
+    private void onAndroid(RenderGameOverlayEvent event, IAndroid data) {
         if (event.getType() == RenderGameOverlayEvent.ElementType.CROSSHAIRS) event.setCanceled(true);
         if (event.getType() == RenderGameOverlayEvent.ElementType.POTION_ICONS) event.setCanceled(true);
         if (event.getType() == RenderGameOverlayEvent.ElementType.HEALTH) event.setCanceled(true);
-        if (event.getType() == RenderGameOverlayEvent.ElementType.FOOD && data.getPerkManager().hasPerk(PerkTree.ZERO_CALORIES)){
+        if (event.getType() == RenderGameOverlayEvent.ElementType.FOOD && data.getPerkManager().hasPerk(PerkTree.ZERO_CALORIES)) {
             event.setCanceled(true);
         }
-        if (event.getType() == RenderGameOverlayEvent.ElementType.TEXT){
+        if (event.getType() == RenderGameOverlayEvent.ElementType.AIR && data.getPerkManager().hasPerk(PerkTree.RESPIROCYTES)) {
+            event.setCanceled(true);
+        }
+        if (event.getType() == RenderGameOverlayEvent.ElementType.TEXT) {
             MatrixStack stack = event.getMatrixStack();
             int centerX = event.getWindow().getScaledWidth() / 2;
             int centerY = event.getWindow().getScaledHeight() / 2;
