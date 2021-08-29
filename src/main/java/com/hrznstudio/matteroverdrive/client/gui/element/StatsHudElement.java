@@ -2,14 +2,12 @@ package com.hrznstudio.matteroverdrive.client.gui.element;
 
 import com.hrznstudio.matteroverdrive.api.android.gui.HudElement;
 import com.hrznstudio.matteroverdrive.api.android.gui.HudPosition;
-import com.hrznstudio.matteroverdrive.api.android.stat.IAndroid;
-import com.hrznstudio.matteroverdrive.capabilities.android.AndroidData;
+import com.hrznstudio.matteroverdrive.api.android.IAndroid;
 import com.hrznstudio.matteroverdrive.reference.ReferenceClient;
 import com.hrznstudio.matteroverdrive.util.MORenderUtil;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MainWindow;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;

@@ -1,12 +1,11 @@
-package com.hrznstudio.matteroverdrive.api.android.stat;
+package com.hrznstudio.matteroverdrive.api.android;
 
 
-import com.hrznstudio.matteroverdrive.api.android.module.AndroidModule;
+import com.hrznstudio.matteroverdrive.api.android.perk.AndroidPerkManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-
-import java.util.Map;
 
 public interface IAndroid extends ICapabilitySerializable<CompoundNBT> {
 
@@ -40,6 +39,8 @@ public interface IAndroid extends ICapabilitySerializable<CompoundNBT> {
 
     /**
      * Sets the remaining turning time of an android
+     *
+     * @return the remaining time
      */
     void setTurningTime(int time);
 
@@ -60,8 +61,7 @@ public interface IAndroid extends ICapabilitySerializable<CompoundNBT> {
      */
     void tickServer(Entity entity);
 
-    /**
-     * @return Returns a map of all installed Modules and their current enabled states
-     */
-    Map<AndroidModule, Boolean> getModules();
+    AndroidPerkManager getPerkManager();
+
+    LivingEntity getHolder();
 }

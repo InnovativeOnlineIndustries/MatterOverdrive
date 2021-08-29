@@ -13,6 +13,13 @@
         ],
         "subtitle": "matteroverdrive.subtitle.kunai_thud"
     },
+    "perk_unlock": {
+        "category": "neutral",
+        "sounds": [
+            "matteroverdrive:gui/perk_unlock"
+        ],
+        "subtitle": "matteroverdrive.subtitle.perk_unlock"
+    },
     "gui.glitch": {
         "category": "master",
         "sounds": [

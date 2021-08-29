@@ -1,5 +1,6 @@
 package com.hrznstudio.matteroverdrive.item.food;
 
+import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.Color;
@@ -14,7 +15,11 @@ public class AndroidYellowPillItem extends AndroidPillItem {
     public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
         ItemStack itemstack = super.onItemUseFinish(stack, worldIn, entityLiving);
         if (!worldIn.isRemote) {
-
+            entityLiving.getCapability(MOCapabilities.ANDROID_DATA).ifPresent(iAndroid -> {
+                iAndroid.getPerkManager().getOwned().clear();
+                iAndroid.getPerkManager().getEnabled().clear();
+                iAndroid.requestUpdate();
+            });
         }
         return stack;
     }

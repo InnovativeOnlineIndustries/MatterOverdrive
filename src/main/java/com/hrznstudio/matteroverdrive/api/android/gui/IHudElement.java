@@ -1,7 +1,6 @@
 package com.hrznstudio.matteroverdrive.api.android.gui;
 
-import com.hrznstudio.matteroverdrive.api.android.stat.IAndroid;
-import com.hrznstudio.matteroverdrive.capabilities.android.AndroidData;
+import com.hrznstudio.matteroverdrive.api.android.IAndroid;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.MainWindow;
 

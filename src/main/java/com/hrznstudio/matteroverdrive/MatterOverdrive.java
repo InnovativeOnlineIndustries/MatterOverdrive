@@ -1,14 +1,21 @@
 package com.hrznstudio.matteroverdrive;
 
+import com.hrznstudio.matteroverdrive.android.perks.PerkTree;
 import com.hrznstudio.matteroverdrive.block.MOBlocks;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilityHandler;
 import com.hrznstudio.matteroverdrive.client.gui.AndroidHudScreen;
 import com.hrznstudio.matteroverdrive.client.renderer.entity.MORenderers;
+import com.hrznstudio.matteroverdrive.client.screen.AndroidStationScreen;
+import com.hrznstudio.matteroverdrive.datagen.MOBlockstateProvider;
+import com.hrznstudio.matteroverdrive.datagen.MOItemModelProvider;
+import com.hrznstudio.matteroverdrive.datagen.MOModelProvider;
 import com.hrznstudio.matteroverdrive.entity.MOEntities;
 import com.hrznstudio.matteroverdrive.item.MOItems;
 import com.hrznstudio.matteroverdrive.network.PacketHandler;
 import com.hrznstudio.matteroverdrive.sounds.MOSounds;
+import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.network.NetworkHandler;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -39,10 +46,15 @@ public class MatterOverdrive {
         MOSounds.register(eventBus);
 
         DistExecutor.safeCallWhenOn(Dist.CLIENT, () -> AndroidHudScreen::new);
+
+
+        EventManager.mod(GatherDataEvent.class).process(this::onDataGather).subscribe();
+        PerkTree.poke();
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
         MORenderers.register();
+        ScreenManager.registerFactory(MOBlocks.ANDROID_CONTAINER.get(), AndroidStationScreen::new);
     }
 
     private void setup(final FMLCommonSetupEvent event) {
@@ -50,16 +62,15 @@ public class MatterOverdrive {
         MOCapabilityHandler.register();
     }
 
-    @SubscribeEvent
+
     public static void onServerStarting(RegisterCommandsEvent event) {
     }
 
-    @SubscribeEvent
-    public static void onDataGather(GatherDataEvent event) {
-        // For Client-Side Generated Files
-        if (event.includeClient()) {
-            //TODO: Put stuff here
-        }
+
+    public void onDataGather(GatherDataEvent event) {
+        event.getGenerator().addProvider(new MOBlockstateProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
+        event.getGenerator().addProvider(new MOItemModelProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
+        event.getGenerator().addProvider(new MOModelProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
     }
 
 }

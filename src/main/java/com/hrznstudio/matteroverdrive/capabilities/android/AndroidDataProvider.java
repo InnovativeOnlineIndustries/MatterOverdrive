@@ -1,6 +1,6 @@
 package com.hrznstudio.matteroverdrive.capabilities.android;
 
-import com.hrznstudio.matteroverdrive.api.android.stat.IAndroid;
+import com.hrznstudio.matteroverdrive.api.android.IAndroid;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;

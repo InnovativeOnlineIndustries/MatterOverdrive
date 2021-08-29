@@ -1,7 +1,13 @@
 package com.hrznstudio.matteroverdrive.capabilities.android;
 
+<<<<<<< refs/remotes/origin/master
 import com.hrznstudio.matteroverdrive.api.android.module.AndroidModule;
 import com.hrznstudio.matteroverdrive.api.android.stat.IAndroid;
+=======
+import com.hrznstudio.matteroverdrive.api.android.IAndroid;
+import com.hrznstudio.matteroverdrive.api.android.perk.AndroidPerkManager;
+import com.hrznstudio.matteroverdrive.api.android.perk.IAndroidPerk;
+>>>>>>> Added Android Station and Basic Android Perks
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import com.hrznstudio.matteroverdrive.network.PacketHandler;
 import com.hrznstudio.matteroverdrive.network.server.AndroidSyncAllPacket;
@@ -12,10 +18,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.potion.Potions;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
@@ -23,6 +27,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import org.apache.logging.log4j.core.jmx.Server;
 
 import java.util.Random;
 
@@ -36,6 +41,8 @@ public class AndroidData implements IAndroid {
     private boolean isAndroid;
     private int transformationTime;
     private boolean needsUpdate;
+    private LivingEntity holder;
+    private AndroidPerkManager perkManager;
 
     public final Map<AndroidModule, Boolean> installedModules;
 
@@ -43,7 +50,11 @@ public class AndroidData implements IAndroid {
         this.isAndroid = false;
         this.transformationTime = 0;
         this.needsUpdate = false;
+<<<<<<< refs/remotes/origin/master
         this.installedModules = new HashMap<>();
+=======
+        this.perkManager = new AndroidPerkManager();
+>>>>>>> Added Android Station and Basic Android Perks
     }
 
     public boolean isAndroid() {
@@ -75,6 +86,9 @@ public class AndroidData implements IAndroid {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void tickClient(Entity entity) {
+        if (entity instanceof LivingEntity){
+            this.holder = (LivingEntity) entity;
+        }
         if (isTurning() && transformationTime % 40 == 0) {
             playGlitchSound(entity, entity.world.rand, 0.2f);
         }
@@ -86,6 +100,13 @@ public class AndroidData implements IAndroid {
 
     @Override
     public void tickServer(Entity entity) {
+        if (entity instanceof LivingEntity){
+            this.holder = (LivingEntity) entity;
+        }
+        tickPerks();
+        if (entity instanceof ServerPlayerEntity){
+            updatePerkAttributes((ServerPlayerEntity) entity);
+        }
         if (isTurning()){
             tickTransformationTime(entity);
         }
@@ -94,9 +115,41 @@ public class AndroidData implements IAndroid {
         }
     }
 
+    @Override
+    public AndroidPerkManager getPerkManager() {
+        return perkManager;
+    }
+
+    @Override
+    public LivingEntity getHolder() {
+        return holder;
+    }
+
     public void sync(Entity entity){
         if (entity instanceof ServerPlayerEntity){
             PacketHandler.sendToPlayer(new AndroidSyncAllPacket(serializeNBT()), (ServerPlayerEntity) entity);
+        }
+    }
+
+    public void updatePerkAttributes(ServerPlayerEntity player){
+        for (String perk : this.getPerkManager().getOwned().keySet()) {
+            if (IAndroidPerk.PERKS.containsKey(perk)){
+                IAndroidPerk androidPerk = IAndroidPerk.PERKS.get(perk);
+                if (!androidPerk.canBeToggled() || this.getPerkManager().hasPerkEnabled(androidPerk)){
+                    player.getAttributeManager().reapplyModifiers(androidPerk.getAttributeModifiers(this, this.getPerkManager().getLevel(androidPerk)));
+                }
+            }
+        }
+    }
+
+    public void tickPerks(){
+        for (String perk : this.getPerkManager().getOwned().keySet()) {
+            if (IAndroidPerk.PERKS.containsKey(perk)){
+                IAndroidPerk androidPerk = IAndroidPerk.PERKS.get(perk);
+                if (!androidPerk.canBeToggled() || this.getPerkManager().hasPerkEnabled(androidPerk)){
+                    androidPerk.onAndroidTick(this, this.getPerkManager().getLevel(androidPerk));
+                }
+            }
         }
     }
 
@@ -132,6 +185,7 @@ public class AndroidData implements IAndroid {
         final CompoundNBT nbt = new CompoundNBT();
         nbt.putBoolean(IS_ANDROID_NBT, this.isAndroid);
         nbt.putInt(TRANSFORMATION_TIME_NBT, this.transformationTime);
+        nbt.put("PerkManager", perkManager.serializeNBT());
         return nbt;
     }
 
@@ -139,6 +193,7 @@ public class AndroidData implements IAndroid {
     public void deserializeNBT(CompoundNBT nbt) {
         this.isAndroid = nbt.getBoolean(IS_ANDROID_NBT);
         this.transformationTime = nbt.getInt(TRANSFORMATION_TIME_NBT);
+        this.perkManager.deserializeNBT(nbt.getCompound("PerkManager"));
     }
 
     @Override
