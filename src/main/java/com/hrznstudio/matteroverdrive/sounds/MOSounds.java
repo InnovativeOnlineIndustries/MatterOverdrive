@@ -15,6 +15,7 @@ public class MOSounds {
     public static final RegistryObject<SoundEvent> ANDROID_TELEPORT = register("android_teleport");
     public static final RegistryObject<SoundEvent> GLITCH = register("gui.glitch");
     public static final RegistryObject<SoundEvent> PERK_UNLOCK = register("perk_unlock");
+    public static final RegistryObject<SoundEvent> NIGTH_VISION = register("night_vision");
 
     private static RegistryObject<SoundEvent> register(String key) {
         return SOUNDS.register(key, () -> new SoundEvent(new ResourceLocation(MatterOverdrive.MOD_ID, key)));

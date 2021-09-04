@@ -6,6 +6,13 @@
         ],
         "subtitle": "matteroverdrive.subtitle.android_teleport"
     },
+    "night_vision": {
+        "category": "neutral",
+        "sounds": [
+            "matteroverdrive:android/abilities/night_vision"
+        ],
+        "subtitle": "matteroverdrive.subtitle.night_vision"
+    },
     "kunai_thud": {
         "category": "neutral",
         "sounds": [

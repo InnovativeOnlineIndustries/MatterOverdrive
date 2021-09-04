@@ -79,4 +79,10 @@ public class BasePerkBuilder extends BaseAndroidPerk{
         this.setPoint(point);
         return this;
     }
+
+    public BasePerkBuilder canToggle() {
+        this.setCanBeToggled(true);
+        return this;
+    }
+
 }

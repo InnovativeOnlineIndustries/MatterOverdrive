@@ -8,6 +8,7 @@ import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import com.hrznstudio.matteroverdrive.capabilities.android.AndroidData;
 import com.hrznstudio.matteroverdrive.client.animation.AnimationConsole;
 import com.hrznstudio.matteroverdrive.client.animation.segment.AnimationSegmentText;
+import com.hrznstudio.matteroverdrive.client.gui.element.PerksHudElement;
 import com.hrznstudio.matteroverdrive.client.gui.element.StatsHudElement;
 import com.hrznstudio.matteroverdrive.reference.ReferenceClient;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -56,6 +57,7 @@ public class AndroidHudScreen{
         this.shaderEnabled = false;
         this.elementList = new ArrayList<>();
         this.elementList.add(new StatsHudElement());
+        this.elementList.add(new PerksHudElement());
     }
 
     @SubscribeEvent

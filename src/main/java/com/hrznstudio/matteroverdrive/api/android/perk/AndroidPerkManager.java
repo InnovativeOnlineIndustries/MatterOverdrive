@@ -1,6 +1,5 @@
 package com.hrznstudio.matteroverdrive.api.android.perk;
 
-import it.unimi.dsi.fastutil.Hash;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.util.INBTSerializable;
 
@@ -38,21 +37,31 @@ public class AndroidPerkManager implements INBTSerializable<CompoundNBT> {
         return enabled;
     }
 
-    public void buyPerk(IAndroidPerk perk){
-        if (this.owned.containsKey(perk.getName())){
+    public void buyPerk(IAndroidPerk perk) {
+        if (this.owned.containsKey(perk.getName())) {
             this.owned.put(perk.getName(), this.owned.get(perk.getName()) + 1);
         } else {
             this.owned.put(perk.getName(), 1);
         }
     }
 
-    public int getLevel(IAndroidPerk perk){
+    public void togglePerk(String perk) {
+        if (this.owned.containsKey(perk)) {
+            if (this.enabled.contains(perk)) {
+                this.enabled.remove(perk);
+            } else {
+                this.enabled.add(perk);
+            }
+        }
+    }
+
+    public int getLevel(IAndroidPerk perk) {
         return hasPerk(perk) ? this.owned.get(perk.getName()) : 0;
     }
 
     @Override
     public CompoundNBT serializeNBT() {
-        CompoundNBT compoundNBT =  new CompoundNBT();
+        CompoundNBT compoundNBT = new CompoundNBT();
         CompoundNBT owned = new CompoundNBT();
         for (String s : this.owned.keySet()) {
             owned.putInt(s, this.owned.get(s));

@@ -4,13 +4,12 @@ import com.hrznstudio.matteroverdrive.MatterOverdrive;
 import com.hrznstudio.matteroverdrive.api.android.perk.IAndroidPerk;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import com.hrznstudio.matteroverdrive.network.PacketHandler;
-import com.hrznstudio.matteroverdrive.network.client.AndroidPerkAttemptBuyMessage;
+import com.hrznstudio.matteroverdrive.network.client.AndroidPerkAttemptBuyPacket;
 import com.hrznstudio.matteroverdrive.util.MOColorUtil;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -19,7 +18,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
@@ -110,6 +108,6 @@ public class PerkButton extends Widget {
 
     @Override
     public void onClick(double p_230982_1_, double p_230982_3_) {
-        PacketHandler.NETWORK.get().sendToServer(new AndroidPerkAttemptBuyMessage(perk.getName()));
+        PacketHandler.NETWORK.get().sendToServer(new AndroidPerkAttemptBuyPacket(perk.getName()));
     }
 }

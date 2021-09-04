@@ -137,9 +137,7 @@ public class AndroidData implements IAndroid {
         for (String perk : this.getPerkManager().getOwned().keySet()) {
             if (IAndroidPerk.PERKS.containsKey(perk)){
                 IAndroidPerk androidPerk = IAndroidPerk.PERKS.get(perk);
-                if (!androidPerk.canBeToggled() || this.getPerkManager().hasPerkEnabled(androidPerk)){
-                    androidPerk.onAndroidTick(this, this.getPerkManager().getLevel(androidPerk));
-                }
+                androidPerk.onAndroidTick(this, this.getPerkManager().getLevel(androidPerk));
             }
         }
     }
@@ -178,7 +176,6 @@ public class AndroidData implements IAndroid {
         nbt.putBoolean(IS_ANDROID_NBT, this.isAndroid);
         nbt.putInt(TRANSFORMATION_TIME_NBT, this.transformationTime);
         nbt.put("PerkManager", perkManager.serializeNBT());
-        System.out.println(nbt);
         return nbt;
     }
 

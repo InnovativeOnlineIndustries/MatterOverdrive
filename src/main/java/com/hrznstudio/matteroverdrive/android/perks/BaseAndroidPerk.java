@@ -1,15 +1,12 @@
 package com.hrznstudio.matteroverdrive.android.perks;
 
 import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
 import com.hrznstudio.matteroverdrive.MatterOverdrive;
 import com.hrznstudio.matteroverdrive.api.android.IAndroid;
 import com.hrznstudio.matteroverdrive.api.android.perk.IAndroidPerk;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -37,7 +34,10 @@ public class BaseAndroidPerk implements IAndroidPerk {
     private List<ItemStack> requiredItems = new ArrayList<>();
     private IAndroidPerk parent = null;
     private List<IAndroidPerk> child = new ArrayList<>();
-    private Point point = new Point(0,0);
+    private Point point = new Point(0, 0);
+    private boolean canBeToggled = false;
+    private BiConsumer<IAndroid, Integer> onClientKeyPress = (androidData, integer) -> {
+    };
 
     public BaseAndroidPerk(String perkName) {
         this.perkName = perkName;
@@ -107,7 +107,11 @@ public class BaseAndroidPerk implements IAndroidPerk {
 
     @Override
     public void onKeyPress(IAndroid player, int statLevel, int key, boolean down) {
+        onClientKeyPress.accept(player, statLevel);
+    }
 
+    public void setOnClientKeyPress(BiConsumer<IAndroid, Integer> onClientKeyPress) {
+        this.onClientKeyPress = onClientKeyPress;
     }
 
     @Override
@@ -126,7 +130,11 @@ public class BaseAndroidPerk implements IAndroidPerk {
 
     @Override
     public boolean canBeToggled() {
-        return false;
+        return canBeToggled;
+    }
+
+    public void setCanBeToggled(boolean canBeToggled) {
+        this.canBeToggled = canBeToggled;
     }
 
     public void setOnAndroidTick(BiConsumer<IAndroid, Integer> onAndroidTick) {

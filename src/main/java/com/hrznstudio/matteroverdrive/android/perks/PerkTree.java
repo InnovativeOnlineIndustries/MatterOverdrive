@@ -1,6 +1,7 @@
 package com.hrznstudio.matteroverdrive.android.perks;
 
 import com.google.common.collect.ImmutableMultimap;
+import com.hrznstudio.matteroverdrive.capabilities.AndroidEnergyCapability;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import com.hrznstudio.matteroverdrive.item.food.AndroidPillItem;
 import com.hrznstudio.titanium.event.handler.EventManager;
@@ -9,6 +10,8 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
@@ -30,6 +33,7 @@ public class PerkTree {
     //ZERO CALORIES - Implemented
     //RESPIROCYTES - Implemented
     //AIR BAGS -
+    //NIGHT VISION - Implemented
 
     public static BasePerkBuilder NANONOTS = new BasePerkBuilder("nanobots")
             .point(new Point(0, 0))
@@ -91,7 +95,29 @@ public class PerkTree {
                     )
             );
 
+    public static BasePerkBuilder NIGHT_VISION;
+
     public static void poke() {
+        NIGHT_VISION = new BasePerkBuilder("night_vision")
+                .point(new Point(5, 3))
+                .xpNeeded(28)
+                .canToggle()
+                .onAndroidTick((iAndroid, integer) -> {
+                    if (iAndroid.getPerkManager().hasPerkEnabled(NIGHT_VISION)) {
+                        iAndroid.getHolder().getCapability(CapabilityEnergy.ENERGY).ifPresent(energyStorage -> {
+                            if (energyStorage.getEnergyStored() >= 16) {
+                                energyStorage.extractEnergy(16, false);
+                                iAndroid.getHolder().addPotionEffect(new EffectInstance(Effects.NIGHT_VISION, 15 * 20, 0, true, false));
+                                if (iAndroid.getHolder() instanceof ServerPlayerEntity)
+                                    AndroidEnergyCapability.syncEnergy((ServerPlayerEntity) iAndroid.getHolder());
+                            }
+                        });
+                    } else {
+                        iAndroid.getHolder().removePotionEffect(Effects.NIGHT_VISION);
+                    }
+                });
+
+
         //Cancel healing when android
         EventManager.forge(LivingHealEvent.class).process(livingHealEvent -> {
             //livingHealEvent.getEntityLiving().getCapability(MOCapabilities.ANDROID_DATA).ifPresent(iAndroid -> livingHealEvent.setCanceled(true));

@@ -54,5 +54,7 @@
     "matteroverdrive.perk.respirocytes.name": "Respirocytes",
     "matteroverdrive.perk.respirocytes.desc": "Removes the need for oxygen",
     "matteroverdrive.perk.air_bags.name": "Air Bags",
-    "matteroverdrive.perk.air_bags.desc": "Enables floating when in water"
+    "matteroverdrive.perk.air_bags.desc": "Enables floating when in water",
+    "matteroverdrive.perk.night_vision.name": "Night Vision",
+    "matteroverdrive.perk.night_vision.desc": "Enables Night Vision. Consumes §e16FE/t§r while active."
 }

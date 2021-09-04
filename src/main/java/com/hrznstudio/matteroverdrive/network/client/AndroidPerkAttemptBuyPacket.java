@@ -11,15 +11,15 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
-public class AndroidPerkAttemptBuyMessage extends Message {
+public class AndroidPerkAttemptBuyPacket extends Message {
 
     public String perk;
 
 
-    public AndroidPerkAttemptBuyMessage() {
+    public AndroidPerkAttemptBuyPacket() {
     }
 
-    public AndroidPerkAttemptBuyMessage(String perk) {
+    public AndroidPerkAttemptBuyPacket(String perk) {
         this.perk = perk;
     }
 
