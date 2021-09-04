@@ -3,6 +3,7 @@ package com.hrznstudio.matteroverdrive.capabilities.android;
 import com.hrznstudio.matteroverdrive.api.android.IAndroid;
 import com.hrznstudio.matteroverdrive.api.android.perk.AndroidPerkManager;
 import com.hrznstudio.matteroverdrive.api.android.perk.IAndroidPerk;
+import com.hrznstudio.matteroverdrive.capabilities.AndroidEnergyCapability;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import com.hrznstudio.matteroverdrive.network.PacketHandler;
 import com.hrznstudio.matteroverdrive.network.server.AndroidSyncAllPacket;
@@ -22,6 +23,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.CapabilityEnergy;
 
 import java.util.Random;
 
@@ -162,6 +164,7 @@ public class AndroidData implements IAndroid {
         }
         if (transformationTime <= 0) {
             setAndroid(true);
+            entity.getCapability(CapabilityEnergy.ENERGY).ifPresent(iEnergyStorage -> iEnergyStorage.receiveEnergy((int) (AndroidEnergyCapability.DEFAULT_ENERGY * 0.25), false));
             requestUpdate();
             if (entity instanceof PlayerEntity && !((PlayerEntity) entity).isCreative() && !entity.world.getWorldInfo().isHardcore()) {
                 entity.attackEntityFrom(fake, Integer.MAX_VALUE);

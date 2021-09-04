@@ -21,6 +21,7 @@ public class MOBlockstateProvider extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         simpleBlockUn(MOBlocks.ANDROID_STATION.get());
+        horizontalBlock(MOBlocks.ANDROID_STATION.get());
     }
 
     private void crop(CropsBlock block) {

@@ -1,8 +1,8 @@
 package com.hrznstudio.matteroverdrive.client.gui.element;
 
+import com.hrznstudio.matteroverdrive.api.android.IAndroid;
 import com.hrznstudio.matteroverdrive.api.android.gui.HudElement;
 import com.hrznstudio.matteroverdrive.api.android.gui.HudPosition;
-import com.hrznstudio.matteroverdrive.api.android.IAndroid;
 import com.hrznstudio.matteroverdrive.reference.ReferenceClient;
 import com.hrznstudio.matteroverdrive.util.MORenderUtil;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -12,6 +12,7 @@ import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraftforge.energy.CapabilityEnergy;
 
 import java.awt.*;
 import java.text.DecimalFormat;
@@ -41,7 +42,7 @@ public class StatsHudElement extends HudElement {
         RenderSystem.enableAlphaTest();
         RenderSystem.enableBlend();
 
-        double energy = 0; //TODO Get player Energy
+        double energy = androidPlayer.getHolder() != null ? androidPlayer.getHolder().getCapability(CapabilityEnergy.ENERGY).map(energyStorage -> energyStorage.getEnergyStored() / (double) energyStorage.getMaxEnergyStored()).orElse(0D) : 0;
         double health = mc.player.getHealth() / 20;
         double speed = 1;
 

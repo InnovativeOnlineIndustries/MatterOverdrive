@@ -1,11 +1,11 @@
 package com.hrznstudio.matteroverdrive.block;
 
 import com.hrznstudio.matteroverdrive.block.tile.AndroidStationTile;
+import com.hrznstudio.matteroverdrive.block.tile.BoundingBoxTile;
+import com.hrznstudio.matteroverdrive.block.tile.ChargingStationTile;
 import com.hrznstudio.matteroverdrive.container.AndroidStationContainer;
 import com.hrznstudio.matteroverdrive.item.MOItems;
 import com.hrznstudio.titanium.block.BasicTileBlock;
-import com.hrznstudio.titanium.container.BasicContainer;
-import com.hrznstudio.titanium.container.impl.BasicInventoryContainer;
 import com.hrznstudio.titanium.nbthandler.NBTManager;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.container.Container;
@@ -14,8 +14,6 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
@@ -33,10 +31,20 @@ public class MOBlocks {
     private static final DeferredRegister<TileEntityType<?>> TILE_TYPES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, MOD_ID);
     private static final DeferredRegister<ContainerType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, MOD_ID);
 
+    //Android Station
     public static RegistryObject<BasicTileBlock<AndroidStationTile>> ANDROID_STATION = block("android_station", AndroidStationBlock::new);
     public static RegistryObject<BlockItem> ANDROID_STATION_ITEM = blockItem("android_station", ANDROID_STATION);
     public static RegistryObject<TileEntityType<AndroidStationTile>> ANDROID_STATION_TILE = tile("android_station", AndroidStationTile::new, ANDROID_STATION);
     public static RegistryObject<ContainerType<AndroidStationContainer>> ANDROID_CONTAINER = container("android_station", () -> IForgeContainerType.create(AndroidStationContainer::new));
+
+    //Charging Station
+    public static RegistryObject<BasicTileBlock<ChargingStationTile>> CHARGING_STATION = block("charging_station", ChargingStationBlock::new);
+    public static RegistryObject<BlockItem> CHARGING_STATION_ITEM = BLOCK_ITEMS.register("charging_station", () -> new ChargingStationBlock.Item(CHARGING_STATION.get(), new Item.Properties().group(MOItems.MATTER_OVERDRIVE)));
+    public static RegistryObject<TileEntityType<ChargingStationTile>> CHARGING_STATION_TILE = tile("charging_station", ChargingStationTile::new, CHARGING_STATION);
+
+    //Bounding Box
+    public static RegistryObject<BasicTileBlock<BoundingBoxTile>> BOUNDING_BOX = block("bounding_box", BoundingBoxBlock::new);
+    public static RegistryObject<TileEntityType<BoundingBoxTile>> BOUNDING_BOX_TILE = tile("bounding_box", BoundingBoxTile::new, BOUNDING_BOX);
 
     public static void register(IEventBus eventBus) {
         BLOCKS.register(eventBus);
@@ -45,6 +53,8 @@ public class MOBlocks {
         CONTAINER_TYPES.register(eventBus);
 
         NBTManager.getInstance().scanTileClassForAnnotations(AndroidStationTile.class);
+        NBTManager.getInstance().scanTileClassForAnnotations(ChargingStationTile.class);
+        NBTManager.getInstance().scanTileClassForAnnotations(BoundingBoxTile.class);
     }
 
     public static <T extends Block> RegistryObject<T> block(String id, Supplier<T> block) {

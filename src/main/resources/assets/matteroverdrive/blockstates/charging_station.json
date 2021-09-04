@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "subfacing=north": {
+      "model": "matteroverdrive:block/charging_station"
+    },
+    "subfacing=south": {
+      "model": "matteroverdrive:block/charging_station",
+      "y": 180
+    },
+    "subfacing=west": {
+      "model": "matteroverdrive:block/charging_station",
+      "y": 270
+    },
+    "subfacing=east": {
+      "model": "matteroverdrive:block/charging_station",
+      "y": 90
+    }
+  }
+}
