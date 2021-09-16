@@ -22,11 +22,13 @@ import java.util.function.BiPredicate;
 
 public class BaseAndroidPerk implements IAndroidPerk {
 
-    private BiConsumer<IAndroid, Integer> onAndroidTick = (androidData, integer) -> {};
-    private BiConsumer<IAndroid, Integer> onUnlock = (androidData, integer) -> {};
-    private BiConsumer<IAndroid, Integer> onUnlearn = (androidData, integer) -> {};
+    private BiPredicate<IAndroid, Integer> onAndroidTick = (androidData, integer) -> true;
+    private BiConsumer<IAndroid, Integer> onUnlock = (androidData, integer) -> {
+    };
+    private BiConsumer<IAndroid, Integer> onUnlearn = (androidData, integer) -> {
+    };
     private BiPredicate<IAndroid, Integer> canBeUnLocked = (androidData, integer) -> true;
-    private BiPredicate<IAndroid, Integer> canShowOnHUD = (androidData, integer) -> true;
+    private BiPredicate<IAndroid, Integer> canShowOnHUD = (androidData, integer) -> false;
     private int maxLevel = 1;
     private int xpNeeded = 0;
     private final String perkName;
@@ -50,8 +52,8 @@ public class BaseAndroidPerk implements IAndroidPerk {
     }
 
     @Override
-    public void onAndroidTick(IAndroid player, int statLevel) {
-        onAndroidTick.accept(player, statLevel);
+    public boolean onAndroidTick(IAndroid player, int statLevel) {
+        return onAndroidTick.test(player, statLevel);
     }
 
     @Override
@@ -137,7 +139,7 @@ public class BaseAndroidPerk implements IAndroidPerk {
         this.canBeToggled = canBeToggled;
     }
 
-    public void setOnAndroidTick(BiConsumer<IAndroid, Integer> onAndroidTick) {
+    public void setOnAndroidTick(BiPredicate<IAndroid, Integer> onAndroidTick) {
         this.onAndroidTick = onAndroidTick;
     }
 

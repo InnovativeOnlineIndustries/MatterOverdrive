@@ -39,9 +39,21 @@ public class PerkTree {
             .point(new Point(0, 0))
             .xpNeeded(26)
             .maxLevel(4)
+            .canShowOnHUD((iAndroid, integer) -> true)
             .onAndroidTick((iAndroid, integer) -> {
-                if (iAndroid.getHolder().getEntityWorld().getGameTime() % 20 == 0)
-                    iAndroid.getHolder().heal(1); //TODO Check for energy
+                if (iAndroid.getHolder().getEntityWorld().getGameTime() % 20 == 0 && iAndroid.getHolder().getHealth() < iAndroid.getHolder().getMaxHealth()) {
+                    return iAndroid.getHolder().getCapability(CapabilityEnergy.ENERGY).map(energyStorage -> {
+                        if (energyStorage.getEnergyStored() >= 1048) {
+                            iAndroid.getHolder().heal(1);
+                            energyStorage.extractEnergy(1048, false);
+                            if (iAndroid.getHolder() instanceof ServerPlayerEntity)
+                                AndroidEnergyCapability.syncEnergy((ServerPlayerEntity) iAndroid.getHolder());
+                            return true;
+                        }
+                        return false;
+                    }).orElse(false);
+                }
+                return false;
             })
             .attributeModifierMultimap((iAndroid, integer) -> ImmutableMultimap.of(Attributes.MAX_HEALTH, new AttributeModifier(UUID.fromString("d28b7061-fb92-4064-90fb-7e02b95a72a0"), "Nanobots", 5 * integer, AttributeModifier.Operation.ADDITION)))
             .child(new BasePerkBuilder("attack_boost")
@@ -58,6 +70,7 @@ public class PerkTree {
             .child(new BasePerkBuilder("nano_armor")
                     .maxLevel(4)
                     .xpNeeded(30)
+                    .canShowOnHUD((iAndroid, integer) -> true)
                     .attributeModifierMultimap((iAndroid, integer) -> ImmutableMultimap.of(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString("d28b7061-fb92-4064-90fb-7e02b95a72a2"), "Nano Armor", 1 + 0.12 * integer, AttributeModifier.Operation.MULTIPLY_TOTAL)))
                     .child(new BasePerkBuilder("plasma_shield")
                             .xpNeeded(36)
@@ -67,7 +80,10 @@ public class PerkTree {
                             )
                             .child(new BasePerkBuilder("cloak")
                                     .xpNeeded(36)
-                                    .onAndroidTick((iAndroid, integer) -> iAndroid.getHolder().getCapability(CapabilityEnergy.ENERGY).ifPresent(iEnergyStorage -> iEnergyStorage.extractEnergy(128, false)))
+                                    .onAndroidTick((iAndroid, integer) -> {
+                                        iAndroid.getHolder().getCapability(CapabilityEnergy.ENERGY).ifPresent(iEnergyStorage -> iEnergyStorage.extractEnergy(128, false));
+                                        return false;
+                                    })
                             )
                     )
             );
@@ -77,19 +93,30 @@ public class PerkTree {
     public static BasePerkBuilder ZERO_CALORIES = new BasePerkBuilder("zero_calories")
             .point(new Point(0, 3))
             .xpNeeded(18)
+            .canShowOnHUD((iAndroid, integer) -> true)
             .onAndroidTick((iAndroid, integer) -> {
                 if (iAndroid.getHolder() instanceof ServerPlayerEntity) {
                     if (((ServerPlayerEntity) iAndroid.getHolder()).getFoodStats().getFoodLevel() < 8) {
                         ((ServerPlayerEntity) iAndroid.getHolder()).getFoodStats().setFoodLevel(10);
+                        return true;
                     }
                     if (((ServerPlayerEntity) iAndroid.getHolder()).getFoodStats().getFoodLevel() > 12) {
                         ((ServerPlayerEntity) iAndroid.getHolder()).getFoodStats().setFoodLevel(10);
+                        return false;
                     }
                 }
+                return false;
             })
             .child(RESPIROCYTES = new BasePerkBuilder("respirocytes")
                     .xpNeeded(12)
-                    .onAndroidTick((iAndroid, integer) -> iAndroid.getHolder().setAir(iAndroid.getHolder().getMaxAir()))
+                    .canShowOnHUD((iAndroid, integer) -> true)
+                    .onAndroidTick((iAndroid, integer) -> {
+                        if (iAndroid.getHolder().getAir() < iAndroid.getHolder().getMaxAir()) {
+                            iAndroid.getHolder().setAir(iAndroid.getHolder().getMaxAir());
+                            return true;
+                        }
+                        return false;
+                    })
                     .child(new BasePerkBuilder("air_bags")
                             .xpNeeded(14)
                     )
@@ -102,6 +129,7 @@ public class PerkTree {
                 .point(new Point(5, 3))
                 .xpNeeded(28)
                 .canToggle()
+                .canShowOnHUD((iAndroid, integer) -> iAndroid.getPerkManager().hasPerkEnabled(NIGHT_VISION))
                 .onAndroidTick((iAndroid, integer) -> {
                     if (iAndroid.getPerkManager().hasPerkEnabled(NIGHT_VISION)) {
                         iAndroid.getHolder().getCapability(CapabilityEnergy.ENERGY).ifPresent(energyStorage -> {
@@ -112,9 +140,11 @@ public class PerkTree {
                                     AndroidEnergyCapability.syncEnergy((ServerPlayerEntity) iAndroid.getHolder());
                             }
                         });
+                        return true;
                     } else {
                         iAndroid.getHolder().removePotionEffect(Effects.NIGHT_VISION);
                     }
+                    return false;
                 });
 
 

@@ -19,7 +19,7 @@ public class BasePerkBuilder extends BaseAndroidPerk{
         super(perkName);
     }
 
-    public BasePerkBuilder onAndroidTick(BiConsumer<IAndroid, Integer> onAndroidTick) {
+    public BasePerkBuilder onAndroidTick(BiPredicate<IAndroid, Integer> onAndroidTick) {
         this.setOnAndroidTick(onAndroidTick);
         return this;
     }

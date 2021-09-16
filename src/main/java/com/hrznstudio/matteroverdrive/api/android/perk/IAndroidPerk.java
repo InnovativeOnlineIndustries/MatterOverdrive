@@ -22,7 +22,7 @@ public interface IAndroidPerk {
 
     String getName();
 
-    void onAndroidTick(IAndroid player, int statLevel);
+    boolean onAndroidTick(IAndroid player, int statLevel);
 
     void onUnlock(IAndroid player, int statLevel);
 

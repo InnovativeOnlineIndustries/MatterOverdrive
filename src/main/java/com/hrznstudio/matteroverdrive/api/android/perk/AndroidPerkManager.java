@@ -12,13 +12,16 @@ public class AndroidPerkManager implements INBTSerializable<CompoundNBT> {
 
     public static String NBT_ENABLED = "Enabled";
     public static String NBT_OWNED = "Owned";
+    public static String NBT_TRACKED = "Tracker";
 
     private Map<String, Integer> owned;
     private List<String> enabled;
+    private Map<String, Long> perkActivityTracker;
 
     public AndroidPerkManager() {
         this.owned = new HashMap<>();
         this.enabled = new ArrayList<>();
+        this.perkActivityTracker = new HashMap<>();
     }
 
     public boolean hasPerk(IAndroidPerk perk){
@@ -35,6 +38,10 @@ public class AndroidPerkManager implements INBTSerializable<CompoundNBT> {
 
     public List<String> getEnabled() {
         return enabled;
+    }
+
+    public Map<String, Long> getPerkActivityTracker() {
+        return perkActivityTracker;
     }
 
     public void buyPerk(IAndroidPerk perk) {
@@ -70,8 +77,13 @@ public class AndroidPerkManager implements INBTSerializable<CompoundNBT> {
         for (int i = 0; i < this.enabled.size(); i++) {
             enabled.putString(i + "", this.enabled.get(i));
         }
+        CompoundNBT tracker = new CompoundNBT();
+        for (String s : this.perkActivityTracker.keySet()) {
+            tracker.putLong(s, this.perkActivityTracker.get(s));
+        }
         compoundNBT.put(NBT_ENABLED, enabled);
         compoundNBT.put(NBT_OWNED, owned);
+        compoundNBT.put(NBT_TRACKED, tracker);
         return compoundNBT;
     }
 
@@ -86,6 +98,10 @@ public class AndroidPerkManager implements INBTSerializable<CompoundNBT> {
         CompoundNBT enabled = nbt.getCompound(NBT_ENABLED);
         for (String s : enabled.keySet()) {
             this.enabled.add(enabled.getString(s));
+        }
+        CompoundNBT tracked = nbt.getCompound(NBT_TRACKED);
+        for (String s : tracked.keySet()) {
+            this.perkActivityTracker.put(s, tracked.getLong(s));
         }
     }
 }

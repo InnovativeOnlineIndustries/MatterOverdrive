@@ -134,12 +134,18 @@ public class AndroidData implements IAndroid {
     }
 
     public void tickPerks(){
+        boolean somethingUpdated = false;
         for (String perk : this.getPerkManager().getOwned().keySet()) {
-            if (IAndroidPerk.PERKS.containsKey(perk)){
+            if (IAndroidPerk.PERKS.containsKey(perk)) {
                 IAndroidPerk androidPerk = IAndroidPerk.PERKS.get(perk);
-                androidPerk.onAndroidTick(this, this.getPerkManager().getLevel(androidPerk));
+                if (androidPerk.onAndroidTick(this, this.getPerkManager().getLevel(androidPerk)) && androidPerk.showOnPlayerHUD(this, this.getPerkManager().getLevel(androidPerk))) {
+                    this.getPerkManager().getPerkActivityTracker().put(perk, this.getHolder().world.getGameTime());
+                    somethingUpdated = true;
+                }
+                ;
             }
         }
+        if (somethingUpdated) this.requestUpdate();
     }
 
     private void tickTransformationTime(Entity entity){
