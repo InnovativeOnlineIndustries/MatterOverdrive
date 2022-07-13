@@ -93,15 +93,15 @@ public class AndroidPerkManager implements INBTSerializable<CompoundTag> {
         this.owned.clear();
         this.enabled.clear();
         CompoundTag owned = nbt.getCompound(NBT_OWNED);
-        for (String s : owned.keySet()) {
+        for (String s : owned.getAllKeys()) {
             this.owned.put(s, owned.getInt(s));
         }
         CompoundTag enabled = nbt.getCompound(NBT_ENABLED);
-        for (String s : enabled.keySet()) {
+        for (String s : enabled.getAllKeys()) {
             this.enabled.add(enabled.getString(s));
         }
         CompoundTag tracked = nbt.getCompound(NBT_TRACKED);
-        for (String s : tracked.keySet()) {
+        for (String s : tracked.getAllKeys()) {
             this.perkActivityTracker.put(s, tracked.getLong(s));
         }
     }
