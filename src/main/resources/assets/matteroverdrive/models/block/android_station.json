@@ -1,6 +1,0 @@
-{
-  "parent": "matteroverdrive:block/station",
-  "textures": {
-    "side": "matteroverdrive:blocks/station/android"
-  }
-}
