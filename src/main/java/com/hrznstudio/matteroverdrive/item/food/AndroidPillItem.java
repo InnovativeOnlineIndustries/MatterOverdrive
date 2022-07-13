@@ -1,15 +1,14 @@
 package com.hrznstudio.matteroverdrive.item.food;
 
-import com.hrznstudio.titanium.api.material.IHasColor;
-import net.minecraft.item.Item;
-import net.minecraft.util.text.Color;
-import net.minecraft.util.text.TextFormatting;
+import com.hrznstudio.matteroverdrive.util.IHasColor;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.world.item.Item;
 
 public class AndroidPillItem extends Item implements IHasColor {
 
     private final int pillColor;
 
-    private final int pillWhite = Color.fromTextFormatting(TextFormatting.WHITE).getColor();
+    private final int pillWhite = TextColor.fromTextFormatting(TextFormatting.WHITE).getColor();
 
     public AndroidPillItem(Properties properties, Color pillColor) {
         super(properties);

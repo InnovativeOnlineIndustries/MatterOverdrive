@@ -17,6 +17,7 @@ import com.hrznstudio.matteroverdrive.sounds.MOSounds;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
@@ -38,6 +39,7 @@ public class MatterOverdrive {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         eventBus.addListener(this::clientSetup);
         eventBus.addListener(this::setup);
+        eventBus.addListener(MOClientModEvents::registerKeyBinds);
 
         MOItems.register(eventBus);
         MOBlocks.register(eventBus);
@@ -46,8 +48,6 @@ public class MatterOverdrive {
 
         DistExecutor.safeCallWhenOn(Dist.CLIENT, () -> AndroidHudScreen::new);
 
-
-        EventManager.mod(GatherDataEvent.class).process(this::onDataGather).subscribe();
         PerkTree.poke();
     }
 
@@ -64,12 +64,5 @@ public class MatterOverdrive {
 
 
     public static void onServerStarting(RegisterCommandsEvent event) {
-    }
-
-
-    public void onDataGather(GatherDataEvent event) {
-        event.getGenerator().addProvider(new MOBlockstateProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
-        event.getGenerator().addProvider(new MOItemModelProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
-        event.getGenerator().addProvider(new MOModelProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
     }
 }

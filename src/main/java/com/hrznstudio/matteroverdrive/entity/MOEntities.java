@@ -2,17 +2,16 @@ package com.hrznstudio.matteroverdrive.entity;
 
 import com.hrznstudio.matteroverdrive.MatterOverdrive;
 import com.hrznstudio.matteroverdrive.entity.projectile.KunaiEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class MOEntities {
 
-    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, MatterOverdrive.MOD_ID);
+    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, MatterOverdrive.MOD_ID);
 
     public static final RegistryObject<EntityType<KunaiEntity>> KUNAI = register("kunai",
         EntityType.Builder.<KunaiEntity>create(KunaiEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).trackingRange(8));

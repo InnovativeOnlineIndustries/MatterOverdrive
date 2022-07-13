@@ -3,22 +3,22 @@ package com.hrznstudio.matteroverdrive.entity.projectile;
 import com.hrznstudio.matteroverdrive.entity.MOEntities;
 import com.hrznstudio.matteroverdrive.item.MOItems;
 import com.hrznstudio.matteroverdrive.sounds.MOSounds;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkHooks;
 
-public class KunaiEntity extends AbstractArrowEntity {
+public class KunaiEntity extends AbstractArrow {
 
-    public KunaiEntity(EntityType<? extends KunaiEntity> type, World worldIn) {
+    public KunaiEntity(EntityType<? extends KunaiEntity> type, Level worldIn) {
         super(type, worldIn);
     }
 
-    public KunaiEntity(World worldIn, LivingEntity shooter) {
+    public KunaiEntity(Level worldIn, LivingEntity shooter) {
         super(MOEntities.KUNAI.get(), shooter, worldIn);
     }
 
@@ -29,7 +29,7 @@ public class KunaiEntity extends AbstractArrowEntity {
 
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public Packet<?> createSpawnPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
