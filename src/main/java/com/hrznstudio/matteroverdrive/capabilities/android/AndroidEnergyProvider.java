@@ -1,7 +1,7 @@
 package com.hrznstudio.matteroverdrive.capabilities.android;
 
 import com.hrznstudio.matteroverdrive.capabilities.AndroidEnergyCapability;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -13,7 +13,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class AndroidEnergyProvider implements ICapabilityProvider, ICapabilitySerializable<CompoundNBT> {
+public class AndroidEnergyProvider implements ICapabilityProvider, ICapabilitySerializable<CompoundTag> {
 
     private final AndroidEnergyCapability energyCapability = new AndroidEnergyCapability(AndroidEnergyCapability.DEFAULT_ENERGY);
 
@@ -26,14 +26,14 @@ public class AndroidEnergyProvider implements ICapabilityProvider, ICapabilitySe
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT compoundNBT = new CompoundNBT();
-        compoundNBT.putInt("Energy", energyCapability.getEnergyStored());
-        return compoundNBT;
+    public CompoundTag serializeNBT() {
+        CompoundTag CompoundTag = new CompoundTag();
+        CompoundTag.putInt("Energy", energyCapability.getEnergyStored());
+        return CompoundTag;
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         energyCapability.setEnergy(nbt.getInt("Energy"));
     }
 }

@@ -2,7 +2,7 @@ package com.hrznstudio.matteroverdrive.capabilities.android;
 
 import com.hrznstudio.matteroverdrive.api.android.IAndroid;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -12,7 +12,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class AndroidDataProvider implements ICapabilityProvider, ICapabilitySerializable<CompoundNBT> {
+public class AndroidDataProvider implements ICapabilityProvider, ICapabilitySerializable<CompoundTag> {
 
     private final IAndroid androidData = MOCapabilities.ANDROID_DATA.getDefaultInstance();
 
@@ -25,12 +25,12 @@ public class AndroidDataProvider implements ICapabilityProvider, ICapabilitySeri
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
+    public CompoundTag serializeNBT() {
         return androidData.serializeNBT();
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         androidData.deserializeNBT(nbt);
     }
 }

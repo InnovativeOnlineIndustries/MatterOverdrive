@@ -13,7 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
@@ -177,8 +177,8 @@ public class AndroidData implements IAndroid {
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        final CompoundNBT nbt = new CompoundNBT();
+    public CompoundTag serializeNBT() {
+        final CompoundTag nbt = new CompoundTag();
         nbt.putBoolean(IS_ANDROID_NBT, this.isAndroid);
         nbt.putInt(TRANSFORMATION_TIME_NBT, this.transformationTime);
         nbt.put("PerkManager", perkManager.serializeNBT());
@@ -186,7 +186,7 @@ public class AndroidData implements IAndroid {
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         this.isAndroid = nbt.getBoolean(IS_ANDROID_NBT);
         this.transformationTime = nbt.getInt(TRANSFORMATION_TIME_NBT);
         this.perkManager.deserializeNBT(nbt.getCompound("PerkManager"));

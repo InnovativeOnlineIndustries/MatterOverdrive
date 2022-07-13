@@ -6,7 +6,7 @@ import com.google.common.collect.Multimap;
 import com.hrznstudio.matteroverdrive.capabilities.android.AndroidData;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -16,7 +16,7 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public abstract class AndroidModule extends ForgeRegistryEntry<AndroidModule> implements INBTSerializable<CompoundNBT> {
+public abstract class AndroidModule extends ForgeRegistryEntry<AndroidModule> implements INBTSerializable<CompoundTag> {
 
     private final int maxTier;
     private final int minTier;
@@ -65,21 +65,21 @@ public abstract class AndroidModule extends ForgeRegistryEntry<AndroidModule> im
      *
      * @param nbt The NBT being passed for updating the Module.
      */
-    public void onInstall(LivingEntity entity, AndroidData data, CompoundNBT nbt) {}
+    public void onInstall(LivingEntity entity, AndroidData data, CompoundTag nbt) {}
 
     /**
      * This is used to update the Modules internal data using passed NBT-Data.
      *
      * @param nbt The NBT being passed for updating the Module.
      */
-    public void onUpdate(LivingEntity entity, AndroidData data, CompoundNBT nbt) {}
+    public void onUpdate(LivingEntity entity, AndroidData data, CompoundTag nbt) {}
 
     /**
      * This is used to set the stored data using a NBT-tag on Removal.
      *
      * @param nbt The NBT being passed for updating the Module.
      */
-    public void onRemoval(LivingEntity entity, AndroidData data, CompoundNBT nbt) {}
+    public void onRemoval(LivingEntity entity, AndroidData data, CompoundTag nbt) {}
 
     /**
      * This returns a boolean check against both Modifiers not just this Modifier.
@@ -171,8 +171,8 @@ public abstract class AndroidModule extends ForgeRegistryEntry<AndroidModule> im
      * @return Returns the Serialized Data of the Module
      */
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT nbt = new CompoundNBT();
+    public CompoundTag serializeNBT() {
+        CompoundTag nbt = new CompoundTag();
         nbt.putInt(CURRENT_TIER, this.getCurrentTier());
         return nbt;
     }
@@ -183,7 +183,7 @@ public abstract class AndroidModule extends ForgeRegistryEntry<AndroidModule> im
      * @param nbt The serialized Data of the Module
      */
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         this.setCurrentTier(nbt.getInt(CURRENT_TIER));
     }
 }

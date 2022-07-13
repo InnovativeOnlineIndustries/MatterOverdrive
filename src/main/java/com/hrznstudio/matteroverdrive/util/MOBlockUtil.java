@@ -1,15 +1,16 @@
 package com.hrznstudio.matteroverdrive.util;
 
-import net.minecraft.block.Block;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 
 public class MOBlockUtil {
 
-    public static boolean checkDirectionForState(World world, BlockPos current, Direction direction, Block state, int amount) {
+    public static boolean checkDirectionForState(Level level, BlockPos current, Direction direction, Block block, int amount) {
         for (int i = 0; i < amount; i++) {
-            if (!world.getBlockState(current.offset(direction, i + 1)).isIn(state)) return false;
+            if (!level.getBlockState(BlockPos.of(BlockPos.offset( i + 1, direction))).is(block)) return false;
         }
         return true;
     }
