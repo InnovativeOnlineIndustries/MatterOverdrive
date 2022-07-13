@@ -2,29 +2,29 @@ package com.hrznstudio.matteroverdrive.api.android;
 
 
 import com.hrznstudio.matteroverdrive.api.android.perk.AndroidPerkManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
-public interface IAndroid extends ICapabilitySerializable<CompoundNBT> {
+public interface IAndroid extends ICapabilitySerializable<CompoundTag> {
 
     /**
-     * Checks if the {@link net.minecraft.entity.Entity} is currently and android or not
+     * Checks if the {@link net.minecraft.world.entity.Entity} is currently and android or not
      *
      * @return true if the player is an android
      */
     boolean isAndroid();
 
     /**
-     * Sets if the {@link net.minecraft.entity.Entity} is currently and android or not
+     * Sets if the {@link net.minecraft.world.entity.Entity} is currently and android or not
      *
      * @return true if the player is an android
      */
     void setAndroid(boolean android);
 
     /**
-     * Checks if the {@link net.minecraft.entity.Entity} is turning into an android
+     * Checks if the {@link net.minecraft.world.entity.Entity} is turning into an android
      *
      * @return true if the player is currently turning into an android
      */

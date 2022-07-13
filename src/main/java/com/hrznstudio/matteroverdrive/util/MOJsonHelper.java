@@ -5,15 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.hrznstudio.matteroverdrive.MatterOverdrive;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.potion.Effect;
-import net.minecraft.state.Property;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import java.util.Map;
 import java.util.Optional;

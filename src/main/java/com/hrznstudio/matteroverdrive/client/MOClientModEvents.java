@@ -7,7 +7,7 @@ import com.hrznstudio.matteroverdrive.api.android.perk.IAndroidPerk;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import com.hrznstudio.matteroverdrive.item.MOItems;
 import com.hrznstudio.matteroverdrive.network.PacketHandler;
-import com.hrznstudio.matteroverdrive.network.client.AndroidPerkTogglePacket;
+import com.hrznstudio.matteroverdrive.network.c2s.AndroidPerkTogglePacket;
 import com.hrznstudio.matteroverdrive.sounds.MOSounds;
 import com.hrznstudio.titanium.api.material.IHasColor;
 import com.hrznstudio.titanium.event.handler.EventManager;

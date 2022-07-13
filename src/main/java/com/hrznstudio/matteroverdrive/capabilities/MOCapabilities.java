@@ -2,11 +2,11 @@ package com.hrznstudio.matteroverdrive.capabilities;
 
 import com.hrznstudio.matteroverdrive.api.android.IAndroid;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 
 public class MOCapabilities {
 
-    @CapabilityInject(IAndroid.class)
-    public static final Capability<IAndroid> ANDROID_DATA = null;
+    public static final Capability<IAndroid> ANDROID_DATA = CapabilityManager.get(new CapabilityToken<>() {});
 
 }

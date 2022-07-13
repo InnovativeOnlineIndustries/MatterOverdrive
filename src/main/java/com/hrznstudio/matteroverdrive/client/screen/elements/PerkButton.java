@@ -4,7 +4,7 @@ import com.hrznstudio.matteroverdrive.MatterOverdrive;
 import com.hrznstudio.matteroverdrive.api.android.perk.IAndroidPerk;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import com.hrznstudio.matteroverdrive.network.PacketHandler;
-import com.hrznstudio.matteroverdrive.network.client.AndroidPerkAttemptBuyPacket;
+import com.hrznstudio.matteroverdrive.network.c2s.AndroidPerkAttemptBuyPacket;
 import com.hrznstudio.matteroverdrive.util.MOColorUtil;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;

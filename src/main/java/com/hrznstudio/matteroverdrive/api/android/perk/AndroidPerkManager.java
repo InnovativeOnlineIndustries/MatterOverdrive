@@ -1,6 +1,7 @@
 package com.hrznstudio.matteroverdrive.api.android.perk;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AndroidPerkManager implements INBTSerializable<CompoundNBT> {
+public class AndroidPerkManager implements INBTSerializable<CompoundTag> {
 
     public static String NBT_ENABLED = "Enabled";
     public static String NBT_OWNED = "Owned";
@@ -67,39 +68,39 @@ public class AndroidPerkManager implements INBTSerializable<CompoundNBT> {
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT compoundNBT = new CompoundNBT();
-        CompoundNBT owned = new CompoundNBT();
+    public CompoundTag serializeNBT() {
+        CompoundTag compoundTag = new CompoundTag();
+        CompoundTag owned = new CompoundTag();
         for (String s : this.owned.keySet()) {
             owned.putInt(s, this.owned.get(s));
         }
-        CompoundNBT enabled = new CompoundNBT();
+        CompoundTag enabled = new CompoundTag();
         for (int i = 0; i < this.enabled.size(); i++) {
             enabled.putString(i + "", this.enabled.get(i));
         }
-        CompoundNBT tracker = new CompoundNBT();
+        CompoundTag tracker = new CompoundTag();
         for (String s : this.perkActivityTracker.keySet()) {
             tracker.putLong(s, this.perkActivityTracker.get(s));
         }
-        compoundNBT.put(NBT_ENABLED, enabled);
-        compoundNBT.put(NBT_OWNED, owned);
-        compoundNBT.put(NBT_TRACKED, tracker);
-        return compoundNBT;
+        compoundTag.put(NBT_ENABLED, enabled);
+        compoundTag.put(NBT_OWNED, owned);
+        compoundTag.put(NBT_TRACKED, tracker);
+        return compoundTag;
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         this.owned.clear();
         this.enabled.clear();
-        CompoundNBT owned = nbt.getCompound(NBT_OWNED);
+        CompoundTag owned = nbt.getCompound(NBT_OWNED);
         for (String s : owned.keySet()) {
             this.owned.put(s, owned.getInt(s));
         }
-        CompoundNBT enabled = nbt.getCompound(NBT_ENABLED);
+        CompoundTag enabled = nbt.getCompound(NBT_ENABLED);
         for (String s : enabled.keySet()) {
             this.enabled.add(enabled.getString(s));
         }
-        CompoundNBT tracked = nbt.getCompound(NBT_TRACKED);
+        CompoundTag tracked = nbt.getCompound(NBT_TRACKED);
         for (String s : tracked.keySet()) {
             this.perkActivityTracker.put(s, tracked.getLong(s));
         }

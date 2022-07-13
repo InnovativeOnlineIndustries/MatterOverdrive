@@ -1,11 +1,10 @@
 package com.hrznstudio.matteroverdrive.capabilities;
 
 import com.hrznstudio.matteroverdrive.network.PacketHandler;
-import com.hrznstudio.matteroverdrive.network.server.AndroidEnergySyncPacket;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import com.hrznstudio.matteroverdrive.network.s2c.AndroidEnergySyncPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fml.network.NetworkDirection;
 
 public class AndroidEnergyCapability implements IEnergyStorage {
 
@@ -34,7 +33,7 @@ public class AndroidEnergyCapability implements IEnergyStorage {
         this.energy = Math.max(0, Math.min(capacity, energy));
     }
 
-    public static void syncEnergy(ServerPlayerEntity entity) {
+    public static void syncEnergy(ServerPlayer entity) {
         entity.getCapability(CapabilityEnergy.ENERGY).ifPresent(energyStorage -> {
             PacketHandler.NETWORK.get().sendTo(new AndroidEnergySyncPacket(energyStorage.getEnergyStored(), energyStorage.getMaxEnergyStored()), entity.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
         });
