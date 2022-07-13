@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[35,)"
+loaderVersion="[41,)"
 issueTrackerURL = "https://github.com/InnovativeOnlineIndustries/MatterOverdrive/issues"
 license = "MIT"
 [[mods]]
@@ -7,7 +7,7 @@ modId = "matteroverdrive"
 version = "${file.jarVersion}"
 displayName = "Matter Overdrive"
 displayURL = "https://www.curseforge.com/minecraft/mc-mods/matter-overdrive"
-authors = "HRZNStudio, Sekwah41, Lanse505"
+authors = "Buuz135, Sekwah41, Lanse505"
 logoFile = "mo_logo.png"
 description = '''
 "Tinky Winky says 'No'" - Lanse505
@@ -16,7 +16,7 @@ description = '''
 [[dependencies.matteroverdrive]]
 modId = "forge"
 mandatory = true
-versionRange = "[35,)"
+versionRange="[41.0.94,)"
 ordering = "NONE"
 side = "BOTH"
 
@@ -24,6 +24,6 @@ side = "BOTH"
 [[dependencies.matteroverdrive]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.16.3,)"
+versionRange="[1.19]"
 ordering = "NONE"
 side = "BOTH"
