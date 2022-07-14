@@ -115,6 +115,7 @@ public class AndroidHudScreen{
             Minecraft.getInstance().getTextureManager().bindForSetup(CROSS_HAIR_RL);
             stack.pushPose();
             RenderSystem.enableBlend();
+            // TODO: @Sekwah look into the final parts of this
             RenderSystem.enableAlphaTest();
             RenderSystem.blendFunc(GL_ONE_MINUS_DST_COLOR, GL_ONE_MINUS_SRC_COLOR);
             RenderSystem.setShaderColor(ReferenceClient.Colors.HOLO.getRed() / 255f, ReferenceClient.Colors.HOLO.getGreen() / 255f, ReferenceClient.Colors.HOLO.getBlue() / 255f, ReferenceClient.Colors.HOLO.getAlpha());
