@@ -4,27 +4,26 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.hrznstudio.matteroverdrive.capabilities.android.AndroidData;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public abstract class AndroidModule extends ForgeRegistryEntry<AndroidModule> implements INBTSerializable<CompoundTag> {
+public abstract class AndroidModule implements INBTSerializable<CompoundTag> {
 
     private final int maxTier;
     private final int minTier;
     private final boolean shouldAllowStackingModules;
 
     private String translationKey;
-    private ITextComponent name;
-    private List<ITextComponent> tooltip;
+    private MutableComponent name;
+    private List<MutableComponent> tooltip;
     private int currentTier;
 
     public static final String CURRENT_TIER = "currentTier";
@@ -104,7 +103,8 @@ public abstract class AndroidModule extends ForgeRegistryEntry<AndroidModule> im
     @Nonnull
     public String getTranslationName() {
         if (translationKey == null) {
-            translationKey = Util.makeTranslationKey("android.module", this.getRegistryName());
+            // TODO either pass the registry name in or get it from the registry once its created.
+            // translationKey = Util.makeDescriptionId("android.module", this.getRegistryName());
         }
         return translationKey;
     }
@@ -113,9 +113,9 @@ public abstract class AndroidModule extends ForgeRegistryEntry<AndroidModule> im
      * @return Returns the translated Name for the Modifier.
      */
     @Nonnull
-    public ITextComponent getName() {
+    public MutableComponent getName() {
         if (name == null) {
-            name = new TranslationTextComponent(this.getTranslationName());
+            name = Component.translatable(this.getTranslationName());
         }
         return name;
     }
@@ -124,7 +124,7 @@ public abstract class AndroidModule extends ForgeRegistryEntry<AndroidModule> im
      * @return Returns the translated Name for the Modifier.
      */
     @Nonnull
-    public List<ITextComponent> getTooltip() {
+    public List<MutableComponent> getTooltip() {
         if (tooltip == null) {
             tooltip = Lists.newArrayList();
         }

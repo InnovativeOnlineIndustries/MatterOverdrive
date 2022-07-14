@@ -1,7 +1,6 @@
 package com.hrznstudio.matteroverdrive.client;
 
 import com.hrznstudio.matteroverdrive.MatterOverdrive;
-import com.hrznstudio.matteroverdrive.android.perks.BaseAndroidPerk;
 import com.hrznstudio.matteroverdrive.android.perks.PerkTree;
 import com.hrznstudio.matteroverdrive.api.android.perk.IAndroidPerk;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
