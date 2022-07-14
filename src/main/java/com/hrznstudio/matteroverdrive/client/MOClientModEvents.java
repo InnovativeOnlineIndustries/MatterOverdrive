@@ -12,6 +12,8 @@ import com.hrznstudio.matteroverdrive.sounds.MOSounds;
 import com.hrznstudio.matteroverdrive.util.IHasColor;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.sounds.SoundSource;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
@@ -54,7 +56,7 @@ public class MOClientModEvents {
     public static void onClient() {
         if (PerkTree.NIGHT_VISION instanceof BaseAndroidPerk) {
             PerkTree.NIGHT_VISION.setOnClientKeyPress((iAndroid, integer) -> {
-                Minecraft.getInstance().getSoundHandler().play(new SimpleSound(MOSounds.NIGTH_VISION.get(), SoundCategory.PLAYERS, 0.5f, 1f, Minecraft.getInstance().player.getPosition()));
+                Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(MOSounds.NIGTH_VISION.get(), SoundSource.PLAYERS, 0.5f, 1f, Minecraft.getInstance().player.getPosition()));
             });
         }
     }
