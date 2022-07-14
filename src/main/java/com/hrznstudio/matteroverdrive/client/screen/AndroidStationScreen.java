@@ -14,7 +14,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 
@@ -72,7 +71,7 @@ public class AndroidStationScreen extends ContainerScreen<AndroidStationContaine
         leftSize = 56;
         int rightSize = 36;
         fill(poseStack, xStart +1, yStart + cornerHeights - 16, this.width - xStart - 16, this.height - yStart - cornerHeights + 14, 0xff222825);
-        Minecraft.getInstance().getTextureManager().bindForSetup(new ResourceLocation(MatterOverdrive.MOD_ID, "textures/gui/base_gui.png"));
+        RenderSystem.setShaderTexture(0, new ResourceLocation(MatterOverdrive.MOD_ID, "textures/gui/base_gui.png"));
         //Top Left Corner
         blit(poseStack, xStart, yStart, 0,0, leftSize, cornerHeights);
         //Bottom left corner

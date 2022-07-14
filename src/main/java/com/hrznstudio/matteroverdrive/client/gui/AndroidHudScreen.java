@@ -112,7 +112,7 @@ public class AndroidHudScreen{
             int centerX = event.getWindow().getWidth() / 2;
             int centerY = event.getWindow().getHeight() / 2;
             //CROSSHAIR
-            Minecraft.getInstance().getTextureManager().bindForSetup(CROSS_HAIR_RL);
+            RenderSystem.setShaderTexture(0, CROSS_HAIR_RL);
             stack.pushPose();
             RenderSystem.enableBlend();
             // TODO: @Sekwah look into the final parts of this
@@ -177,29 +177,29 @@ public class AndroidHudScreen{
     }
 
     public void renderSpinner(PoseStack stack, int centerX, int centerY, int spinnerSize, ResourceLocation location, int mult, boolean invert) {
-        Minecraft.getInstance().getTextureManager().bindForSetup(location);
+        RenderSystem.setShaderTexture(0, location);
         stack.pushPose();
         RenderSystem.enableBlend();
-        RenderSystem.enableAlphaTest();
+        //RenderSystem.enableAlphaTest();
         stack.translate(centerX, centerY, 0);
         stack.mulPose(Vector3f.ZP.rotation(Minecraft.getInstance().level.getGameTime()/ 90f * mult * (invert ? 1 : -1)));
         stack.translate(-spinnerSize / 2, -spinnerSize / 2, 0);
         Screen.blit(stack, 0, 0, 0, 0, spinnerSize, spinnerSize, spinnerSize, spinnerSize);
         RenderSystem.disableBlend();
-        RenderSystem.disableAlphaTest();
+        //RenderSystem.disableAlphaTest();
         stack.popPose();
     }
 
     public void renderGlitch(RenderGuiOverlayEvent event) {
         event.getPoseStack().pushPose();
         RenderSystem.enableBlend();
-        RenderSystem.enableAlphaTest();
+        //RenderSystem.enableAlphaTest();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
         RenderSystem.setShaderColor(1, 1, 1, 1);
-        Minecraft.getInstance().getTextureManager().bindForSetup(glitch_tex);
+        RenderSystem.setShaderTexture(0, glitch_tex);
         Screen.blit(event.getPoseStack(),0, 0,  0,0, 1280, 720, event.getWindow().getWidth(), event.getWindow().getHeight());
         RenderSystem.disableBlend();
-        RenderSystem.disableAlphaTest();
+        //RenderSystem.disableAlphaTest();
         event.getPoseStack().popPose();
     }
 
