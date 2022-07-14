@@ -54,7 +54,7 @@ public class MOClientModEvents {
 
     @OnlyIn(Dist.CLIENT)
     public static void onClient() {
-        if (PerkTree.NIGHT_VISION instanceof BaseAndroidPerk) {
+        if (PerkTree.NIGHT_VISION != null) {
             PerkTree.NIGHT_VISION.setOnClientKeyPress((iAndroid, integer) -> {
                 Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(MOSounds.NIGTH_VISION.get(), SoundSource.PLAYERS, 0.5f, 1f, Minecraft.getInstance().player.level.random, Minecraft.getInstance().player.blockPosition()));
             });

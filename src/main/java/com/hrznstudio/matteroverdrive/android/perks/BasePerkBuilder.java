@@ -13,7 +13,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 
-public class BasePerkBuilder extends BaseAndroidPerk{
+public class BasePerkBuilder extends BaseAndroidPerk {
 
     public BasePerkBuilder(String perkName) {
         super(perkName);
