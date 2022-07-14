@@ -3,6 +3,7 @@ package com.hrznstudio.matteroverdrive.android.perks;
 import com.google.common.collect.ImmutableMultimap;
 import com.hrznstudio.matteroverdrive.capabilities.android.AndroidEnergy;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
+import com.hrznstudio.matteroverdrive.event.EventManager;
 import com.hrznstudio.matteroverdrive.item.food.AndroidPillItem;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import net.minecraft.entity.ai.attributes.AttributeModifier;

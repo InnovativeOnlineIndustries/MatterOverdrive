@@ -2,7 +2,7 @@ package com.hrznstudio.matteroverdrive.api.android.gui;
 
 import com.hrznstudio.matteroverdrive.api.android.IAndroid;
 import com.hrznstudio.matteroverdrive.reference.ReferenceClient;
-import net.minecraft.client.MainWindow;
+import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
 
 import java.awt.*;
@@ -27,12 +27,12 @@ public abstract class HudElement implements IHudElement{
     }
 
     @Override
-    public int getWidth(MainWindow resolution, IAndroid androidPlayer) {
+    public int getWidth(Window resolution, IAndroid androidPlayer) {
         return width;
     }
 
     @Override
-    public int getHeight(MainWindow resolution, IAndroid androidPlayer) {
+    public int getHeight(Window resolution, IAndroid androidPlayer) {
         return height;
     }
 
