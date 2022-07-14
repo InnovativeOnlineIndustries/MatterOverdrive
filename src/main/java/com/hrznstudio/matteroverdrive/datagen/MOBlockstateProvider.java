@@ -5,12 +5,19 @@ import com.hrznstudio.titanium.block.RotatableBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.CropsBlock;
 import net.minecraft.block.RotatedPillarBlock;
+import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Direction;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class MOBlockstateProvider extends BlockStateProvider {
 
@@ -24,32 +31,32 @@ public class MOBlockstateProvider extends BlockStateProvider {
         horizontalBlock(MOBlocks.ANDROID_STATION.get());
     }
 
-    private void crop(CropsBlock block) {
+    private void crop(CropBlock block) {
         getVariantBuilder(block).forAllStates(blockState -> {
-            int age = blockState.get(block.getAgeProperty());
-            return ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + block.getRegistryName().getPath() + "_" + age))).build();
+            int age = blockState.getValue(block.getAgeProperty());
+            return ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + getBlockRL(block).getPath() + "_" + age))).build();
         });
     }
 
     private void simpleBlockUn(Block block) {
-        simpleBlock(block, new ModelFile.UncheckedModelFile(modLoc("block/" + block.getRegistryName().getPath())));
+        simpleBlock(block, new ModelFile.UncheckedModelFile(modLoc("block/" + getBlockRL(block).getPath())));
     }
 
     private void horizontalBlock(Block block) {
-        ModelFile file = new ModelFile.UncheckedModelFile(modLoc("block/" + block.getRegistryName().getPath()));
+        ModelFile file = new ModelFile.UncheckedModelFile(modLoc("block/" + getBlockRL(block).getPath()));
         getVariantBuilder(block)
                 .forAllStates(state -> ConfiguredModel.builder()
                         .modelFile(file)
-                        .rotationY(((int) state.get(RotatableBlock.FACING_HORIZONTAL).getHorizontalAngle()) % 360)
+                        .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).get3DDataValue()) % 360)
                         .build()
                 );
     }
 
     private void logBlockRot(Block block) {
-        ModelFile file = new ModelFile.UncheckedModelFile(modLoc("block/" + block.getRegistryName().getPath()));
+        ModelFile file = new ModelFile.UncheckedModelFile(modLoc("block/" + getBlockRL(block).getPath()));
         getVariantBuilder(block)
                 .forAllStates(state -> {
-                            Direction.Axis axis = state.get(RotatedPillarBlock.AXIS);
+                            Direction.Axis axis = state.getValue(RotatedPillarBlock.AXIS);
                             if (axis == Direction.Axis.Y) {
                                 return ConfiguredModel.builder()
                                         .modelFile(file)
@@ -68,6 +75,10 @@ public class MOBlockstateProvider extends BlockStateProvider {
                                     .build();
                         }
                 );
+    }
+
+    private ResourceLocation getBlockRL(Block block) {
+      return ForgeRegistries.BLOCKS.getKey(block);
     }
 
 }

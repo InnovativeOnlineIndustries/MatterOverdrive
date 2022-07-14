@@ -4,10 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hrznstudio.matteroverdrive.MatterOverdrive;
 import net.minecraft.advancements.Advancement;
-import net.minecraft.data.AdvancementProvider;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
+import net.minecraft.data.DataProvider;
+import net.minecraft.data.advancements.AdvancementProvider;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -24,12 +24,12 @@ public class ExtendableAdvancementProvider extends AdvancementProvider {
     }
 
     @Override
-    public void act(DirectoryCache cache) throws IOException {
+    public void run(CachedOutput cache) {
         Path outputFolder = this.generator.getOutputFolder();
         Consumer<Advancement> consumer = advancement -> {
             Path path = outputFolder.resolve("data/" + advancement.getId().getNamespace() + "/advancements/" + advancement.getId().getPath() + ".json");
             try {
-                IDataProvider.save(GSON, cache, advancement.copy().serialize(), path);
+                DataProvider.saveStable(cache, advancement.deconstruct().serializeToJson(), path);
             } catch (IOException e) {
                 MatterOverdrive.LOGGER.info(e);
             }
