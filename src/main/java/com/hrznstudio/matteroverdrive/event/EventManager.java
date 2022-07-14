@@ -1,3 +1,5 @@
+package com.hrznstudio.matteroverdrive.event;
+
 import com.hrznstudio.matteroverdrive.event.Bus;
 import com.hrznstudio.matteroverdrive.event.FilteredEventManager;
 import com.hrznstudio.matteroverdrive.event.GenericEventManager;
