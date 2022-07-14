@@ -81,13 +81,13 @@ public class AndroidHudScreen{
             }
             if (!shaderEnabled){
                 shaderEnabled = true;
-                Minecraft.getInstance().doRunTask(() -> Minecraft.getInstance().gameRenderer.loadShader(new ResourceLocation(MatterOverdrive.MOD_ID, "shaders/post/transform.json")));
+                Minecraft.getInstance().doRunTask(() -> Minecraft.getInstance().gameRenderer.loadEffect(new ResourceLocation(MatterOverdrive.MOD_ID, "shaders/post/transform.json")));
             }
         }
         if (data.isAndroid()){
             if (shaderEnabled){
                 shaderEnabled = false;
-                Minecraft.getInstance().doRunTask(() -> Minecraft.getInstance().gameRenderer.stopUseShader());
+                Minecraft.getInstance().doRunTask(() -> Minecraft.getInstance().gameRenderer.shutdownEffect());
             }
             onAndroid(event, data);
         }
