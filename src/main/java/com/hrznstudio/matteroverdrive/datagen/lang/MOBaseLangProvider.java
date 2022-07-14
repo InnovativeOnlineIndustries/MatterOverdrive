@@ -25,8 +25,8 @@ public class MOBaseLangProvider extends LanguageProvider {
      */
     public void add(Advancement advancement, String title, String description) {
         final DisplayInfo display = advancement.getDisplay();
-        add(display.getTitle().getUnformattedComponentText(), title);
-        add(display.getDescription().getUnformattedComponentText(), description);
+        add(display.getTitle().getString(), title);
+        add(display.getDescription().getString(), description);
     }
 
 }
