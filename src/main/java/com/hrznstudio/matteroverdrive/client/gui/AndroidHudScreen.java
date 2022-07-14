@@ -14,7 +14,10 @@ import com.hrznstudio.matteroverdrive.reference.ReferenceClient;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -24,6 +27,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.awt.*;
+import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,22 +109,22 @@ public class AndroidHudScreen{
         }
         if (event.getOverlay() == VanillaGuiOverlay.TITLE_TEXT.type()) {
             PoseStack stack = event.getPoseStack();
-            int centerX = event.getWindow().getScaledWidth() / 2;
-            int centerY = event.getWindow().getScaledHeight() / 2;
-            //CORSSHAIR
-            Minecraft.getInstance().getTextureManager().bindTexture(CROSS_HAIR_RL);
-            stack.push();
+            int centerX = event.getWindow().getWidth() / 2;
+            int centerY = event.getWindow().getHeight() / 2;
+            //CROSSHAIR
+            Minecraft.getInstance().getTextureManager().bindForSetup(CROSS_HAIR_RL);
+            stack.pushPose();
             RenderSystem.enableBlend();
             RenderSystem.enableAlphaTest();
             RenderSystem.blendFunc(GL_ONE_MINUS_DST_COLOR, GL_ONE_MINUS_SRC_COLOR);
-            RenderSystem.color3f(ReferenceClient.Colors.HOLO.getRed() / 255f, ReferenceClient.Colors.HOLO.getGreen() / 255f, ReferenceClient.Colors.HOLO.getBlue() / 255f);
+            RenderSystem.setShaderColor(ReferenceClient.Colors.HOLO.getRed() / 255f, ReferenceClient.Colors.HOLO.getGreen() / 255f, ReferenceClient.Colors.HOLO.getBlue() / 255f, ReferenceClient.Colors.HOLO.getAlpha());
             Screen.blit(stack, centerX - 9, centerY - 8, 0, 0, 16, 16, 16, 16);
             RenderSystem.disableBlend();
             RenderSystem.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             RenderSystem.disableAlphaTest();
-            stack.pop();
+            stack.popPose();
             //ELEMENTS
-            stack.push();
+            stack.pushPose();
             if (!Minecraft.getInstance().player.isSleeping()) {
                 hudRotationYawSmooth = Minecraft.getInstance().player.prevRenderArmYaw + (Minecraft.getInstance().player.renderArmYaw - Minecraft.getInstance().player.prevRenderArmYaw) * event.getPartialTicks();
                 hudRotationPitchSmooth = Minecraft.getInstance().player.prevRenderArmPitch + (Minecraft.getInstance().player.renderArmPitch - Minecraft.getInstance().player.prevRenderArmPitch) * event.getPartialTicks();
@@ -128,74 +132,74 @@ public class AndroidHudScreen{
             }
             for (IHudElement iHudElement : elementList) {
                 if (iHudElement.isVisible(data)){
-                    stack.push();
+                    stack.pushPose();
                     int elementWidth = (int) (iHudElement.getWidth(event.getWindow(), data) * iHudElement.getPosition().getX());
-                    stack.translate(iHudElement.getPosition().getX() * event.getWindow().getScaledWidth() - elementWidth, iHudElement.getPosition().getY() * event.getWindow().getScaledHeight() - iHudElement.getHeight(event.getWindow(), data) * iHudElement.getPosition().getY(), 0);
+                    stack.translate(iHudElement.getPosition().getX() * event.getWindow().getWidth() - elementWidth, iHudElement.getPosition().getY() * event.getWindow().getHeight() - iHudElement.getHeight(event.getWindow(), data) * iHudElement.getPosition().getY(), 0);
                     iHudElement.setBaseColor(baseGuiColor);
                     iHudElement.setBackgroundAlpha(opacityBackground);
-                    iHudElement.drawElement(stack, data, event.getWindow(), event.getPartialTicks());
-                    stack.pop();
+                    iHudElement.drawElement(stack, data, event.getWindow(), event.getPartialTick());
+                    stack.popPose();
                 }
             }
-            stack.pop();
+            stack.popPose();
         }
     }
 
     private void onTransforming(RenderGuiOverlayEvent.Pre event, IAndroid data){
         PoseStack stack = event.getPoseStack();
-        int centerX = event.getWindow().getScaledWidth() / 2;
-        int centerY = event.getWindow().getScaledHeight() / 2;
+        int centerX = event.getWindow().getWidth() / 2;
+        int centerY = event.getWindow().getHeight() / 2;
         int maxTime = AndroidData.TURNING_TIME;
         int time = maxTime - data.getTurningTime();
         animationConsole.setTime(time);
 
         String infos = animationConsole.getString();
         String[] split = infos.split("\n");
-        stack.push();
+        stack.pushPose();
         stack.translate(10, 40, 0);
         //stack.scale(0.75f, 0.75f, 0.75f);
         for (int i = 0; i < split.length; i++) {
             String info = split[i];
-            Minecraft.getInstance().fontRenderer.drawStringWithShadow(stack, info, 0, i * 9, ReferenceClient.Colors.HOLO.getRGB());
+            Minecraft.getInstance().font.drawShadow(stack, info, 0, i * 9, ReferenceClient.Colors.HOLO.getRGB());
         }
-        stack.pop();
+        stack.popPose();
         int spinnerSize = 40;
 
         RenderSystem.blendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);
         if (data.getTurningTime() % 40 > 0 && data.getTurningTime() % 40 < 3) renderGlitch(event);
-        RenderSystem.color3f(1, 1, 1);
+        RenderSystem.setShaderColor(1, 1, 1, 1);
         renderSpinner(stack, centerX, centerY, spinnerSize, spinner_1_tex, 4, false);
-        RenderSystem.color3f(0.8f, 0.8f, 0.8f);
+        RenderSystem.setShaderColor(0.8f, 0.8f, 0.8f, 0.8f);
         renderSpinner(stack, centerX, centerY, spinnerSize, spinner_2_tex, 5, true);
-        RenderSystem.color3f(0.7f, 0.7f, 0.7f);
+        RenderSystem.setShaderColor(0.7f, 0.7f, 0.7f, 0.7f);
         renderSpinner(stack, centerX, centerY, spinnerSize, spinner_3_tex, 7, false);
     }
 
-    public void renderSpinner(MatrixStack stack, int centerX, int centerY, int spinnerSize, ResourceLocation location, int mult, boolean invert) {
-        Minecraft.getInstance().getTextureManager().bindTexture(location);
-        stack.push();
+    public void renderSpinner(PoseStack stack, int centerX, int centerY, int spinnerSize, ResourceLocation location, int mult, boolean invert) {
+        Minecraft.getInstance().getTextureManager().bindForSetup(location);
+        stack.pushPose();
         RenderSystem.enableBlend();
         RenderSystem.enableAlphaTest();
         stack.translate(centerX, centerY, 0);
-        stack.rotate(Vector3f.ZP.rotation(Minecraft.getInstance().world.getGameTime()/ 90f * mult * (invert ? 1 : -1)));
+        stack.mulPose(Vector3f.ZP.rotation(Minecraft.getInstance().level.getGameTime()/ 90f * mult * (invert ? 1 : -1)));
         stack.translate(-spinnerSize / 2, -spinnerSize / 2, 0);
         Screen.blit(stack, 0, 0, 0, 0, spinnerSize, spinnerSize, spinnerSize, spinnerSize);
         RenderSystem.disableBlend();
         RenderSystem.disableAlphaTest();
-        stack.pop();
+        stack.popPose();
     }
 
-    public void renderGlitch(RenderGameOverlayEvent event) {
-        event.getMatrixStack().push();
+    public void renderGlitch(RenderGuiOverlayEvent event) {
+        event.getPoseStack().pushPose();
         RenderSystem.enableBlend();
         RenderSystem.enableAlphaTest();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-        RenderSystem.color3f(1, 1, 1);
-        Minecraft.getInstance().getTextureManager().bindTexture(glitch_tex);
-        Screen.blit(event.getMatrixStack(),0, 0,  0,0, 1280, 720, event.getWindow().getScaledWidth(), event.getWindow().getScaledHeight());
+        RenderSystem.setShaderColor(1, 1, 1, 1);
+        Minecraft.getInstance().getTextureManager().bindForSetup(glitch_tex);
+        Screen.blit(event.getPoseStack(),0, 0,  0,0, 1280, 720, event.getWindow().getWidth(), event.getWindow().getHeight());
         RenderSystem.disableBlend();
         RenderSystem.disableAlphaTest();
-        event.getMatrixStack().pop();
+        event.getPoseStack().popPose();
     }
 
     private void setupAnimationConsole(){
@@ -203,10 +207,10 @@ public class AndroidHudScreen{
             animationConsole = new AnimationConsole(false, AndroidData.TURNING_TIME);
             String info;
             for (int i = 0; i < 8; i++) {
-                info = new TranslationTextComponent("gui.android_hud.transforming.line." + i).getString();
+                info = Component.translatable("gui.android_hud.transforming.line." + i).getString();
                 animationConsole.addSegmentSequential(AnimationSegmentText.getSegmentText(info, 0, 1).setLengthPerCharacter(1));
             }
-            info = new TranslationTextComponent("gui.android_hud.transforming.line.final").getString();
+            info = Component.translatable("gui.android_hud.transforming.line.final").getString();
             animationConsole.setFinalSegment(new AnimationSegmentText(info, 0, 1).setLengthPerCharacter(1));
         }
     }

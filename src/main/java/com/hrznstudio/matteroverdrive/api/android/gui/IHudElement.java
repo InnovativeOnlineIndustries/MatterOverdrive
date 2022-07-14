@@ -1,8 +1,8 @@
 package com.hrznstudio.matteroverdrive.api.android.gui;
 
 import com.hrznstudio.matteroverdrive.api.android.IAndroid;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.MainWindow;
+import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import java.awt.*;
 
@@ -10,11 +10,11 @@ public interface IHudElement {
 
     boolean isVisible(IAndroid android);
 
-    void drawElement(MatrixStack stack, IAndroid androidPlayer, MainWindow resolution, float ticks);
+    void drawElement(PoseStack stack, IAndroid androidPlayer, Window resolution, float ticks);
 
-    int getWidth(MainWindow resolution, IAndroid androidPlayer);
+    int getWidth(Window resolution, IAndroid androidPlayer);
 
-    int getHeight(MainWindow resolution, IAndroid androidPlayer);
+    int getHeight(Window resolution, IAndroid androidPlayer);
 
     void setX(int x);
 
