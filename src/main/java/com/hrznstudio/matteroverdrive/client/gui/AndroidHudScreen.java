@@ -11,17 +11,15 @@ import com.hrznstudio.matteroverdrive.client.animation.segment.AnimationSegmentT
 import com.hrznstudio.matteroverdrive.client.gui.element.PerksHudElement;
 import com.hrznstudio.matteroverdrive.client.gui.element.StatsHudElement;
 import com.hrznstudio.matteroverdrive.reference.ReferenceClient;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -61,7 +59,7 @@ public class AndroidHudScreen{
     }
 
     @SubscribeEvent
-    public void renderGameOverlay(RenderGameOverlayEvent.Pre event){
+    public void renderGameOverlay(RenderGuiOverlayEvent.Pre event){
         if (Minecraft.getInstance().player.isSpectator()) return;
 
         Minecraft.getInstance().player.getCapability(MOCapabilities.ANDROID_DATA).ifPresent(iAndroidData -> {
@@ -69,44 +67,44 @@ public class AndroidHudScreen{
         });
     }
 
-    private void onOverlay(RenderGameOverlayEvent event, IAndroid data){
+    private void onOverlay(RenderGuiOverlayEvent.Pre event, IAndroid data){
         setupAnimationConsole();
         if (data.isTurning()){
-            if (event.getType() == RenderGameOverlayEvent.ElementType.CROSSHAIRS) event.setCanceled(true);
-            if (event.getType() == RenderGameOverlayEvent.ElementType.POTION_ICONS) event.setCanceled(true);
-            if (event.getType() == RenderGameOverlayEvent.ElementType.HOTBAR ||
-                    event.getType() == RenderGameOverlayEvent.ElementType.EXPERIENCE ||
-                    event.getType() == RenderGameOverlayEvent.ElementType.HEALTH ||
-                    event.getType() == RenderGameOverlayEvent.ElementType.FOOD) event.setCanceled(true);
-            if (event.getType() == RenderGameOverlayEvent.ElementType.TEXT){
+            if (event.getOverlay() == VanillaGuiOverlay.CROSSHAIR.type()) event.setCanceled(true);
+            if (event.getOverlay() == VanillaGuiOverlay.POTION_ICONS.type()) event.setCanceled(true);
+            if (event.getOverlay() == VanillaGuiOverlay.HOTBAR.type() ||
+                    event.getOverlay() == VanillaGuiOverlay.EXPERIENCE_BAR.type() ||
+                    event.getOverlay() == VanillaGuiOverlay.PLAYER_HEALTH.type() ||
+                    event.getOverlay() == VanillaGuiOverlay.FOOD_LEVEL.type()) event.setCanceled(true);
+            if (event.getOverlay() == VanillaGuiOverlay.TITLE_TEXT.type()){
                 onTransforming(event, data);
             }
             if (!shaderEnabled){
                 shaderEnabled = true;
-                Minecraft.getInstance().runImmediately(() -> Minecraft.getInstance().gameRenderer.loadShader(new ResourceLocation(MatterOverdrive.MOD_ID, "shaders/post/transform.json")));
+                Minecraft.getInstance().doRunTask(() -> Minecraft.getInstance().gameRenderer.loadShader(new ResourceLocation(MatterOverdrive.MOD_ID, "shaders/post/transform.json")));
             }
         }
         if (data.isAndroid()){
             if (shaderEnabled){
                 shaderEnabled = false;
-                Minecraft.getInstance().runImmediately(() -> Minecraft.getInstance().gameRenderer.stopUseShader());
+                Minecraft.getInstance().doRunTask(() -> Minecraft.getInstance().gameRenderer.stopUseShader());
             }
             onAndroid(event, data);
         }
     }
 
-    private void onAndroid(RenderGameOverlayEvent event, IAndroid data) {
-        if (event.getType() == RenderGameOverlayEvent.ElementType.CROSSHAIRS) event.setCanceled(true);
-        if (event.getType() == RenderGameOverlayEvent.ElementType.POTION_ICONS) event.setCanceled(true);
-        if (event.getType() == RenderGameOverlayEvent.ElementType.HEALTH) event.setCanceled(true);
-        if (event.getType() == RenderGameOverlayEvent.ElementType.FOOD && data.getPerkManager().hasPerk(PerkTree.ZERO_CALORIES)) {
+    private void onAndroid(RenderGuiOverlayEvent.Pre event, IAndroid data) {
+        if (event.getOverlay() == VanillaGuiOverlay.CROSSHAIR.type()) event.setCanceled(true);
+        if (event.getOverlay() == VanillaGuiOverlay.POTION_ICONS.type()) event.setCanceled(true);
+        if (event.getOverlay() == VanillaGuiOverlay.PLAYER_HEALTH.type()) event.setCanceled(true);
+        if (event.getOverlay() == VanillaGuiOverlay.FOOD_LEVEL.type() && data.getPerkManager().hasPerk(PerkTree.ZERO_CALORIES)) {
             event.setCanceled(true);
         }
-        if (event.getType() == RenderGameOverlayEvent.ElementType.AIR && data.getPerkManager().hasPerk(PerkTree.RESPIROCYTES)) {
+        if (event.getOverlay() == VanillaGuiOverlay.AIR_LEVEL.type() && data.getPerkManager().hasPerk(PerkTree.RESPIROCYTES)) {
             event.setCanceled(true);
         }
-        if (event.getType() == RenderGameOverlayEvent.ElementType.TEXT) {
-            MatrixStack stack = event.getMatrixStack();
+        if (event.getOverlay() == VanillaGuiOverlay.TITLE_TEXT.type()) {
+            PoseStack stack = event.getPoseStack();
             int centerX = event.getWindow().getScaledWidth() / 2;
             int centerY = event.getWindow().getScaledHeight() / 2;
             //CORSSHAIR
@@ -143,8 +141,8 @@ public class AndroidHudScreen{
         }
     }
 
-    private void onTransforming(RenderGameOverlayEvent event, IAndroid data){
-        MatrixStack stack = event.getMatrixStack();
+    private void onTransforming(RenderGuiOverlayEvent.Pre event, IAndroid data){
+        PoseStack stack = event.getPoseStack();
         int centerX = event.getWindow().getScaledWidth() / 2;
         int centerY = event.getWindow().getScaledHeight() / 2;
         int maxTime = AndroidData.TURNING_TIME;

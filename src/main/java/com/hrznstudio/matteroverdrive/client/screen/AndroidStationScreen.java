@@ -10,12 +10,14 @@ import com.hrznstudio.titanium.container.impl.BasicInventoryContainer;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.gui.screens.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
@@ -23,6 +25,7 @@ import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.entity.player.Inventory;
 
 public class AndroidStationScreen extends ContainerScreen<AndroidStationContainer> {
 
@@ -36,7 +39,7 @@ public class AndroidStationScreen extends ContainerScreen<AndroidStationContaine
     private int pointerX = 0;
     private int pointerY = 0;
 
-    public AndroidStationScreen(AndroidStationContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+    public AndroidStationScreen(AndroidStationContainer screenContainer, Inventory inv, MutableComponent titleIn) {
         super(screenContainer, inv, titleIn);
     }
 
@@ -78,7 +81,7 @@ public class AndroidStationScreen extends ContainerScreen<AndroidStationContaine
         leftSize = 56;
         int rightSize = 36;
         fill(matrixStack, xStart +1, yStart + cornerHeights - 16, this.width - xStart - 16, this.height - yStart - cornerHeights + 14, 0xff222825);
-        Minecraft.getInstance().getTextureManager().bindTexture(new ResourceLocation(MatterOverdrive.MOD_ID, "textures/gui/base_gui.png"));
+        Minecraft.getInstance().getTextureManager().bindForSetup(new ResourceLocation(MatterOverdrive.MOD_ID, "textures/gui/base_gui.png"));
         //Top Left Corner
         blit(matrixStack, xStart, yStart, 0,0, leftSize, cornerHeights);
         //Bottom left corner

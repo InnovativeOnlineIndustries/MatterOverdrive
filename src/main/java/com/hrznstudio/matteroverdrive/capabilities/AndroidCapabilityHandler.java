@@ -3,14 +3,14 @@ package com.hrznstudio.matteroverdrive.capabilities;
 import com.hrznstudio.matteroverdrive.MatterOverdrive;
 import com.hrznstudio.matteroverdrive.api.android.IAndroid;
 import com.hrznstudio.matteroverdrive.capabilities.android.AndroidData;
-import com.hrznstudio.matteroverdrive.capabilities.android.AndroidDataProvider;
+import com.hrznstudio.matteroverdrive.capabilities.android.AndroidEnergy;
 import com.hrznstudio.matteroverdrive.capabilities.android.AndroidEnergyProvider;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -18,19 +18,15 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 @Mod.EventBusSubscriber(modid = MatterOverdrive.MOD_ID)
 public class AndroidCapabilityHandler {
 
-    public static void register() {
-        CapabilityManager.INSTANCE.register(IAndroid.class, NBTCapabilityStorage.create(CompoundTag.class), AndroidData::new);
-    }
-
     @SubscribeEvent
     public static void attachCapability(AttachCapabilitiesEvent<Entity> event) {
-        if (event.getObject() instanceof PlayerEntity) {
-            event.addCapability(new ResourceLocation(MatterOverdrive.MOD_ID, "android_data"), new AndroidDataProvider());
+        if (event.getObject() instanceof Player) {
+            event.addCapability(new ResourceLocation(MatterOverdrive.MOD_ID, "android_data"), new AndroidData());
             event.addCapability(new ResourceLocation(MatterOverdrive.MOD_ID, "android_energy"), new AndroidEnergyProvider());
         }
     }
@@ -38,17 +34,17 @@ public class AndroidCapabilityHandler {
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {
         event.getOriginal().getCapability(MOCapabilities.ANDROID_DATA).ifPresent(original -> {
-            event.getPlayer().getCapability(MOCapabilities.ANDROID_DATA).ifPresent(future -> {
+            event.getEntity().getCapability(MOCapabilities.ANDROID_DATA).ifPresent(future -> {
                 future.deserializeNBT(original.serializeNBT());
                 future.requestUpdate();
             });
         });
         event.getOriginal().getCapability(CapabilityEnergy.ENERGY).ifPresent(original -> {
-            event.getPlayer().getCapability(CapabilityEnergy.ENERGY).ifPresent(future -> {
-                if (original instanceof AndroidEnergyCapability && future instanceof AndroidEnergyCapability) {
-                    ((AndroidEnergyCapability) future).setEnergy(original.getEnergyStored());
-                    if (event.getPlayer() instanceof ServerPlayerEntity)
-                        AndroidEnergyCapability.syncEnergy((ServerPlayerEntity) event.getEntity());
+            event.getEntity().getCapability(CapabilityEnergy.ENERGY).ifPresent(future -> {
+                if (original instanceof AndroidEnergy && future instanceof AndroidEnergy) {
+                    ((AndroidEnergy) future).setEnergy(original.getEnergyStored());
+                    if (event.getEntity() instanceof ServerPlayer serverPlayer)
+                        AndroidEnergy.syncEnergy(serverPlayer);
                 }
             });
         });
@@ -57,7 +53,7 @@ public class AndroidCapabilityHandler {
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event) {
         if (event.phase == TickEvent.Phase.START) return;
-        for (PlayerEntity playerEntity : ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers()) {
+        for (Player playerEntity : ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers()) {
             playerEntity.getCapability(MOCapabilities.ANDROID_DATA).ifPresent(iAndroid -> iAndroid.tickServer(playerEntity));
         }
     }
@@ -72,9 +68,9 @@ public class AndroidCapabilityHandler {
 
     @SubscribeEvent
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        event.getPlayer().getCapability(MOCapabilities.ANDROID_DATA).ifPresent(IAndroid::requestUpdate);
-        if (event.getPlayer() instanceof ServerPlayerEntity)
-            AndroidEnergyCapability.syncEnergy((ServerPlayerEntity) event.getEntity());
+        event.getEntity().getCapability(MOCapabilities.ANDROID_DATA).ifPresent(IAndroid::requestUpdate);
+        if (event.getEntity() instanceof ServerPlayer serverPlayer)
+            AndroidEnergy.syncEnergy(serverPlayer);
     }
 
 }

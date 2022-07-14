@@ -1,7 +1,7 @@
 package com.hrznstudio.matteroverdrive.block.tile;
 
 import com.hrznstudio.matteroverdrive.block.MOBlocks;
-import com.hrznstudio.matteroverdrive.capabilities.AndroidEnergyCapability;
+import com.hrznstudio.matteroverdrive.capabilities.android.AndroidEnergy;
 import com.hrznstudio.titanium.block.tile.PoweredTile;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -44,7 +44,7 @@ public class ChargingStationTile extends PoweredTile<ChargingStationTile> {
                 entity.getCapability(CapabilityEnergy.ENERGY).ifPresent(energyStorage -> {
                     this.getEnergyStorage().extractEnergy(energyStorage.receiveEnergy(this.getEnergyStorage().extractEnergy(512, true), false), false);
                     if (entity instanceof ServerPlayerEntity)
-                        AndroidEnergyCapability.syncEnergy((ServerPlayerEntity) entity);
+                        AndroidEnergy.syncEnergy((ServerPlayerEntity) entity);
                 });
             });
         }

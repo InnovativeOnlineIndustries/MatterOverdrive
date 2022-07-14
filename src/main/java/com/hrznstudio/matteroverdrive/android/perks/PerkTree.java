@@ -1,7 +1,7 @@
 package com.hrznstudio.matteroverdrive.android.perks;
 
 import com.google.common.collect.ImmutableMultimap;
-import com.hrznstudio.matteroverdrive.capabilities.AndroidEnergyCapability;
+import com.hrznstudio.matteroverdrive.capabilities.android.AndroidEnergy;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import com.hrznstudio.matteroverdrive.item.food.AndroidPillItem;
 import com.hrznstudio.titanium.event.handler.EventManager;
@@ -47,7 +47,7 @@ public class PerkTree {
                             iAndroid.getHolder().heal(1);
                             energyStorage.extractEnergy(1048, false);
                             if (iAndroid.getHolder() instanceof ServerPlayerEntity)
-                                AndroidEnergyCapability.syncEnergy((ServerPlayerEntity) iAndroid.getHolder());
+                                AndroidEnergy.syncEnergy((ServerPlayerEntity) iAndroid.getHolder());
                             return true;
                         }
                         return false;
@@ -137,7 +137,7 @@ public class PerkTree {
                                 energyStorage.extractEnergy(16, false);
                                 iAndroid.getHolder().addPotionEffect(new EffectInstance(Effects.NIGHT_VISION, 15 * 20, 0, true, false));
                                 if (iAndroid.getHolder() instanceof ServerPlayerEntity)
-                                    AndroidEnergyCapability.syncEnergy((ServerPlayerEntity) iAndroid.getHolder());
+                                    AndroidEnergy.syncEnergy((ServerPlayerEntity) iAndroid.getHolder());
                             }
                         });
                         return true;

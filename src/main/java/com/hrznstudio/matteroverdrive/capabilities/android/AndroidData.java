@@ -3,31 +3,34 @@ package com.hrznstudio.matteroverdrive.capabilities.android;
 import com.hrznstudio.matteroverdrive.api.android.IAndroid;
 import com.hrznstudio.matteroverdrive.api.android.perk.AndroidPerkManager;
 import com.hrznstudio.matteroverdrive.api.android.perk.IAndroidPerk;
-import com.hrznstudio.matteroverdrive.capabilities.AndroidEnergyCapability;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import com.hrznstudio.matteroverdrive.network.PacketHandler;
 import com.hrznstudio.matteroverdrive.network.s2c.AndroidSyncAllPacket;
 import com.hrznstudio.matteroverdrive.network.s2c.AndroidTurningTimeSyncPacket;
 import com.hrznstudio.matteroverdrive.sounds.MOSounds;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 
-import java.util.Random;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-public class AndroidData implements IAndroid {
+public class AndroidData implements IAndroid, ICapabilityProvider {
+    private final LazyOptional<IAndroid> holder = LazyOptional.of(() -> this);
 
     public static final int TURNING_TIME = 30 * 21;
 
@@ -37,7 +40,7 @@ public class AndroidData implements IAndroid {
     private boolean isAndroid;
     private int transformationTime;
     private boolean needsUpdate;
-    private LivingEntity holder;
+    private LivingEntity entity;
     private AndroidPerkManager perkManager;
 
     public AndroidData() {
@@ -77,25 +80,27 @@ public class AndroidData implements IAndroid {
     @OnlyIn(Dist.CLIENT)
     public void tickClient(Entity entity) {
         if (entity instanceof LivingEntity){
-            this.holder = (LivingEntity) entity;
+            this.entity = (LivingEntity) entity;
         }
         if (isTurning() && transformationTime % 40 == 0) {
-            playGlitchSound(entity, entity.world.rand, 0.2f);
+            playGlitchSound(entity, entity.level.random, 0.2f);
         }
     }
 
-    private void playGlitchSound(Entity player, Random random, float amount) {
-        player.world.playSound(player.getPosX(), player.getPosY(), player.getPosZ(), MOSounds.GLITCH.get(), SoundCategory.PLAYERS, amount, 0.9f + random.nextFloat() * 0.2f, false);
+    private void playGlitchSound(Entity entity, RandomSource random, float amount) {
+        if(entity instanceof Player player) {
+            player.level.playSound(player, player.blockPosition(), MOSounds.GLITCH.get(), SoundSource.PLAYERS, amount, 0.9f + random.nextFloat() * 0.2f);
+        }
     }
 
     @Override
     public void tickServer(Entity entity) {
         if (entity instanceof LivingEntity){
-            this.holder = (LivingEntity) entity;
+            this.entity = (LivingEntity) entity;
         }
         tickPerks();
-        if (entity instanceof ServerPlayerEntity){
-            updatePerkAttributes((ServerPlayerEntity) entity);
+        if (entity instanceof ServerPlayer serverPlayer){
+            updatePerkAttributes(serverPlayer);
         }
         if (isTurning()){
             tickTransformationTime(entity);
@@ -112,22 +117,22 @@ public class AndroidData implements IAndroid {
 
     @Override
     public LivingEntity getHolder() {
-        return holder;
+        return entity;
     }
 
     public void sync(Entity entity){
-        if (entity instanceof ServerPlayerEntity){
-            PacketHandler.sendToPlayer(new AndroidSyncAllPacket(serializeNBT()), (ServerPlayerEntity) entity);
+        if (entity instanceof ServerPlayer serverEntity){
+            PacketHandler.sendToPlayer(new AndroidSyncAllPacket(serializeNBT()), serverEntity);
             this.needsUpdate = false;
         }
     }
 
-    public void updatePerkAttributes(ServerPlayerEntity player){
+    public void updatePerkAttributes(ServerPlayer player){
         for (String perk : this.getPerkManager().getOwned().keySet()) {
             if (IAndroidPerk.PERKS.containsKey(perk)){
                 IAndroidPerk androidPerk = IAndroidPerk.PERKS.get(perk);
                 if (!androidPerk.canBeToggled() || this.getPerkManager().hasPerkEnabled(androidPerk)){
-                    player.getAttributeManager().reapplyModifiers(androidPerk.getAttributeModifiers(this, this.getPerkManager().getLevel(androidPerk)));
+                    player.getAttributes().addTransientAttributeModifiers(androidPerk.getAttributeModifiers(this, this.getPerkManager().getLevel(androidPerk)));
                 }
             }
         }
@@ -139,7 +144,7 @@ public class AndroidData implements IAndroid {
             if (IAndroidPerk.PERKS.containsKey(perk)) {
                 IAndroidPerk androidPerk = IAndroidPerk.PERKS.get(perk);
                 if (androidPerk.onAndroidTick(this, this.getPerkManager().getLevel(androidPerk)) && androidPerk.showOnPlayerHUD(this, this.getPerkManager().getLevel(androidPerk))) {
-                    this.getPerkManager().getPerkActivityTracker().put(perk, this.getHolder().world.getGameTime());
+                    this.getPerkManager().getPerkActivityTracker().put(perk, this.getHolder().level.getGameTime());
                     somethingUpdated = true;
                 }
                 ;
@@ -150,28 +155,28 @@ public class AndroidData implements IAndroid {
 
     private void tickTransformationTime(Entity entity){
         DamageSource fake = new DamageSource("android_transformation");
-        fake.setDamageIsAbsolute();
-        fake.setDamageBypassesArmor();
+        fake.bypassInvul();
+        fake.bypassArmor();
         --transformationTime;
-        if (entity instanceof ServerPlayerEntity){
-            PacketHandler.sendToPlayer(new AndroidTurningTimeSyncPacket(transformationTime), (ServerPlayerEntity) entity);
+        if (entity instanceof ServerPlayer serverPlayer){
+            PacketHandler.sendToPlayer(new AndroidTurningTimeSyncPacket(transformationTime), serverPlayer);
         }
         if (entity instanceof LivingEntity){
             if (transformationTime > 0) {
-                ((LivingEntity) entity).addPotionEffect(new EffectInstance(Effects.SLOWNESS, 20, 2, false, false));
-                ((LivingEntity) entity).addPotionEffect(new EffectInstance(Effects.HUNGER, 20, 0, false, false));
-                ((LivingEntity) entity).addPotionEffect(new EffectInstance(Effects.WEAKNESS, 20, 0, false, false));
+                ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 2, false, false));
+                ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.HUNGER, 20, 0, false, false));
+                ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 20, 0, false, false));
                 if (transformationTime % 40 == 0) {
-                    entity.attackEntityFrom(fake, 0.1f);
+                    entity.hurt(fake, 0.1f);
                 }
             }
         }
         if (transformationTime <= 0) {
             setAndroid(true);
-            entity.getCapability(CapabilityEnergy.ENERGY).ifPresent(iEnergyStorage -> iEnergyStorage.receiveEnergy((int) (AndroidEnergyCapability.DEFAULT_ENERGY * 0.25), false));
+            entity.getCapability(CapabilityEnergy.ENERGY).ifPresent(iEnergyStorage -> iEnergyStorage.receiveEnergy((int) (AndroidEnergy.DEFAULT_ENERGY * 0.25), false));
             requestUpdate();
-            if (entity instanceof PlayerEntity && !((PlayerEntity) entity).isCreative() && !entity.world.getWorldInfo().isHardcore()) {
-                entity.attackEntityFrom(fake, Integer.MAX_VALUE);
+            if (entity instanceof Player player && !player.isCreative() && !entity.level.getLevelData().isHardcore()) {
+                entity.hurt(fake, Integer.MAX_VALUE);
             }
         }
     }
@@ -192,8 +197,9 @@ public class AndroidData implements IAndroid {
         this.perkManager.deserializeNBT(nbt.getCompound("PerkManager"));
     }
 
+    @Nonnull
     @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        return cap == MOCapabilities.ANDROID_DATA ? LazyOptional.of(() -> this).cast() : LazyOptional.empty();
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+        return MOCapabilities.ANDROID_DATA.orEmpty(cap, holder);
     }
 }

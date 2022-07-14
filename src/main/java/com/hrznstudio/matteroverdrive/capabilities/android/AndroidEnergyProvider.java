@@ -1,6 +1,6 @@
 package com.hrznstudio.matteroverdrive.capabilities.android;
 
-import com.hrznstudio.matteroverdrive.capabilities.AndroidEnergyCapability;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
 
 public class AndroidEnergyProvider implements ICapabilityProvider, ICapabilitySerializable<CompoundTag> {
 
-    private final AndroidEnergyCapability energyCapability = new AndroidEnergyCapability(AndroidEnergyCapability.DEFAULT_ENERGY);
+    private final AndroidEnergy energyCapability = new AndroidEnergy(AndroidEnergy.DEFAULT_ENERGY);
 
     private final LazyOptional<IEnergyStorage> optional = LazyOptional.of(() -> energyCapability);
 

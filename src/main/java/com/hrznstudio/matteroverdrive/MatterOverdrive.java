@@ -2,29 +2,22 @@ package com.hrznstudio.matteroverdrive;
 
 import com.hrznstudio.matteroverdrive.android.perks.PerkTree;
 import com.hrznstudio.matteroverdrive.block.MOBlocks;
-import com.hrznstudio.matteroverdrive.capabilities.MOCapabilityHandler;
 import com.hrznstudio.matteroverdrive.client.MOClientModEvents;
 import com.hrznstudio.matteroverdrive.client.gui.AndroidHudScreen;
 import com.hrznstudio.matteroverdrive.client.renderer.entity.MORenderers;
 import com.hrznstudio.matteroverdrive.client.screen.AndroidStationScreen;
-import com.hrznstudio.matteroverdrive.datagen.MOBlockstateProvider;
-import com.hrznstudio.matteroverdrive.datagen.MOItemModelProvider;
-import com.hrznstudio.matteroverdrive.datagen.MOModelProvider;
 import com.hrznstudio.matteroverdrive.entity.MOEntities;
 import com.hrznstudio.matteroverdrive.item.MOItems;
 import com.hrznstudio.matteroverdrive.network.PacketHandler;
 import com.hrznstudio.matteroverdrive.sounds.MOSounds;
-import com.hrznstudio.titanium.event.handler.EventManager;
-import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -53,13 +46,12 @@ public class MatterOverdrive {
 
     private void clientSetup(final FMLClientSetupEvent event) {
         MORenderers.register();
-        ScreenManager.registerFactory(MOBlocks.ANDROID_CONTAINER.get(), AndroidStationScreen::new);
+        MenuScreens.register(MOBlocks.ANDROID_CONTAINER.get(), AndroidStationScreen::new);
         MOClientModEvents.onClient();
     }
 
     private void setup(final FMLCommonSetupEvent event) {
         PacketHandler.init();
-        MOCapabilityHandler.register();
     }
 
 

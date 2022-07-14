@@ -1,6 +1,6 @@
 package com.hrznstudio.matteroverdrive.network.s2c;
 
-import com.hrznstudio.matteroverdrive.capabilities.AndroidEnergyCapability;
+import com.hrznstudio.matteroverdrive.capabilities.android.AndroidEnergy;
 import com.hrznstudio.matteroverdrive.network.NetworkHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
@@ -34,8 +34,8 @@ public class AndroidEnergySyncPacket {
         public void handle(AndroidEnergySyncPacket msg, Supplier<NetworkEvent.Context> ctx) {
             ctx.get().enqueueWork(() -> {
                 Minecraft.getInstance().player.getCapability(CapabilityEnergy.ENERGY).ifPresent(energyStorage -> {
-                    if (energyStorage instanceof AndroidEnergyCapability) {
-                        ((AndroidEnergyCapability) energyStorage).setEnergy(msg.energy);
+                    if (energyStorage instanceof AndroidEnergy) {
+                        ((AndroidEnergy) energyStorage).setEnergy(msg.energy);
                     }
                 });
             });

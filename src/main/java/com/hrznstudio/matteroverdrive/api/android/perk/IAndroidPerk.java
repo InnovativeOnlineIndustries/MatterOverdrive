@@ -2,11 +2,10 @@ package com.hrznstudio.matteroverdrive.api.android.perk;
 
 import com.google.common.collect.Multimap;
 import com.hrznstudio.matteroverdrive.api.android.IAndroid;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -36,7 +35,7 @@ public interface IAndroidPerk {
 
     int getRequiredXP(IAndroid player, int statLevel);
 
-    ITextComponent getDisplayName(IAndroid player, int statLevel);
+    TextComponent getDisplayName(IAndroid player, int statLevel);
 
     Multimap<Attribute, AttributeModifier> getAttributeModifiers(IAndroid player, int stateLevel);
 
