@@ -3,12 +3,7 @@ package com.hrznstudio.matteroverdrive.item.food;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import com.hrznstudio.matteroverdrive.capabilities.android.AndroidData;
 import com.hrznstudio.matteroverdrive.item.MOItems;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.util.text.Color;
-import net.minecraft.world.World;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -21,8 +16,8 @@ public class AndroidRedPillItem extends AndroidPillItem {
     }
 
     @Override
-    public ItemStack onItemUseFinish(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
-        ItemStack itemstack = super.onItemUseFinish(stack, worldIn, entityLiving);
+    public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
+        ItemStack itemstack = super.finishUsingItem(stack, worldIn, entityLiving);
         if (!worldIn.isClientSide) {
             if (entityLiving instanceof Player) {
                 Player player = (Player) entityLiving;
