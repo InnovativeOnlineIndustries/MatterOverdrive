@@ -4,16 +4,10 @@ import com.hrznstudio.matteroverdrive.api.android.perk.AndroidPerkManager;
 import com.hrznstudio.matteroverdrive.api.android.perk.IAndroidPerk;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import com.hrznstudio.matteroverdrive.network.NetworkHandler;
-import com.hrznstudio.matteroverdrive.network.PacketHandler;
-import com.hrznstudio.matteroverdrive.network.s2c.AndroidPerkAttemptBuyReplyPacket;
-import com.hrznstudio.matteroverdrive.network.s2c.AndroidSyncAllPacket;
-import com.hrznstudio.titanium.network.Message;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import com.hrznstudio.matteroverdrive.sounds.MOSounds;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -52,7 +46,7 @@ public class AndroidPerkAttemptBuyPacket {
                         if (entity.experienceLevel >= requiredXP){
                             entity.giveExperienceLevels(-requiredXP);
                             perkManager.buyPerk(androidPerk);
-                            PacketHandler.NETWORK.get().sendTo(new AndroidPerkAttemptBuyReplyPacket(), entity.connection.netManager,  NetworkDirection.PLAY_TO_CLIENT);
+                            entity.level.playSound(entity, entity.blockPosition(), MOSounds.PERK_UNLOCK.get(), SoundSource.PLAYERS, 0.5f, 1f);
                             iAndroid.requestUpdate();
                         }
                     }
