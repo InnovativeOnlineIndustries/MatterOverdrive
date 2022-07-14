@@ -3,19 +3,19 @@ package com.hrznstudio.matteroverdrive.item;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.hrznstudio.matteroverdrive.entity.projectile.KunaiEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public class KunaiItem extends Item {
     private final Multimap<Attribute, AttributeModifier> weaponAttributes;
@@ -23,39 +23,37 @@ public class KunaiItem extends Item {
     public KunaiItem(Properties properties) {
         super(properties);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 3.0D, AttributeModifier.Operation.ADDITION));
-        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Tool modifier", -1.8F, AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", 3.0D, AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", -1.8F, AttributeModifier.Operation.ADDITION));
         this.weaponAttributes = builder.build();
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        ItemStack usedItem = playerIn.getHeldItem(handIn);
+    public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
+        ItemStack usedItem = playerIn.getUseItem();
 
-        worldIn.playSound(null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + 0.5F);
-        if (!worldIn.isRemote) {
-            KunaiEntity kunaiEntity = new KunaiEntity(worldIn, playerIn);
+        level.playSound(null, playerIn.position().x, playerIn.position().y, playerIn.position().z, SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F / (playerIn.getRandom().nextFloat() * 0.4F + 1.2F) + 0.5F);
+        if (!level.isClientSide()) {
+            KunaiEntity kunaiEntity = new KunaiEntity(level, playerIn);
 
-            kunaiEntity.func_234612_a_(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 3.0F, 1.0F);
+            kunaiEntity.shootFromRotation(playerIn, playerIn.getXRot(), playerIn.getYRot(), 0.0F, 3.0F, 1.0F);
 
-            kunaiEntity.pickupStatus = playerIn.abilities.isCreativeMode ?
-                AbstractArrowEntity.PickupStatus.CREATIVE_ONLY : AbstractArrowEntity.PickupStatus.ALLOWED;
-
-            worldIn.addEntity(kunaiEntity);
+            kunaiEntity.pickup = playerIn.getAbilities().instabuild ? AbstractArrow.Pickup.CREATIVE_ONLY : AbstractArrow.Pickup.ALLOWED;
+            level.addFreshEntity(kunaiEntity);
         }
 
 
-        if (!playerIn.abilities.isCreativeMode) {
+        if (!playerIn.getAbilities().instabuild) {
             usedItem.shrink(1);
         }
 
-        return ActionResult.func_233538_a_(usedItem, worldIn.isRemote);
+        return InteractionResultHolder.sidedSuccess(usedItem, level.isClientSide());
 
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot, ItemStack stack) {
-        return equipmentSlot == EquipmentSlotType.MAINHAND ? weaponAttributes : super.getAttributeModifiers(equipmentSlot, stack);
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot equipmentSlot, ItemStack stack) {
+        return equipmentSlot == EquipmentSlot.MAINHAND ? weaponAttributes : super.getAttributeModifiers(equipmentSlot, stack);
     }
 
 }
