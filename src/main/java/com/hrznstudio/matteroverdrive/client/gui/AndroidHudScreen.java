@@ -127,9 +127,9 @@ public class AndroidHudScreen{
             //ELEMENTS
             stack.pushPose();
             if (!Minecraft.getInstance().player.isSleeping()) {
-                hudRotationYawSmooth = Minecraft.getInstance().player.prevRenderArmYaw + (Minecraft.getInstance().player.renderArmYaw - Minecraft.getInstance().player.prevRenderArmYaw) * event.getPartialTicks();
-                hudRotationPitchSmooth = Minecraft.getInstance().player.prevRenderArmPitch + (Minecraft.getInstance().player.renderArmPitch - Minecraft.getInstance().player.prevRenderArmPitch) * event.getPartialTicks();
-                stack.translate((hudRotationYawSmooth - Minecraft.getInstance().player.rotationYaw) * 0.2f, (hudRotationPitchSmooth - Minecraft.getInstance().player.rotationPitch) * 0.2f, 0);
+                hudRotationYawSmooth = Minecraft.getInstance().player.yBobO + (Minecraft.getInstance().player.yBob - Minecraft.getInstance().player.yBobO) * event.getPartialTick();
+                hudRotationPitchSmooth = Minecraft.getInstance().player.xBobO + (Minecraft.getInstance().player.xBob - Minecraft.getInstance().player.xBobO) * event.getPartialTick();
+                stack.translate((hudRotationYawSmooth - Minecraft.getInstance().player.getYRot()) * 0.2f, (hudRotationPitchSmooth - Minecraft.getInstance().player.getXRot()) * 0.2f, 0);
             }
             for (IHudElement iHudElement : elementList) {
                 if (iHudElement.isVisible(data)){
