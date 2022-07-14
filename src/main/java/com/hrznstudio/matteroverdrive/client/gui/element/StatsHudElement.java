@@ -5,14 +5,14 @@ import com.hrznstudio.matteroverdrive.api.android.gui.HudElement;
 import com.hrznstudio.matteroverdrive.api.android.gui.HudPosition;
 import com.hrznstudio.matteroverdrive.reference.ReferenceClient;
 import com.hrznstudio.matteroverdrive.util.MORenderUtil;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MainWindow;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraftforge.energy.CapabilityEnergy;
 
 import java.awt.*;
@@ -36,22 +36,22 @@ public class StatsHudElement extends HudElement {
         return android.isAndroid();
     }
 
-    public static int renderIconWithInfo(MatrixStack stack, ResourceLocation holoIcon, String info, Color color, int x, int y, int iconOffsetX, int iconOffsetY, boolean leftSided, int iconWidth, int iconHeight, float backgroundAlpha) {
-        int infoWidth = Minecraft.getInstance().fontRenderer.getStringWidth(info);
+    public static int renderIconWithInfo(PoseStack stack, ResourceLocation holoIcon, String info, Color color, int x, int y, int iconOffsetX, int iconOffsetY, boolean leftSided, int iconWidth, int iconHeight, float backgroundAlpha) {
+        int infoWidth = Minecraft.getInstance().font.width(info);
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        AbstractGui.fill(stack, x, y - 1, infoWidth + 2 + iconWidth + 2, 18 + 2, new Color(0, 0, 0, backgroundAlpha).getRGB());
+        Screen.fill(stack, x, y - 1, infoWidth + 2 + iconWidth + 2, 18 + 2, new Color(0, 0, 0, backgroundAlpha).getRGB());
         RenderSystem.blendFunc(GL_SRC_ALPHA, GL_ONE);
-        RenderSystem.color4f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
+        RenderSystem.setShaderColor(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
 
         if (!leftSided) {
-            Minecraft.getInstance().getTextureManager().bindTexture(holoIcon);
-            AbstractGui.blit(stack, x + iconOffsetX, y + iconOffsetY, 100, 0, 0, 16, 16, 16, 16);
-            Minecraft.getInstance().fontRenderer.drawString(stack, info, x + iconWidth + 2 + iconOffsetX, y + iconWidth / 2 - Minecraft.getInstance().fontRenderer.FONT_HEIGHT / 2 + iconOffsetY, color.getRGB());
+            RenderSystem.setShaderTexture(0, holoIcon);
+            Screen.blit(stack, x + iconOffsetX, y + iconOffsetY, 100, 0, 0, 16, 16, 16, 16);
+            Minecraft.getInstance().font.draw(stack, info, x + iconWidth + 2 + iconOffsetX, y + iconWidth / 2 - Minecraft.getInstance().font.lineHeight / 2 + iconOffsetY, color.getRGB());
         } else {
-            Minecraft.getInstance().fontRenderer.drawString(stack, info, x + iconOffsetX, y + iconWidth / 2 - Minecraft.getInstance().fontRenderer.FONT_HEIGHT / 2 + iconOffsetY, color.getRGB());
-            Minecraft.getInstance().getTextureManager().bindTexture(holoIcon);
-            AbstractGui.blit(stack, x + infoWidth + 2 + iconOffsetX, y + iconOffsetY, 100, 0, 0, 16, 16, 16, 16);
+            Minecraft.getInstance().font.draw(stack, info, x + iconOffsetX, y + iconWidth / 2 - Minecraft.getInstance().font.lineHeight / 2 + iconOffsetY, color.getRGB());
+            RenderSystem.setShaderTexture(0, holoIcon);
+            Screen.blit(stack, x + infoWidth + 2 + iconOffsetX, y + iconOffsetY, 100, 0, 0, 16, 16, 16, 16);
         }
         RenderSystem.disableBlend();
         return infoWidth + 2 + iconWidth + 2;
@@ -63,7 +63,7 @@ public class StatsHudElement extends HudElement {
     }
 
     private int getWidthIconWithInfo(String info, int iconWidth) {
-        return iconWidth + mc.fontRenderer.getStringWidth(info) + 4;
+        return iconWidth + mc.font.width(info) + 4;
     }
 
     private int getWidthIconWithPercent(double amount, int iconWidth) {
@@ -71,9 +71,9 @@ public class StatsHudElement extends HudElement {
     }
 
     @Override
-    public void drawElement(MatrixStack stack, IAndroid androidPlayer, MainWindow resolution, float ticks) {
+    public void drawElement(PoseStack stack, IAndroid androidPlayer, Window resolution, float ticks) {
         if (!isVisible(androidPlayer)) return;
-        stack.push();
+        stack.pushPose();
         RenderSystem.enableAlphaTest();
         RenderSystem.enableBlend();
 
@@ -89,9 +89,9 @@ public class StatsHudElement extends HudElement {
             x = 12 - (int) (24 * this.getPosition().getX());
             y = 12 - (int) (24 * this.getPosition().getY());
             //RenderSystem.blendFunc(GL_SRC_ALPHA, GL_ONE);
-            RenderSystem.color4f(baseColor.getRed() / 255f, baseColor.getGreen() / 255f, baseColor.getBlue() / 255f, baseColor.getAlpha() / 255f);
-            mc.getTextureManager().bindTexture(BAR_RL);
-            AbstractGui.blit(stack, x, (int) (y + (getHeight(resolution, androidPlayer) - 11) * getPosition().getY()), 0, 0, 174, 11, 174, 11);
+            RenderSystem.setShaderColor(baseColor.getRed() / 255f, baseColor.getGreen() / 255f, baseColor.getBlue() / 255f, baseColor.getAlpha() / 255f);
+            RenderSystem.setShaderTexture(0, BAR_RL);
+            Screen.blit(stack, x, (int) (y + (getHeight(resolution, androidPlayer) - 11) * getPosition().getY()), 0, 0, 174, 11, 174, 11);
             y += 10 - 5 * getPosition().getY();
             x += 5;
 
@@ -104,14 +104,14 @@ public class StatsHudElement extends HudElement {
             renderIconWithPercent(stack, SPEED_RL, speed, statsX, y, 0, 0, false, baseColor, baseColor, 16, 16, backgroundAlpha);
         } else if (getPosition() == HudPosition.MIDDLE_LEFT || getPosition() == HudPosition.MIDDLE_RIGHT){
             x = 12 - (int) (24 * this.getPosition().getX());
-            stack.push();
+            stack.pushPose();
             //RenderSystem.blendFunc(GL_SRC_ALPHA, GL_ONE);
-            RenderSystem.color4f(baseColor.getRed() / 255f, baseColor.getGreen() / 255f, baseColor.getBlue() / 255f, baseColor.getAlpha() / 255f);
+            RenderSystem.setShaderColor(baseColor.getRed() / 255f, baseColor.getGreen() / 255f, baseColor.getBlue() / 255f, baseColor.getAlpha() / 255f);
             stack.translate(x + 11 + (getWidth(resolution, androidPlayer) - 11) * getPosition().getX(), y, 0);
-            stack.rotate(Vector3f.ZP.rotationDegrees(90));
-            mc.getTextureManager().bindTexture(BAR_RL);
-            AbstractGui.blit(stack, 0,0, 0,0,174, 11, 174, 11);
-            stack.pop();
+            stack.mulPose(Vector3f.ZP.rotationDegrees(90));
+            RenderSystem.setShaderTexture(0, BAR_RL);
+            Screen.blit(stack, 0,0, 0,0,174, 11, 174, 11);
+            stack.popPose();
             y += 86;
             int ySize = 24 + 22 + 24;
             x += 11;
@@ -127,10 +127,10 @@ public class StatsHudElement extends HudElement {
         }
 
         RenderSystem.disableAlphaTest();
-        stack.pop();
+        stack.popPose();
     }
 
-    private int renderIconWithPercent(MatrixStack stack, ResourceLocation holoIcon, double amount, int x, int y, int iconOffsetX, int iconOffsetY, boolean leftSided, Color fromColor, Color toColor, int iconWidth, int iconHeight, float backgroundAlpha) {
-        return this.renderIconWithInfo(stack, holoIcon, DecimalFormat.getPercentInstance().format(amount), MORenderUtil.lerp(fromColor, toColor, MathHelper.clamp((float) amount, 0, 1)), x, y, iconOffsetX, iconOffsetY, leftSided, iconWidth, iconHeight, backgroundAlpha);
+    private int renderIconWithPercent(PoseStack stack, ResourceLocation holoIcon, double amount, int x, int y, int iconOffsetX, int iconOffsetY, boolean leftSided, Color fromColor, Color toColor, int iconWidth, int iconHeight, float backgroundAlpha) {
+        return this.renderIconWithInfo(stack, holoIcon, DecimalFormat.getPercentInstance().format(amount), MORenderUtil.lerp(fromColor, toColor, Mth.clamp((float) amount, 0, 1)), x, y, iconOffsetX, iconOffsetY, leftSided, iconWidth, iconHeight, backgroundAlpha);
     }
 }

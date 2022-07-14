@@ -7,7 +7,8 @@
 
 package com.hrznstudio.matteroverdrive.client.animation.segment;
 
-import com.hrznstudio.titanium.util.StringUtil;
+import net.minecraft.ChatFormatting;
+import net.minecraft.util.Mth;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.versions.forge.ForgeVersion;
 
@@ -38,12 +39,18 @@ public class AnimationSegmentText extends AnimationSegment {
 
     public String getText(int time) {
         if (animationType == 1) {
-            return StringUtil.typingAnimation(TextFormatting.getTextWithoutFormattingCodes(string).replaceAll("\\$gre", TextFormatting.GREEN.toString()).replaceAll("\\$res", TextFormatting.RESET.toString()).replaceAll("\\$forge", ForgeVersion.getVersion()), (time - this.getBegin()), this.getLength());
+            return typingAnimation(TextFormatting.getTextWithoutFormattingCodes(string).replaceAll("\\$gre", ChatFormatting.GREEN.toString()).replaceAll("\\$res", ChatFormatting.RESET.toString()).replaceAll("\\$forge", ForgeVersion.getVersion()), (time - this.getBegin()), this.getLength());
         }
         return "";
     }
 
     public void setString(String string) {
         this.string = string;
+    }
+
+    public static String typingAnimation(String message, int time, int maxTime) {
+        float percent = ((float) time / (float) maxTime);
+        int messageCount = message.length();
+        return message.substring(0, Mth.clamp(Math.round(messageCount * percent), 0, messageCount));
     }
 }
