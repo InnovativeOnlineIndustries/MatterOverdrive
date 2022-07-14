@@ -23,19 +23,24 @@ public class KunaiEntity extends AbstractArrow {
     }
 
     @Override
-    protected SoundEvent getHitEntitySound() {
+    protected SoundEvent getDefaultHitGroundSoundEvent() {
         return MOSounds.KUNAI_THUD.get();
+    }
+
+    @Override
+    public void setSoundEvent(SoundEvent pSound) {
+        super.setSoundEvent(this.getDefaultHitGroundSoundEvent());
     }
 
 
     @Override
-    public Packet<?> createSpawnPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
 
     @Override
-    protected ItemStack getArrowStack() {
+    protected ItemStack getPickupItem() {
         return new ItemStack(MOItems.KUNAI.get());
     }
 }
