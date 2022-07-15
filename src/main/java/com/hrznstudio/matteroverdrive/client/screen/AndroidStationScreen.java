@@ -9,15 +9,22 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Widget;
-import net.minecraft.client.gui.screens.inventory.ContainerScreen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.Slot;
 
-public class AndroidStationScreen extends ContainerScreen<AndroidStationContainer> {
+/**
+ * See {@link net.minecraft.client.gui.screens.inventory.CraftingScreen} for references on how to render container + button
+ */
+public class AndroidStationScreen extends AbstractContainerScreen<AndroidStationContainer> implements MenuAccess<AndroidStationContainer> {
+
+    private static final ResourceLocation CONTAINER_BACKGROUND = new ResourceLocation("textures/gui/container/generic_54.png");
 
     private float size = 0.3f;
     private int xStart = 0;
@@ -29,8 +36,13 @@ public class AndroidStationScreen extends ContainerScreen<AndroidStationContaine
     private int pointerX = 0;
     private int pointerY = 0;
 
+    private final int containerRows;
+
+
     public AndroidStationScreen(AndroidStationContainer screenContainer, Inventory inv, MutableComponent titleIn) {
         super(screenContainer, inv, titleIn);
+        this.containerRows = 0;
+        //this.containerRows = screenContainer.getRowCount();
     }
 
     @Override
@@ -40,17 +52,14 @@ public class AndroidStationScreen extends ContainerScreen<AndroidStationContaine
         yStart = (int) (this.height * (size/6f));
         IAndroidPerk.PERKS.values().forEach(perk -> {
             if (perk.getParent() == null){
-                addWidget(new PerkButton(perk, xStart + leftSize + 32*perk.getAndroidStationLocation().getX(), yStart + cornerHeights + 32*perk.getAndroidStationLocation().getY(), 18, 18, new StringTextComponent(""), this::getScissors));
+                addWidget(new PerkButton(perk, xStart + leftSize + 32*perk.getAndroidStationLocation().getX(), yStart + cornerHeights + 32*perk.getAndroidStationLocation().getY(), 18, 18, Component.empty(), this::getScissors));
                 addChildPerks(perk,  xStart + leftSize + 32*perk.getAndroidStationLocation().getX(), yStart + cornerHeights + 32*perk.getAndroidStationLocation().getY());
             }
         });
     }
 
-
-
-
     @Override
-    protected void drawGuiContainerBackgroundLayer(PoseStack poseStack, float partialTicks, int x, int y) {
+    protected void renderBg(PoseStack poseStack, float partialTicks, int x, int y) {
         renderBackground(poseStack);
         renderDynamicBackGround(poseStack);
     }
@@ -100,24 +109,24 @@ public class AndroidStationScreen extends ContainerScreen<AndroidStationContaine
         }
 
 
-        this.guiLeft =  xStart + leftSize - 18;
-        this.guiTop = yStart + cornerHeights;
-        this.xSize = this.width - xStart * 2;
-        this.ySize = this.height - yStart * 2;
+        this.leftPos =  xStart + leftSize - 18;
+        this.topPos = yStart + cornerHeights;
+        this.imageWidth = this.width - xStart * 2;
+        this.imageHeight = this.height - yStart * 2;
         RenderSystem.setShaderTexture(0, new ResourceLocation(MatterOverdrive.MOD_ID, "textures/gui/elements/slot_small.png"));
 
         for (int i = 0; i < 9; i++) {
             blit(poseStack,  xStart + leftSize + 18 * i - 11, this.height - yStart - cornerHeights - 7, 0,0, 18, 18,18,18);
-            Slot slot = this.container.getSlot( 3 * 9 + i);
-            slot.yPos = this.height - yStart - cornerHeights - 7 - this.guiTop + 1;
+            Slot slot = menu.getSlot( 3 * 9 + i);
+            slot.y = this.height - yStart - cornerHeights - 7 - this.getGuiTop() + 1;
         }
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
                 int slotX = xStart + leftSize + 18 * j - 11;
                 int slotY = this.height - yStart - cornerHeights - 12 + 18 * i  - 18* 3;
                 blit(poseStack, slotX , slotY, 0,0, 18, 18,18,18);
-                Slot slot = this.container.getSlot(j + i * 9);
-                slot.yPos = slotY - this.guiTop + 1;
+                Slot slot = menu.getSlot(j + i * 9);
+                slot.y = slotY - this.getGuiTop() + 1;
             }
         }
         getScissors().run();
@@ -133,10 +142,10 @@ public class AndroidStationScreen extends ContainerScreen<AndroidStationContaine
                 blit(poseStack,  x + this.pointerX / 4, y + this.pointerY / 4, 0,0, 32,32,32,32);
             }
         }
-        for (Widget button : this.buttons) {
-            if (button instanceof PerkButton){
-                if (oldPointerX != pointerX) button.x += dragX;
-                if (oldPointerY != pointerY) button.y += dragY;
+        for (Widget button : this.renderables) {
+            if (button instanceof PerkButton perkButton){
+                if (oldPointerX != pointerX) perkButton.x += dragX;
+                if (oldPointerY != pointerY) perkButton.y += dragY;
             }
         }
         this.dragX = 0;
@@ -144,14 +153,14 @@ public class AndroidStationScreen extends ContainerScreen<AndroidStationContaine
         RenderSystem.disableScissor();
     }
 
-    @Override
-    protected void drawGuiContainerForegroundLayer(PoseStack poseStack, int x, int y) {
-        for (Widget button : this.buttons) {
-            if (button instanceof PerkButton && ((PerkButton) button).isHoveredOrFocused()){
-                this.renderComponentTooltip(poseStack, ((PerkButton) button).getTooltipLines(), x - this.guiLeft, y - this.guiTop);
-            }
-        }
-    }
+//    @Override
+//    protected void drawGuiContainerForegroundLayer(PoseStack poseStack, int x, int y) {
+//        for (Widget button : this.buttons) {
+//            if (button instanceof PerkButton && ((PerkButton) button).isHoveredOrFocused()){
+//                this.renderComponentTooltip(poseStack, ((PerkButton) button).getTooltipLines(), x - this.guiLeft, y - this.guiTop);
+//            }
+//        }
+//    }
 
     private void addChildPerks(IAndroidPerk perk, double x, double y){
         if (perk.getChild().size() > 0){

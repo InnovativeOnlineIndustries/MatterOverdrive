@@ -4,6 +4,7 @@ import com.hrznstudio.matteroverdrive.api.android.IAndroid;
 import com.hrznstudio.matteroverdrive.block.MOBlocks;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -17,8 +18,11 @@ public class AndroidStationContainer extends AbstractContainerMenu {
 //        addHotbarSlots();
 //    }
 
+    private final Container container;
+
     public AndroidStationContainer(int id, Inventory inventory, FriendlyByteBuf friendlyByteBuf) {
         super(MOBlocks.ANDROID_CONTAINER.get(), id);
+        this.container = inventory;
     }
 
     public AndroidStationContainer(int id, Inventory inventory) {
