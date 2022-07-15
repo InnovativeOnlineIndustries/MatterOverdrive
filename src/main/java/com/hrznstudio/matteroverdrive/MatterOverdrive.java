@@ -45,7 +45,6 @@ public class MatterOverdrive {
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
-        MORenderers.register();
         MenuScreens.register(MOBlocks.ANDROID_CONTAINER.get(), AndroidStationScreen::new);
         MOClientModEvents.onClient();
     }
