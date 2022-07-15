@@ -31,7 +31,7 @@ import static com.hrznstudio.matteroverdrive.util.MOColorUtil.HOLO_COLOR;
 import static com.hrznstudio.matteroverdrive.util.MOColorUtil.INVALID_HOLO_COLOR;
 import static org.lwjgl.opengl.GL11.GL_ONE;
 
-public class RenderStation<T extends BaseStationTile<BaseStationTile>> extends BlockEntityRenderer<T> {
+public class RenderStation<T extends BaseStationTile<BaseStationTile>> implements BlockEntityRenderer<T> {
 
     private static final ResourceLocation glowTexture = new ResourceLocation("matteroverdrive:textures/fx/hologram_beam.png");
 
@@ -78,7 +78,7 @@ public class RenderStation<T extends BaseStationTile<BaseStationTile>> extends B
             color = INVALID_HOLO_COLOR;
         }
 
-        float multiply = 0.5f + (tile.getWorld().getGameTime() % (random.nextInt(70) + 1) == 0 ? (0.05f * random.nextFloat()) : 0.05f);
+        float multiply = 0.5f + (tile.getLevel().getGameTime() % (random.nextInt(70) + 1) == 0 ? (0.05f * random.nextFloat()) : 0.05f);
 
         Matrix4f matrix = stack.last().pose();
 
@@ -118,7 +118,7 @@ public class RenderStation<T extends BaseStationTile<BaseStationTile>> extends B
             //float playerPosX = (float) MathHelper.clampedLerp((float) player.prevPosX, (float) player.getPosX(), partialTicks);
             //float playerPosZ = (float) MathHelper.clampedLerp((float) player.prevPosZ, (float) player.getPosZ(), partialTicks);
             //float angle = (float) Math.toDegrees(Math.atan2(playerPosX - (tile.getPos().getX() + 0.5), playerPosZ - (tile.getPos().getZ() + 0.5)) + Math.PI);
-            stack.mulPose(Vector3f.YP.rotationDegrees(tile.getWorld().getGameTime() % 360));
+            stack.mulPose(Vector3f.YP.rotationDegrees(tile.getLevel().getGameTime() % 360));
 
             RenderSystem.disableCull();
 
@@ -147,9 +147,9 @@ public class RenderStation<T extends BaseStationTile<BaseStationTile>> extends B
     @Override
     public void render(T tile, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int combinedLightIn, int combinedOverlayIn) {
         poseStack.pushPose();
-        drawHoloLights(poseStack, buffer, tile, tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ());
-        drawHoloText(poseStack, tile, tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), partialTicks);
-        drawAdditional(poseStack, buffer, tile, tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), partialTicks);
+        drawHoloLights(poseStack, buffer, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
+        drawHoloText(poseStack, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ(), partialTicks);
+        drawAdditional(poseStack, buffer, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ(), partialTicks);
         poseStack.pushPose();
     }
 }

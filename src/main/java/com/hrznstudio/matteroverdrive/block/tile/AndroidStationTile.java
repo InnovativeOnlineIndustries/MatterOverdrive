@@ -5,7 +5,6 @@ import com.hrznstudio.matteroverdrive.block.MOBlocks;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import com.hrznstudio.matteroverdrive.container.AndroidStationContainer;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
@@ -15,7 +14,7 @@ import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public class AndroidStationTile extends BaseStationTile<AndroidStationTile> {
+public class AndroidStationTile extends BaseStationTile<BaseStationTile> {
 
     public AndroidStationTile() {
         super(MOBlocks.ANDROID_STATION.get());

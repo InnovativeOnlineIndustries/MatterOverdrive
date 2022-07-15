@@ -65,9 +65,9 @@ public class RenderAndroidStation extends RenderStation<AndroidStationTile> {
             //float playerPosZ = (float) MathHelper.clampedLerp((float) player.prevPosZ, (float) player.getPosZ(), partialTicks);
             //float angle = (float) Math.toDegrees(Math.atan2(playerPosX - (tile.getPos().getX() + 0.5), playerPosZ - (tile.getPos().getZ() + 0.5)) + Math.PI);
             stack.mulPose(Vector3f.YP.rotationDegrees(180));
-            stack.mulPose(Vector3f.YN.rotationDegrees(tile.getWorld().getGameTime() % 360));
+            stack.mulPose(Vector3f.YN.rotationDegrees(tile.getLevel().getGameTime() % 360));
             VertexConsumer consumer = bufferIn.getBuffer(ANDROID);
-            float multiply = 0.35f + (tile.getWorld().getGameTime() % (tile.getWorld().rand.nextInt(70) + 1) == 0 ? (0.05f * tile.getWorld().rand.nextFloat()) : 0.05f);
+            float multiply = 0.35f + (tile.getLevel().getGameTime() % (tile.getLevel().random.nextInt(70) + 1) == 0 ? (0.05f * tile.getWorld().rand.nextFloat()) : 0.05f);
             playerModel.renderToBuffer(stack, consumer ,0, 0, multiply, multiply, multiply, 0.0625F);
 
             RenderSystem.enableCull();
