@@ -21,6 +21,10 @@ public class AndroidStationContainer extends AbstractContainerMenu {
         super(MOBlocks.ANDROID_CONTAINER.get(), id);
     }
 
+    public AndroidStationContainer(int id, Inventory inventory) {
+        super(MOBlocks.ANDROID_CONTAINER.get(), id);
+    }
+
     @Override
     public MenuType<?> getType() {
         return MOBlocks.ANDROID_CONTAINER.get();

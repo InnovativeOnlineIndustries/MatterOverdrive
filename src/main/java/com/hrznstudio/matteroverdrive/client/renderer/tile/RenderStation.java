@@ -31,7 +31,7 @@ import static com.hrznstudio.matteroverdrive.util.MOColorUtil.HOLO_COLOR;
 import static com.hrznstudio.matteroverdrive.util.MOColorUtil.INVALID_HOLO_COLOR;
 import static org.lwjgl.opengl.GL11.GL_ONE;
 
-public class RenderStation<T extends BaseStationTile> extends BlockEntityRenderer<T> {
+public class RenderStation<T extends BaseStationTile<BaseStationTile>> extends BlockEntityRenderer<T> {
 
     private static final ResourceLocation glowTexture = new ResourceLocation("matteroverdrive:textures/fx/hologram_beam.png");
 

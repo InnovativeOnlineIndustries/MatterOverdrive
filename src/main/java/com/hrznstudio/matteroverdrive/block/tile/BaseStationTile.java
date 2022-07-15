@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.Nullable;
 
-public class BaseStationTile extends BlockEntity implements Container, MenuProvider, Nameable {
+public class BaseStationTile<A extends BaseStationTile> extends BlockEntity implements Container, MenuProvider, Nameable {
 
     public BaseStationTile(BasicTileBlock<T> base) {
         super(base);

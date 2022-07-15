@@ -33,16 +33,16 @@ public class MOBlocks {
     public static RegistryObject<BasicTileBlock<AndroidStationTile>> ANDROID_STATION = block("android_station", AndroidStationBlock::new);
     public static RegistryObject<BlockItem> ANDROID_STATION_ITEM = blockItem("android_station", ANDROID_STATION);
     public static RegistryObject<BlockEntityType<AndroidStationTile>> ANDROID_STATION_TILE = tile("android_station", AndroidStationTile::new, ANDROID_STATION);
-    public static RegistryObject<MenuType<AndroidStationContainer>> ANDROID_CONTAINER = container("android_station", () -> IForgeMenuType.create(AndroidStationContainer::new));
+    public static RegistryObject<MenuType<AndroidStationContainer>> ANDROID_CONTAINER = container("android_station", () -> IForgeMenuType.create(((windowId, inv, data) -> new AndroidStationContainer(windowId, inv))));
 
     //Charging Station
     public static RegistryObject<BasicTileBlock<ChargingStationTile>> CHARGING_STATION = block("charging_station", ChargingStationBlock::new);
     public static RegistryObject<BlockItem> CHARGING_STATION_ITEM = BLOCK_ITEMS.register("charging_station", () -> new ChargingStationBlock.Item(CHARGING_STATION.get(), new Item.Properties().group(MOItems.MATTER_OVERDRIVE)));
-    public static RegistryObject<TileEntityType<ChargingStationTile>> CHARGING_STATION_TILE = tile("charging_station", ChargingStationTile::new, CHARGING_STATION);
+    public static RegistryObject<BlockEntityType<ChargingStationTile>> CHARGING_STATION_TILE = tile("charging_station", ChargingStationTile::new, CHARGING_STATION);
 
     //Bounding Box
     public static RegistryObject<BasicTileBlock<BoundingBoxTile>> BOUNDING_BOX = block("bounding_box", BoundingBoxBlock::new);
-    public static RegistryObject<TileEntityType<BoundingBoxTile>> BOUNDING_BOX_TILE = tile("bounding_box", BoundingBoxTile::new, BOUNDING_BOX);
+    public static RegistryObject<BlockEntityType<BoundingBoxTile>> BOUNDING_BOX_TILE = tile("bounding_box", BoundingBoxTile::new, BOUNDING_BOX);
 
     public static void register(IEventBus eventBus) {
         BLOCKS.register(eventBus);

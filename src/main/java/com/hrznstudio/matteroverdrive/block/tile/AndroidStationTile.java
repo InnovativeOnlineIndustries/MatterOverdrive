@@ -5,10 +5,9 @@ import com.hrznstudio.matteroverdrive.block.MOBlocks;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import com.hrznstudio.matteroverdrive.container.AndroidStationContainer;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -30,8 +29,8 @@ public class AndroidStationTile extends BaseStationTile<AndroidStationTile> {
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int p_createMenu_1_, Inventory p_createMenu_2_, Player p_createMenu_3_) {
-        return new AndroidStationContainer(MOBlocks.ANDROID_CONTAINER.get(), p_createMenu_2_, p_createMenu_1_);
+    public AbstractContainerMenu createMenu(int id, Inventory inv, Player p_createMenu_3_) {
+        return new AndroidStationContainer(id, inv);
     }
 
     public void openGui(Player player) {
@@ -41,7 +40,7 @@ public class AndroidStationTile extends BaseStationTile<AndroidStationTile> {
     }
 
     @Override
-    public ITextComponent getDisplayName() {
-        return new StringTextComponent("");
+    public Component getDisplayName() {
+        return Component.empty();
     }
 }
