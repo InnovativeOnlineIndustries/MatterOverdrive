@@ -15,6 +15,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("unchecked")
 public class PacketHandler {
 
     public static final String PROTOCOL_VERSION = ModList.get().getModFileById(MatterOverdrive.MOD_ID).versionString();
