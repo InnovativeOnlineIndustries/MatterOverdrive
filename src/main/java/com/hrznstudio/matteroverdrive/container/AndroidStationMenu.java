@@ -1,8 +1,6 @@
 package com.hrznstudio.matteroverdrive.container;
 
-import com.hrznstudio.matteroverdrive.api.android.IAndroid;
 import com.hrznstudio.matteroverdrive.block.MOBlocks;
-import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -11,7 +9,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 
-public class AndroidStationContainer extends AbstractContainerMenu {
+public class AndroidStationMenu extends AbstractContainerMenu {
 
 //    public AndroidStationContainer(MenuType type, Inventory inventory, int id) {
 //        super(type, inventory, id);
@@ -20,12 +18,12 @@ public class AndroidStationContainer extends AbstractContainerMenu {
 
     private final Container container;
 
-    public AndroidStationContainer(int id, Inventory inventory, FriendlyByteBuf friendlyByteBuf) {
+    public AndroidStationMenu(int id, Inventory inventory, FriendlyByteBuf friendlyByteBuf) {
         super(MOBlocks.ANDROID_CONTAINER.get(), id);
         this.container = inventory;
     }
 
-    public AndroidStationContainer(int id, Inventory inventory) {
+    public AndroidStationMenu(int id, Inventory inventory) {
         super(MOBlocks.ANDROID_CONTAINER.get(), id);
     }
 
