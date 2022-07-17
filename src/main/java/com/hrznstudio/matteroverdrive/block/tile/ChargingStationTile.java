@@ -3,6 +3,7 @@ package com.hrznstudio.matteroverdrive.block.tile;
 import com.hrznstudio.matteroverdrive.block.MOBlocks;
 import com.hrznstudio.matteroverdrive.capabilities.android.AndroidEnergy;
 import com.hrznstudio.titanium.block.tile.PoweredTile;
+import net.minecraft.core.BlockPos;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -10,13 +11,14 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.energy.CapabilityEnergy;
 
 import javax.annotation.Nonnull;
 
 public class ChargingStationTile extends PoweredTile<ChargingStationTile> {
 
-    public ChargingStationTile() {
+    public ChargingStationTile(BlockPos pos, BlockState state) {
         super(MOBlocks.CHARGING_STATION.get());
     }
 

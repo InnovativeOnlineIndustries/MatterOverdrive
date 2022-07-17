@@ -1,16 +1,17 @@
 package com.hrznstudio.matteroverdrive.block.tile;
 
 import com.hrznstudio.matteroverdrive.block.MOBlocks;
+import com.hrznstudio.matteroverdrive.block.extendable.tile.MOBaseTile;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.tile.BasicTile;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 
-public class BoundingBoxTile extends BasicTile<BoundingBoxTile> {
+public class BoundingBoxTile extends MOBaseTile<BoundingBoxTile> {
 
     @Save
     private BlockPos parent;
 
-    public BoundingBoxTile() {
+    public BoundingBoxTile(BlockPos pos, BlockState state) {
         super(MOBlocks.BOUNDING_BOX.get());
     }
 

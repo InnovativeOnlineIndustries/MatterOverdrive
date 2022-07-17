@@ -1,41 +1,35 @@
 package com.hrznstudio.matteroverdrive.block;
 
+import com.hrznstudio.matteroverdrive.api.android.misc.RotationType;
+import com.hrznstudio.matteroverdrive.block.extendable.block.MORotatableBlock;
 import com.hrznstudio.matteroverdrive.block.tile.BoundingBoxTile;
 import com.hrznstudio.matteroverdrive.block.tile.ChargingStationTile;
 import com.hrznstudio.matteroverdrive.util.MOBlockUtil;
-import com.hrznstudio.titanium.api.IFactory;
-import com.hrznstudio.titanium.block.RotatableBlock;
-import com.hrznstudio.titanium.util.TileUtil;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import com.hrznstudio.matteroverdrive.util.MOTileHelper;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ChargingStationBlock extends RotatableBlock<ChargingStationTile> {
+public class ChargingStationBlock extends MORotatableBlock<ChargingStationTile> {
 
     public ChargingStationBlock() {
-        super(Properties.from(Blocks.IRON_BLOCK), ChargingStationTile.class);
+        super(Properties.copy(Blocks.IRON_BLOCK), ChargingStationTile.class);
     }
 
     @Override
-    public IFactory<ChargingStationTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<?> getBlockEntityFactory() {
         return ChargingStationTile::new;
-    }
-
-    @Override
-    public net.minecraft.item.Item asItem() {
-        if (super.asItem() == null) setItem((BlockItem) net.minecraft.item.Item.getItemFromBlock(this));
-        return super.asItem();
     }
 
     @Nonnull
@@ -44,18 +38,14 @@ public class ChargingStationBlock extends RotatableBlock<ChargingStationTile> {
         return RotationType.FOUR_WAY;
     }
 
-    @Override
-    public TileEntityType getTileEntityType() {
-        return MOBlocks.CHARGING_STATION_TILE.get();
-    }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState p_180633_3_, @Nullable LivingEntity p_180633_4_, ItemStack p_180633_5_) {
-        super.onBlockPlacedBy(world, pos, p_180633_3_, p_180633_4_, p_180633_5_);
-        if (!world.isRemote) {
+    public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
+        super.setPlacedBy(world, pos, state, entity, stack);
+        if (!world.isClientSide()) {
             for (int i = 0; i < 2; i++) {
-                world.setBlockState(pos.offset(Direction.UP, i + 1), MOBlocks.BOUNDING_BOX.get().getDefaultState());
-                TileUtil.getTileEntity(world, pos.offset(Direction.UP, i + 1), BoundingBoxTile.class).ifPresent(boundingBoxTile -> {
+                world.setBlock(BlockPos.of(BlockPos.offset(i + 1, Direction.UP)), MOBlocks.BOUNDING_BOX.get().defaultBlockState(), 3);
+                MOTileHelper.getTileEntity(world, BlockPos.of(BlockPos.offset(i + 1, Direction.UP)), BoundingBoxTile.class).ifPresent(boundingBoxTile -> {
                     boundingBoxTile.setParent(pos);
                 });
             }
@@ -63,11 +53,11 @@ public class ChargingStationBlock extends RotatableBlock<ChargingStationTile> {
     }
 
     @Override
-    public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving) {
-        super.onReplaced(state, world, pos, newState, isMoving);
-        if (!world.isRemote) {
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        super.onRemove(state, level, pos, newState, isMoving);
+        if (!level.isClientSide()) {
             for (int i = 0; i < 2; i++) {
-                world.setBlockState(pos.offset(Direction.UP, i + 1), Blocks.AIR.getDefaultState());
+                level.setBlock(BlockPos.of(BlockPos.offset(i + 1, Direction.UP)), Blocks.AIR.defaultBlockState(), 3);
             }
         }
     }
@@ -79,8 +69,8 @@ public class ChargingStationBlock extends RotatableBlock<ChargingStationTile> {
         }
 
         @Override
-        protected boolean canPlace(BlockItemUseContext context, BlockState state) {
-            return super.canPlace(context, state) && MOBlockUtil.checkDirectionForState(context.getWorld(), context.getPos(), Direction.UP, Blocks.AIR, 2);
+        protected boolean canPlace(BlockPlaceContext context, BlockState state) {
+            return super.canPlace(context, state) && MOBlockUtil.checkDirectionForState(context.getLevel(), context.getClickedPos(), Direction.UP, Blocks.AIR, 2);
         }
     }
 }

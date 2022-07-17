@@ -32,17 +32,17 @@ public class MOBlocks {
     //Android Station
     public static RegistryObject<AndroidStationBlock> ANDROID_STATION = block("android_station", AndroidStationBlock::new);
     public static RegistryObject<BlockItem> ANDROID_STATION_ITEM = blockItem("android_station", ANDROID_STATION);
-    public static RegistryObject<BlockEntityType<AndroidStationTile>> ANDROID_STATION_TILE = tile("android_station", AndroidStationTile::new, ANDROID_STATION);
+    public static RegistryObject<BlockEntityType<AndroidStationTile>> ANDROID_STATION_TILE = blockEntity("android_station", AndroidStationTile::new, ANDROID_STATION);
     public static RegistryObject<MenuType<AndroidStationMenu>> ANDROID_CONTAINER = container("android_station", () -> IForgeMenuType.create(((windowId, inv, data) -> new AndroidStationMenu(windowId, inv))));
 
     //Charging Station
     public static RegistryObject<ChargingStationBlock> CHARGING_STATION = block("charging_station", ChargingStationBlock::new);
-    public static RegistryObject<BlockItem> CHARGING_STATION_ITEM = BLOCK_ITEMS.register("charging_station", () -> new ChargingStationBlock.Item(CHARGING_STATION.get(), new Item.Properties().group(MOItems.MATTER_OVERDRIVE)));
-    public static RegistryObject<BlockEntityType<ChargingStationTile>> CHARGING_STATION_TILE = tile("charging_station", ChargingStationTile::new, CHARGING_STATION);
+    public static RegistryObject<BlockItem> CHARGING_STATION_ITEM = BLOCK_ITEMS.register("charging_station", () -> new ChargingStationBlock.Item(CHARGING_STATION.get(), new Item.Properties().tab(MOItems.MATTER_OVERDRIVE)));
+    public static RegistryObject<BlockEntityType<ChargingStationTile>> CHARGING_STATION_TILE = blockEntity("charging_station", ChargingStationTile::new, CHARGING_STATION);
 
     //Bounding Box
-    public static RegistryObject<BoundingBoxTile> BOUNDING_BOX = block("bounding_box", BoundingBoxBlock::new);
-    public static RegistryObject<BlockEntityType<BoundingBoxTile>> BOUNDING_BOX_TILE = tile("bounding_box", BoundingBoxTile::new, BOUNDING_BOX);
+    public static RegistryObject<BoundingBoxBlock> BOUNDING_BOX = block("bounding_box", BoundingBoxBlock::new);
+    public static RegistryObject<BlockEntityType<BoundingBoxTile>> BOUNDING_BOX_TILE = blockEntity("bounding_box", BoundingBoxTile::new, BOUNDING_BOX);
 
     public static void register(IEventBus eventBus) {
         BLOCKS.register(eventBus);
@@ -50,9 +50,9 @@ public class MOBlocks {
         TILE_TYPES.register(eventBus);
         CONTAINER_TYPES.register(eventBus);
 
-        NBTManager.getInstance().scanTileClassForAnnotations(AndroidStationTile.class);
-        NBTManager.getInstance().scanTileClassForAnnotations(ChargingStationTile.class);
-        NBTManager.getInstance().scanTileClassForAnnotations(BoundingBoxTile.class);
+//        NBTManager.getInstance().scanTileClassForAnnotations(AndroidStationTile.class);
+//        NBTManager.getInstance().scanTileClassForAnnotations(ChargingStationTile.class);
+//        NBTManager.getInstance().scanTileClassForAnnotations(BoundingBoxTile.class);
     }
 
     public static <T extends Block> RegistryObject<T> block(String id, Supplier<T> block) {
@@ -60,10 +60,10 @@ public class MOBlocks {
     }
 
     public static RegistryObject<BlockItem> blockItem(String id, Supplier<? extends Block> sup) {
-        return BLOCK_ITEMS.register(id, () -> new BlockItem(sup.get(), new Item.Properties().group(MOItems.MATTER_OVERDRIVE)));
+        return BLOCK_ITEMS.register(id, () -> new BlockItem(sup.get(), new Item.Properties().tab(MOItems.MATTER_OVERDRIVE)));
     }
 
-    public static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> tile(String id, Supplier<T> supplier, Supplier<? extends Block> sup) {
+    public static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> blockEntity(String id, BlockEntityType.BlockEntitySupplier<T> supplier, Supplier<? extends Block> sup) {
         return TILE_TYPES.register(id, () -> BlockEntityType.Builder.of(supplier, sup.get()).build(null));
     }
 
