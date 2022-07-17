@@ -3,9 +3,9 @@ package com.hrznstudio.matteroverdrive.android.perks;
 import com.google.common.collect.Multimap;
 import com.hrznstudio.matteroverdrive.api.android.IAndroid;
 import com.hrznstudio.matteroverdrive.api.android.perk.IAndroidPerk;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.ItemStack;
 
 import java.awt.*;
 import java.util.List;

@@ -3,7 +3,7 @@ package com.hrznstudio.matteroverdrive.block;
 import com.hrznstudio.matteroverdrive.block.tile.AndroidStationTile;
 import com.hrznstudio.matteroverdrive.block.tile.BoundingBoxTile;
 import com.hrznstudio.matteroverdrive.block.tile.ChargingStationTile;
-import com.hrznstudio.matteroverdrive.container.AndroidStationContainer;
+import com.hrznstudio.matteroverdrive.container.AndroidStationMenu;
 import com.hrznstudio.matteroverdrive.item.MOItems;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -30,18 +30,18 @@ public class MOBlocks {
     private static final DeferredRegister<MenuType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, MOD_ID);
 
     //Android Station
-    public static RegistryObject<BasicTileBlock<AndroidStationTile>> ANDROID_STATION = block("android_station", AndroidStationBlock::new);
+    public static RegistryObject<AndroidStationBlock> ANDROID_STATION = block("android_station", AndroidStationBlock::new);
     public static RegistryObject<BlockItem> ANDROID_STATION_ITEM = blockItem("android_station", ANDROID_STATION);
     public static RegistryObject<BlockEntityType<AndroidStationTile>> ANDROID_STATION_TILE = tile("android_station", AndroidStationTile::new, ANDROID_STATION);
-    public static RegistryObject<MenuType<AndroidStationContainer>> ANDROID_CONTAINER = container("android_station", () -> IForgeMenuType.create(((windowId, inv, data) -> new AndroidStationContainer(windowId, inv))));
+    public static RegistryObject<MenuType<AndroidStationMenu>> ANDROID_CONTAINER = container("android_station", () -> IForgeMenuType.create(((windowId, inv, data) -> new AndroidStationMenu(windowId, inv))));
 
     //Charging Station
-    public static RegistryObject<BasicTileBlock<ChargingStationTile>> CHARGING_STATION = block("charging_station", ChargingStationBlock::new);
+    public static RegistryObject<ChargingStationBlock> CHARGING_STATION = block("charging_station", ChargingStationBlock::new);
     public static RegistryObject<BlockItem> CHARGING_STATION_ITEM = BLOCK_ITEMS.register("charging_station", () -> new ChargingStationBlock.Item(CHARGING_STATION.get(), new Item.Properties().group(MOItems.MATTER_OVERDRIVE)));
     public static RegistryObject<BlockEntityType<ChargingStationTile>> CHARGING_STATION_TILE = tile("charging_station", ChargingStationTile::new, CHARGING_STATION);
 
     //Bounding Box
-    public static RegistryObject<BasicTileBlock<BoundingBoxTile>> BOUNDING_BOX = block("bounding_box", BoundingBoxBlock::new);
+    public static RegistryObject<BoundingBoxTile> BOUNDING_BOX = block("bounding_box", BoundingBoxBlock::new);
     public static RegistryObject<BlockEntityType<BoundingBoxTile>> BOUNDING_BOX_TILE = tile("bounding_box", BoundingBoxTile::new, BOUNDING_BOX);
 
     public static void register(IEventBus eventBus) {

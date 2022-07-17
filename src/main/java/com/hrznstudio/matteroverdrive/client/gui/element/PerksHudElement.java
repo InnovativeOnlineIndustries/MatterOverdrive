@@ -62,7 +62,6 @@ public class PerksHudElement extends HudElement {
     public void drawElement(PoseStack stack, IAndroid androidPlayer, Window resolution, float ticks) {
         if (!isVisible(androidPlayer)) return;
         stack.pushPose();
-        RenderSystem.enableAlphaTest();
         RenderSystem.enableBlend();
 
         int x = 0;
@@ -112,7 +111,6 @@ public class PerksHudElement extends HudElement {
                 y += StatsHudElement.renderIconWithInfo(stack, IAndroidPerk.PERKS.get(s).getIcon(), "", baseColor, x, y, 0, 0, getPosition() == HudPosition.MIDDLE_LEFT, 16, 16, backgroundAlpha);
             }
         }
-        RenderSystem.disableAlphaTest();
         stack.popPose();
     }
 

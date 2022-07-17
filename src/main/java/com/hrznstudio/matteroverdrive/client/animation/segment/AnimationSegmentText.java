@@ -9,7 +9,6 @@ package com.hrznstudio.matteroverdrive.client.animation.segment;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.util.Mth;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.versions.forge.ForgeVersion;
 
 public class AnimationSegmentText extends AnimationSegment {
@@ -39,7 +38,7 @@ public class AnimationSegmentText extends AnimationSegment {
 
     public String getText(int time) {
         if (animationType == 1) {
-            return typingAnimation(TextFormatting.getTextWithoutFormattingCodes(string).replaceAll("\\$gre", ChatFormatting.GREEN.toString()).replaceAll("\\$res", ChatFormatting.RESET.toString()).replaceAll("\\$forge", ForgeVersion.getVersion()), (time - this.getBegin()), this.getLength());
+            return typingAnimation(ChatFormatting.stripFormatting(string).replaceAll("\\$gre", ChatFormatting.GREEN.toString()).replaceAll("\\$res", ChatFormatting.RESET.toString()).replaceAll("\\$forge", ForgeVersion.getVersion()), (time - this.getBegin()), this.getLength());
         }
         return "";
     }

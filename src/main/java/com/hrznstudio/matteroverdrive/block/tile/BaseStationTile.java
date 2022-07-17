@@ -1,6 +1,7 @@
 package com.hrznstudio.matteroverdrive.block.tile;
 
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
@@ -10,12 +11,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class BaseStationTile<A extends BaseStationTile> extends BlockEntity implements Container, MenuProvider, Nameable {
+public class BaseStationTile extends BlockEntity implements Container, MenuProvider, Nameable {
 
-    public BaseStationTile(BasicTileBlock<T> base) {
-        super(base);
+    public BaseStationTile(BlockEntityType<? extends BaseStationTile> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
     public boolean isUsableByPlayer(LocalPlayer player){
@@ -35,27 +38,27 @@ public class BaseStationTile<A extends BaseStationTile> extends BlockEntity impl
     }
 
     @Override
-    public ItemStack getItem(int p_18941_) {
+    public ItemStack getItem(int slot) {
         return null;
     }
 
     @Override
-    public ItemStack removeItem(int p_18942_, int p_18943_) {
+    public ItemStack removeItem(int slot, int count) {
         return null;
     }
 
     @Override
-    public ItemStack removeItemNoUpdate(int p_18951_) {
+    public ItemStack removeItemNoUpdate(int slot) {
         return null;
     }
 
     @Override
-    public void setItem(int p_18944_, ItemStack p_18945_) {
+    public void setItem(int slot, ItemStack stack) {
 
     }
 
     @Override
-    public boolean stillValid(Player p_18946_) {
+    public boolean stillValid(Player player) {
         return false;
     }
 
@@ -76,7 +79,7 @@ public class BaseStationTile<A extends BaseStationTile> extends BlockEntity impl
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
+    public AbstractContainerMenu createMenu(int menuId, Inventory inventory, Player player) {
         return null;
     }
 }

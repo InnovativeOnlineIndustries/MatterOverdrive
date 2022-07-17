@@ -5,12 +5,12 @@ import com.google.common.collect.Multimap;
 import com.hrznstudio.matteroverdrive.MatterOverdrive;
 import com.hrznstudio.matteroverdrive.api.android.IAndroid;
 import com.hrznstudio.matteroverdrive.api.android.perk.IAndroidPerk;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -87,8 +87,8 @@ public class BaseAndroidPerk implements IAndroidPerk {
     }
 
     @Override
-    public ITextComponent getDisplayName(IAndroid player, int statLevel) {
-        return new TranslationTextComponent("matteroverdrive.perk." + perkName + ".name");
+    public MutableComponent getDisplayName(IAndroid player, int statLevel) {
+        return Component.translatable("matteroverdrive.perk." + perkName + ".name");
     }
 
     @Override

@@ -74,7 +74,6 @@ public class StatsHudElement extends HudElement {
     public void drawElement(PoseStack stack, IAndroid androidPlayer, Window resolution, float ticks) {
         if (!isVisible(androidPlayer)) return;
         stack.pushPose();
-        RenderSystem.enableAlphaTest();
         RenderSystem.enableBlend();
 
         double energy = androidPlayer.getHolder() != null ? androidPlayer.getHolder().getCapability(CapabilityEnergy.ENERGY).map(energyStorage -> energyStorage.getEnergyStored() / (double) energyStorage.getMaxEnergyStored()).orElse(0D) : 0;
@@ -125,8 +124,6 @@ public class StatsHudElement extends HudElement {
             renderIconWithPercent(stack, HEALTH_RL, health, x - getWidthIconWithPercent(health, 18) - 22, y - 8, 0, 0, true, ReferenceClient.Colors.HOLO_RED, baseColor, 16, 16, backgroundAlpha);
             renderIconWithPercent(stack, ENERGY_RL, energy, x + 24, y - 8, 0, 0, false, ReferenceClient.Colors.HOLO_RED, baseColor, 16, 16, backgroundAlpha);
         }
-
-        RenderSystem.disableAlphaTest();
         stack.popPose();
     }
 

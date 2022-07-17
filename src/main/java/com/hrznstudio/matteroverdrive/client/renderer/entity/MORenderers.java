@@ -17,7 +17,7 @@ public class MORenderers {
     @SubscribeEvent
     public static void entityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(MOEntities.KUNAI.get(), KunaiRenderer::new);
-        event.registerBlockEntityRenderer(MOBlocks.ANDROID_STATION_TILE.get(), (context) -> new RenderAndroidStation(context));
+        event.registerBlockEntityRenderer(MOBlocks.ANDROID_STATION_TILE.get(), RenderAndroidStation::new);
     }
 
 

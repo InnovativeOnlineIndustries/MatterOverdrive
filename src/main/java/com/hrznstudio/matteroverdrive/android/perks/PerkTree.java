@@ -1,18 +1,17 @@
 package com.hrznstudio.matteroverdrive.android.perks;
 
 import com.google.common.collect.ImmutableMultimap;
-import com.hrznstudio.matteroverdrive.capabilities.android.AndroidEnergy;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
+import com.hrznstudio.matteroverdrive.capabilities.android.AndroidEnergy;
 import com.hrznstudio.matteroverdrive.event.EventManager;
 import com.hrznstudio.matteroverdrive.item.food.AndroidPillItem;
-import com.hrznstudio.titanium.event.handler.EventManager;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
@@ -42,13 +41,13 @@ public class PerkTree {
             .maxLevel(4)
             .canShowOnHUD((iAndroid, integer) -> true)
             .onAndroidTick((iAndroid, integer) -> {
-                if (iAndroid.getHolder().getEntityWorld().getGameTime() % 20 == 0 && iAndroid.getHolder().getHealth() < iAndroid.getHolder().getMaxHealth()) {
+                if (iAndroid.getHolder().getLevel().getGameTime() % 20 == 0 && iAndroid.getHolder().getHealth() < iAndroid.getHolder().getMaxHealth()) {
                     return iAndroid.getHolder().getCapability(CapabilityEnergy.ENERGY).map(energyStorage -> {
                         if (energyStorage.getEnergyStored() >= 1048) {
                             iAndroid.getHolder().heal(1);
                             energyStorage.extractEnergy(1048, false);
-                            if (iAndroid.getHolder() instanceof ServerPlayerEntity)
-                                AndroidEnergy.syncEnergy((ServerPlayerEntity) iAndroid.getHolder());
+                            if (iAndroid.getHolder() instanceof ServerPlayer player)
+                                AndroidEnergy.syncEnergy(player);
                             return true;
                         }
                         return false;
@@ -96,13 +95,13 @@ public class PerkTree {
             .xpNeeded(18)
             .canShowOnHUD((iAndroid, integer) -> true)
             .onAndroidTick((iAndroid, integer) -> {
-                if (iAndroid.getHolder() instanceof ServerPlayerEntity) {
-                    if (((ServerPlayerEntity) iAndroid.getHolder()).getFoodStats().getFoodLevel() < 8) {
-                        ((ServerPlayerEntity) iAndroid.getHolder()).getFoodStats().setFoodLevel(10);
+                if (iAndroid.getHolder() instanceof ServerPlayer player) {
+                    if (player.getFoodData().getFoodLevel() < 8) {
+                        player.getFoodData().setFoodLevel(10);
                         return true;
                     }
-                    if (((ServerPlayerEntity) iAndroid.getHolder()).getFoodStats().getFoodLevel() > 12) {
-                        ((ServerPlayerEntity) iAndroid.getHolder()).getFoodStats().setFoodLevel(10);
+                    if (player.getFoodData().getFoodLevel() > 12) {
+                        player.getFoodData().setFoodLevel(10);
                         return false;
                     }
                 }
@@ -112,8 +111,8 @@ public class PerkTree {
                     .xpNeeded(12)
                     .canShowOnHUD((iAndroid, integer) -> true)
                     .onAndroidTick((iAndroid, integer) -> {
-                        if (iAndroid.getHolder().getAir() < iAndroid.getHolder().getMaxAir()) {
-                            iAndroid.getHolder().setAir(iAndroid.getHolder().getMaxAir());
+                        if (iAndroid.getHolder().getAirSupply() < iAndroid.getHolder().getMaxAirSupply()) {
+                            iAndroid.getHolder().setAirSupply(iAndroid.getHolder().getMaxAirSupply());
                             return true;
                         }
                         return false;
@@ -136,14 +135,14 @@ public class PerkTree {
                         iAndroid.getHolder().getCapability(CapabilityEnergy.ENERGY).ifPresent(energyStorage -> {
                             if (energyStorage.getEnergyStored() >= 16) {
                                 energyStorage.extractEnergy(16, false);
-                                iAndroid.getHolder().addPotionEffect(new EffectInstance(Effects.NIGHT_VISION, 15 * 20, 0, true, false));
-                                if (iAndroid.getHolder() instanceof ServerPlayerEntity)
-                                    AndroidEnergy.syncEnergy((ServerPlayerEntity) iAndroid.getHolder());
+                                iAndroid.getHolder().addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 15 * 20, 0, true, false));
+                                if (iAndroid.getHolder() instanceof ServerPlayer player)
+                                    AndroidEnergy.syncEnergy(player);
                             }
                         });
                         return true;
                     } else {
-                        iAndroid.getHolder().removePotionEffect(Effects.NIGHT_VISION);
+                        iAndroid.getHolder().removeEffect(MobEffects.NIGHT_VISION);
                     }
                     return false;
                 });

@@ -115,14 +115,11 @@ public class AndroidHudScreen{
             RenderSystem.setShaderTexture(0, CROSS_HAIR_RL);
             stack.pushPose();
             RenderSystem.enableBlend();
-            // TODO: @Sekwah look into the final parts of this
-            RenderSystem.enableAlphaTest();
             RenderSystem.blendFunc(GL_ONE_MINUS_DST_COLOR, GL_ONE_MINUS_SRC_COLOR);
             RenderSystem.setShaderColor(ReferenceClient.Colors.HOLO.getRed() / 255f, ReferenceClient.Colors.HOLO.getGreen() / 255f, ReferenceClient.Colors.HOLO.getBlue() / 255f, ReferenceClient.Colors.HOLO.getAlpha());
             Screen.blit(stack, centerX - 9, centerY - 8, 0, 0, 16, 16, 16, 16);
             RenderSystem.disableBlend();
             RenderSystem.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            RenderSystem.disableAlphaTest();
             stack.popPose();
             //ELEMENTS
             stack.pushPose();

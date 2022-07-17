@@ -13,6 +13,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
@@ -31,7 +32,7 @@ import static com.hrznstudio.matteroverdrive.util.MOColorUtil.HOLO_COLOR;
 import static com.hrznstudio.matteroverdrive.util.MOColorUtil.INVALID_HOLO_COLOR;
 import static org.lwjgl.opengl.GL11.GL_ONE;
 
-public class RenderStation<T extends BaseStationTile<BaseStationTile>> implements BlockEntityRenderer<T> {
+public class RenderStation<T extends BaseStationTile> implements BlockEntityRenderer<T> {
 
     private static final ResourceLocation glowTexture = new ResourceLocation("matteroverdrive:textures/fx/hologram_beam.png");
 
@@ -46,11 +47,11 @@ public class RenderStation<T extends BaseStationTile<BaseStationTile>> implement
             RenderSystem.disableBlend();
             RenderSystem.defaultBlendFunc();
         })).createCompositeState(true);
-        return RenderType.create("render_station", DefaultVertexFormat.POSITION_TEX_COLOR, 7, 256, false, true, state);
+        return RenderType.create("render_station", DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.TRIANGLE_FAN, 256, false, true, state);
     }
 
     public RenderStation(BlockEntityRenderDispatcher rendererDispatcherIn) {
-        super(rendererDispatcherIn);
+        super();
     }
 
     private void drawHoloLights(PoseStack stack, MultiBufferSource bufferIn, T tile, double x, double y, double z) {

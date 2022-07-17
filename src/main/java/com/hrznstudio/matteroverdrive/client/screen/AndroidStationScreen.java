@@ -3,7 +3,7 @@ package com.hrznstudio.matteroverdrive.client.screen;
 import com.hrznstudio.matteroverdrive.MatterOverdrive;
 import com.hrznstudio.matteroverdrive.api.android.perk.IAndroidPerk;
 import com.hrznstudio.matteroverdrive.client.screen.elements.PerkButton;
-import com.hrznstudio.matteroverdrive.container.AndroidStationContainer;
+import com.hrznstudio.matteroverdrive.container.AndroidStationMenu;
 import com.hrznstudio.matteroverdrive.util.MOColorUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -16,13 +16,12 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.Slot;
 
 /**
  * See {@link net.minecraft.client.gui.screens.inventory.CraftingScreen} for references on how to render container + button
  */
-public class AndroidStationScreen extends AbstractContainerScreen<AndroidStationContainer> implements MenuAccess<AndroidStationContainer> {
+public class AndroidStationScreen extends AbstractContainerScreen<AndroidStationMenu> implements MenuAccess<AndroidStationMenu> {
 
     private static final ResourceLocation CONTAINER_BACKGROUND = new ResourceLocation("textures/gui/container/generic_54.png");
 
@@ -38,11 +37,10 @@ public class AndroidStationScreen extends AbstractContainerScreen<AndroidStation
 
     private final int containerRows;
 
-
-    public AndroidStationScreen(AndroidStationContainer screenContainer, Inventory inv, MutableComponent titleIn) {
-        super(screenContainer, inv, titleIn);
+    public AndroidStationScreen(AndroidStationMenu screenMenu, Inventory inv, Component titleIn) {
+        super(screenMenu, inv, titleIn);
         this.containerRows = 0;
-        //this.containerRows = screenContainer.getRowCount();
+        //this.containerRows = screenMenu.getRowCount();
     }
 
     @Override
