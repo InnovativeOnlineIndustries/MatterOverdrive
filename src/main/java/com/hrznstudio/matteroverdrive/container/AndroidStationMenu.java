@@ -1,6 +1,8 @@
 package com.hrznstudio.matteroverdrive.container;
 
+import com.hrznstudio.matteroverdrive.api.android.IAndroid;
 import com.hrznstudio.matteroverdrive.block.MOBlocks;
+import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -16,15 +18,16 @@ public class AndroidStationMenu extends AbstractContainerMenu {
 //        addHotbarSlots();
 //    }
 
-    private final Container container;
+    private final Container inventory;
 
     public AndroidStationMenu(int id, Inventory inventory, FriendlyByteBuf friendlyByteBuf) {
         super(MOBlocks.ANDROID_CONTAINER.get(), id);
-        this.container = inventory;
+        this.inventory = inventory;
     }
 
     public AndroidStationMenu(int id, Inventory inventory) {
         super(MOBlocks.ANDROID_CONTAINER.get(), id);
+        this.inventory = inventory;
     }
 
     @Override
@@ -38,16 +41,11 @@ public class AndroidStationMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean stillValid(Player p_38874_) {
-        return false;
+    public boolean stillValid(Player player) {
+        return player.getCapability(MOCapabilities.ANDROID_DATA).map(IAndroid::isAndroid).orElse(false);
     }
 
 
-
-//    @Override
-//    public boolean canInteractWith(Player playerIn) {
-//        return playerIn.getCapability(MOCapabilities.ANDROID_DATA).map(IAndroid::isAndroid).orElse(false);
-//    }
 
 
 }

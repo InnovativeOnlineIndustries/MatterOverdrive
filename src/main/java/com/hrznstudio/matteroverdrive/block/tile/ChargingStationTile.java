@@ -1,25 +1,27 @@
 package com.hrznstudio.matteroverdrive.block.tile;
 
 import com.hrznstudio.matteroverdrive.block.MOBlocks;
+import com.hrznstudio.matteroverdrive.block.extendable.tile.MOPoweredTile;
 import com.hrznstudio.matteroverdrive.capabilities.android.AndroidEnergy;
-import com.hrznstudio.titanium.block.tile.PoweredTile;
 import net.minecraft.core.BlockPos;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.energy.CapabilityEnergy;
 
 import javax.annotation.Nonnull;
 
-public class ChargingStationTile extends PoweredTile<ChargingStationTile> {
+public class ChargingStationTile extends MOPoweredTile<ChargingStationTile> {
 
     public ChargingStationTile(BlockPos pos, BlockState state) {
-        super(MOBlocks.CHARGING_STATION.get());
+        super(MOBlocks.CHARGING_STATION.get(), MOBlocks.CHARGING_STATION_TILE.get(), pos, state, Component.translatable("gui.matteroverdrive.title"));
     }
 
     @Nonnull
@@ -29,26 +31,27 @@ public class ChargingStationTile extends PoweredTile<ChargingStationTile> {
     }
 
     @Override
-    public ActionResultType onActivated(PlayerEntity playerIn, Hand hand, Direction facing, double hitX, double hitY, double hitZ) {
-        if (super.onActivated(playerIn, hand, facing, hitX, hitY, hitZ) == ActionResultType.SUCCESS) {
-            return ActionResultType.SUCCESS;
+    public InteractionResult onActivated(Player player, InteractionHand hand, Direction hitDirection, double hitX, double hitY, double hitZ) {
+        if (super.onActivated(player, hand, hitDirection, hitX, hitY, hitZ) == InteractionResult.SUCCESS) {
+            return InteractionResult.SUCCESS;
         }
-        openGui(playerIn);
-        return ActionResultType.SUCCESS;
+        openGui(player);
+        return InteractionResult.SUCCESS;
     }
 
-
     @Override
-    public void tick() {
-        super.tick();
+    public void serverTick(Level level, BlockPos pos, BlockState state, ChargingStationTile blockEntity) {
+        super.serverTick(level, pos, state, blockEntity);
         if (isServer()) {
-            this.world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(this.getPos()).grow(4), entity -> true).forEach(entity -> {
-                entity.getCapability(CapabilityEnergy.ENERGY).ifPresent(energyStorage -> {
-                    this.getEnergyStorage().extractEnergy(energyStorage.receiveEnergy(this.getEnergyStorage().extractEnergy(512, true), false), false);
-                    if (entity instanceof ServerPlayerEntity)
-                        AndroidEnergy.syncEnergy((ServerPlayerEntity) entity);
+            this.getLevel().getEntitiesOfClass(LivingEntity.class, new AABB(this.getBlockPos()).inflate(4), entity -> true).forEach(entity -> {
+                entity.getCapability(CapabilityEnergy.ENERGY).ifPresent(storage -> {
+                    this.getEnergyStorage().extractEnergy(storage.receiveEnergy(this.getEnergyStorage().extractEnergy(512, true), false), false);
+                    if (entity instanceof ServerPlayer serverPlayer) {
+                        AndroidEnergy.syncEnergy(serverPlayer);
+                    }
                 });
             });
         }
     }
+
 }
