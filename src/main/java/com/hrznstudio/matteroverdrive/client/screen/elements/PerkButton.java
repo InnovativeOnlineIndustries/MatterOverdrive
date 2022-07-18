@@ -89,8 +89,8 @@ public class PerkButton extends AbstractWidget {
         RenderSystem.disableScissor();
     }
 
-    public List<MutableComponent> getTooltipLines(){
-        List<MutableComponent> list = new ArrayList<>();
+    public List<Component> getTooltipLines(){
+        List<Component> list = new ArrayList<>();
         Minecraft.getInstance().player.getCapability(MOCapabilities.ANDROID_DATA).ifPresent(iAndroid -> {
             list.add(Component.literal(perk.getDisplayName(iAndroid, 0).getString()).withStyle(perk.getParent() == null || iAndroid.getPerkManager().hasPerk(perk.getParent()) ? ChatFormatting.AQUA : ChatFormatting.RED));
             list.add(Component.translatable("matteroverdrive.perk." + perk.getName() + ".desc" + (perk.getMaxLevel() > 1 ? "." + iAndroid.getPerkManager().getLevel(perk) : "")).withStyle(ChatFormatting.GRAY));

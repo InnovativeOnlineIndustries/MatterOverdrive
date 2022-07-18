@@ -24,6 +24,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 
 import java.awt.*;
 import java.util.Random;
@@ -32,7 +33,7 @@ import static com.hrznstudio.matteroverdrive.util.MOColorUtil.HOLO_COLOR;
 import static com.hrznstudio.matteroverdrive.util.MOColorUtil.INVALID_HOLO_COLOR;
 import static org.lwjgl.opengl.GL11.GL_ONE;
 
-public class RenderStation<T extends BaseStationTile> implements BlockEntityRenderer<T> {
+public class RenderStation<T extends BaseStationTile<T>> implements BlockEntityRenderer<T> {
 
     private static final ResourceLocation glowTexture = new ResourceLocation("matteroverdrive:textures/fx/hologram_beam.png");
 
@@ -116,9 +117,9 @@ public class RenderStation<T extends BaseStationTile> implements BlockEntityRend
             RenderSystem.blendFunc(GL_ONE, GL_ONE);
             stack.translate( 0.5,  0.5,  0.5);
             stack.mulPose(Vector3f.YP.rotationDegrees(180));
-            //float playerPosX = (float) MathHelper.clampedLerp((float) player.prevPosX, (float) player.getPosX(), partialTicks);
-            //float playerPosZ = (float) MathHelper.clampedLerp((float) player.prevPosZ, (float) player.getPosZ(), partialTicks);
-            //float angle = (float) Math.toDegrees(Math.atan2(playerPosX - (tile.getPos().getX() + 0.5), playerPosZ - (tile.getPos().getZ() + 0.5)) + Math.PI);
+            float playerPosX = (float) Mth.clampedLerp((float) player.xo, (float) player.getX(), partialTicks);
+            float playerPosZ = (float) Mth.clampedLerp((float) player.zo, (float) player.getZ(), partialTicks);
+            float angle = (float) Math.toDegrees(Math.atan2(playerPosX - (tile.getBlockPos().getX() + 0.5), playerPosZ - (tile.getBlockPos().getZ() + 0.5)) + Math.PI);
             stack.mulPose(Vector3f.YP.rotationDegrees(tile.getLevel().getGameTime() % 360));
 
             RenderSystem.disableCull();
@@ -151,6 +152,6 @@ public class RenderStation<T extends BaseStationTile> implements BlockEntityRend
         drawHoloLights(poseStack, buffer, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
         drawHoloText(poseStack, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ(), partialTicks);
         drawAdditional(poseStack, buffer, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ(), partialTicks);
-        poseStack.pushPose();
+        poseStack.popPose();
     }
 }

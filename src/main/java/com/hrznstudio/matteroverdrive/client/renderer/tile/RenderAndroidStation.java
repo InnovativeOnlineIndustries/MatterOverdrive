@@ -62,7 +62,7 @@ public class RenderAndroidStation extends RenderStation<AndroidStationTile> {
     public void drawAdditional(PoseStack stack, MultiBufferSource bufferIn, AndroidStationTile tile, double x, double y, double z, float partialTicks) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null && tile.isUsableByPlayer(player)) {
-            stack.popPose();
+            stack.pushPose();
             stack.translate(0.5,  2,  0.5);
             stack.mulPose(Vector3f.XP.rotationDegrees(180));
             RenderSystem.disableCull();

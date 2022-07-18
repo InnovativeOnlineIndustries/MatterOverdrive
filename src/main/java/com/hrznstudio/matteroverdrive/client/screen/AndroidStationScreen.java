@@ -35,12 +35,10 @@ public class AndroidStationScreen extends AbstractContainerScreen<AndroidStation
     private int pointerX = 0;
     private int pointerY = 0;
 
-    private final int containerRows;
+    //private final int containerRows;
 
     public AndroidStationScreen(AndroidStationMenu screenMenu, Inventory inv, Component titleIn) {
         super(screenMenu, inv, titleIn);
-        this.containerRows = 0;
-        //this.containerRows = screenMenu.getRowCount();
     }
 
     @Override
@@ -52,8 +50,18 @@ public class AndroidStationScreen extends AbstractContainerScreen<AndroidStation
         yStart = (int) (this.height * (size/6f));
         IAndroidPerk.PERKS.values().forEach(perk -> {
             if (perk.getParent() == null){
-                addWidget(new PerkButton(perk, xStart + leftSize + 32*perk.getAndroidStationLocation().getX(), yStart + cornerHeights + 32*perk.getAndroidStationLocation().getY(), 18, 18, Component.empty(), this::getScissors));
-                addChildPerks(perk,  xStart + leftSize + 32*perk.getAndroidStationLocation().getX(), yStart + cornerHeights + 32*perk.getAndroidStationLocation().getY());
+                addWidget(new PerkButton(
+                        perk,
+                        xStart + leftSize + 32 * perk.getAndroidStationLocation().getX(),
+                        yStart + cornerHeights + 32*perk.getAndroidStationLocation().getY(),
+                        18, 18,
+                        Component.empty(), this::getScissors)
+                );
+                addChildPerks(
+                        perk,
+                        xStart + leftSize + 32 * perk.getAndroidStationLocation().getX(),
+                        yStart + cornerHeights + 32 * perk.getAndroidStationLocation().getY()
+                );
             }
         });
     }
@@ -158,14 +166,14 @@ public class AndroidStationScreen extends AbstractContainerScreen<AndroidStation
         RenderSystem.disableScissor();
     }
 
-//    @Override
-//    protected void drawGuiContainerForegroundLayer(PoseStack poseStack, int x, int y) {
-//        for (Widget button : this.buttons) {
-//            if (button instanceof PerkButton && ((PerkButton) button).isHoveredOrFocused()){
-//                this.renderComponentTooltip(poseStack, ((PerkButton) button).getTooltipLines(), x - this.guiLeft, y - this.guiTop);
-//            }
-//        }
-//    }
+    @Override
+    public void render(PoseStack poseStack, int x, int y, float partial) {
+        for (Widget button : this.renderables) {
+            if (button instanceof PerkButton && ((PerkButton) button).isHoveredOrFocused()){
+                this.renderComponentTooltip(poseStack, ((PerkButton) button).getTooltipLines(), x - this.getGuiLeft(), y - this.getGuiTop());
+            }
+        }
+    }
 
     private void addChildPerks(IAndroidPerk perk, double x, double y){
         if (perk.getChild().size() > 0){

@@ -1,4 +1,4 @@
-package com.hrznstudio.matteroverdrive.client.gui;
+package com.hrznstudio.matteroverdrive.client.screen;
 
 import com.hrznstudio.matteroverdrive.MatterOverdrive;
 import com.hrznstudio.matteroverdrive.android.perks.PerkTree;
@@ -8,8 +8,8 @@ import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import com.hrznstudio.matteroverdrive.capabilities.android.AndroidData;
 import com.hrznstudio.matteroverdrive.client.animation.AnimationConsole;
 import com.hrznstudio.matteroverdrive.client.animation.segment.AnimationSegmentText;
-import com.hrznstudio.matteroverdrive.client.gui.element.PerksHudElement;
-import com.hrznstudio.matteroverdrive.client.gui.element.StatsHudElement;
+import com.hrznstudio.matteroverdrive.client.screen.elements.PerksHudElement;
+import com.hrznstudio.matteroverdrive.client.screen.elements.StatsHudElement;
 import com.hrznstudio.matteroverdrive.reference.ReferenceClient;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -27,7 +27,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.awt.*;
-import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.List;
 
