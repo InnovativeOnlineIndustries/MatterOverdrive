@@ -107,7 +107,7 @@ public abstract class MOBaseTile<T extends MOBaseTile<T>> extends BlockEntity im
     return this.title;
   }
 
-  public void openGui(Player player) {
+  public void openMenu(Player player) {
     if (player instanceof ServerPlayer serverPlayer) {
       if (this.createMenu(0, serverPlayer.getInventory(), serverPlayer) == null) return;
       NetworkHooks.openScreen(serverPlayer, this, byteBuf -> {});

@@ -36,8 +36,4 @@ public abstract class BaseStationTile<T extends BaseStationTile<T>> extends MOBa
         return getTitle();
     }
 
-    @Override
-    public Component getTitle() {
-        return getTitle();
-    }
 }

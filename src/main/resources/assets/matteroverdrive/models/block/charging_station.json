@@ -1,7 +1,7 @@
 {
   "__comment": "Add the following line on the same level as a 'model' declaration.",
   "loader": "forge:obj",
-  "flip-v": false,
+  "flip_v": false,
   "model": "matteroverdrive:models/block/charging_station.obj",
   "textures": {
     "texture0": "matteroverdrive:blocks/charging_station",

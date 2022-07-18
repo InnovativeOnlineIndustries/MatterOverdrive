@@ -30,7 +30,7 @@ public class AndroidStationBlock extends MOBaseTileBlock<AndroidStationTile> {
 
     @Override
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult result) {
-        if(level.getBlockEntity(blockPos) instanceof AndroidStationTile androidStationTile && !level.isClientSide()) {
+        if(level.getBlockEntity(blockPos) instanceof AndroidStationTile androidStationTile) {
             androidStationTile.onActivated(player, hand, result.getDirection(), result.getBlockPos().getX(), result.getBlockPos().getY(), result.getBlockPos().getZ());
         }
         return InteractionResult.SUCCESS;

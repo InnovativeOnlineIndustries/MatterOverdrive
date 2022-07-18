@@ -1,9 +1,8 @@
 package com.hrznstudio.matteroverdrive.block;
 
 import com.hrznstudio.matteroverdrive.block.tile.AndroidStationTile;
-import com.hrznstudio.matteroverdrive.block.tile.BoundingBoxTile;
 import com.hrznstudio.matteroverdrive.block.tile.ChargingStationTile;
-import com.hrznstudio.matteroverdrive.container.AndroidStationMenu;
+import com.hrznstudio.matteroverdrive.menu.AndroidStationMenu;
 import com.hrznstudio.matteroverdrive.item.MOItems;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -42,7 +41,6 @@ public class MOBlocks {
 
     //Bounding Box
     public static RegistryObject<BoundingBoxBlock> BOUNDING_BOX = block("bounding_box", BoundingBoxBlock::new);
-    public static RegistryObject<BlockEntityType<BoundingBoxTile>> BOUNDING_BOX_TILE = blockEntity("bounding_box", BoundingBoxTile::new, BOUNDING_BOX);
 
     public static void register(IEventBus eventBus) {
         BLOCKS.register(eventBus);

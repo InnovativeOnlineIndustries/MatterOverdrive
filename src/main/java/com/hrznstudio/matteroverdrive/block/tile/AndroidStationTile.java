@@ -2,9 +2,8 @@ package com.hrznstudio.matteroverdrive.block.tile;
 
 import com.hrznstudio.matteroverdrive.api.android.IAndroid;
 import com.hrznstudio.matteroverdrive.block.MOBlocks;
-import com.hrznstudio.matteroverdrive.block.extendable.tile.MOBaseTile;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
-import com.hrznstudio.matteroverdrive.container.AndroidStationMenu;
+import com.hrznstudio.matteroverdrive.menu.AndroidStationMenu;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -32,7 +31,9 @@ public class AndroidStationTile extends BaseStationTile<AndroidStationTile> {
         if (super.onActivated(player, hand, hitDirection, hitX, hitY, hitZ) == InteractionResult.SUCCESS) {
             return InteractionResult.SUCCESS;
         }
-        openGui(player);
+        if (isServer()) {
+            openMenu(player);
+        }
         return InteractionResult.SUCCESS;
     }
 
@@ -53,7 +54,7 @@ public class AndroidStationTile extends BaseStationTile<AndroidStationTile> {
         return this;
     }
 
-    public void openGui(Player player) {
+    public void openMenu(Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
             NetworkHooks.openScreen(serverPlayer, this, buffer -> {});
         }

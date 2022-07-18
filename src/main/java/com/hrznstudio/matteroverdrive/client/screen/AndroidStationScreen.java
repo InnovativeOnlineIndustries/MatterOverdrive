@@ -3,16 +3,16 @@ package com.hrznstudio.matteroverdrive.client.screen;
 import com.hrznstudio.matteroverdrive.MatterOverdrive;
 import com.hrznstudio.matteroverdrive.api.android.perk.IAndroidPerk;
 import com.hrznstudio.matteroverdrive.client.screen.elements.PerkButton;
-import com.hrznstudio.matteroverdrive.container.AndroidStationMenu;
+import com.hrznstudio.matteroverdrive.menu.AndroidStationMenu;
 import com.hrznstudio.matteroverdrive.util.MOColorUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
@@ -46,6 +46,8 @@ public class AndroidStationScreen extends AbstractContainerScreen<AndroidStation
     @Override
     protected void init() {
         super.init();
+        titleLabelX = 15;
+        titleLabelY = -35;
         xStart = (int) (this.width * (size/2f));
         yStart = (int) (this.height * (size/6f));
         IAndroidPerk.PERKS.values().forEach(perk -> {
@@ -59,7 +61,12 @@ public class AndroidStationScreen extends AbstractContainerScreen<AndroidStation
     @Override
     protected void renderBg(PoseStack poseStack, float partialTicks, int x, int y) {
         renderBackground(poseStack);
-        renderDynamicBackGround(poseStack);
+        renderDynamicBackground(poseStack);
+    }
+
+    @Override
+    protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY) {
+        this.font.draw(poseStack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, ChatFormatting.WHITE.getColor());
     }
 
     public Runnable getScissors(){
@@ -69,7 +76,7 @@ public class AndroidStationScreen extends AbstractContainerScreen<AndroidStation
         return  () -> RenderSystem.enableScissor((int) (scissorStart * d0), (int) (scissorYStart * d0),  (int)((this.width - this.xStart * 2  - leftSize - 2)* d0), (int) ((this.height - this.yStart -scissorYStart - cornerHeights + 10) * d0));
     }
 
-    public void renderDynamicBackGround(PoseStack poseStack){
+    public void renderDynamicBackground(PoseStack poseStack){
         size = 0.3f;
         xStart = (int) (this.width * (size/2f));
         yStart = (int) (this.height * (size/6f));

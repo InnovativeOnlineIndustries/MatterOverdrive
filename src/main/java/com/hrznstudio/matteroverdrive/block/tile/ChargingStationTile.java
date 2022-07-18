@@ -35,7 +35,7 @@ public class ChargingStationTile extends MOPoweredTile<ChargingStationTile> {
         if (super.onActivated(player, hand, hitDirection, hitX, hitY, hitZ) == InteractionResult.SUCCESS) {
             return InteractionResult.SUCCESS;
         }
-        openGui(player);
+        openMenu(player);
         return InteractionResult.SUCCESS;
     }
 

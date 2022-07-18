@@ -2,7 +2,6 @@ package com.hrznstudio.matteroverdrive.block;
 
 import com.hrznstudio.matteroverdrive.api.android.misc.RotationType;
 import com.hrznstudio.matteroverdrive.block.extendable.block.MORotatableBlock;
-import com.hrznstudio.matteroverdrive.block.tile.BoundingBoxTile;
 import com.hrznstudio.matteroverdrive.block.tile.ChargingStationTile;
 import com.hrznstudio.matteroverdrive.util.MOBlockUtil;
 import com.hrznstudio.matteroverdrive.util.MOTileHelper;
@@ -24,7 +23,7 @@ import javax.annotation.Nullable;
 public class ChargingStationBlock extends MORotatableBlock<ChargingStationTile> {
 
     public ChargingStationBlock() {
-        super(Properties.copy(Blocks.IRON_BLOCK), ChargingStationTile.class);
+        super(Properties.copy(Blocks.IRON_BLOCK).noOcclusion(), ChargingStationTile.class);
     }
 
     @Override
@@ -40,14 +39,14 @@ public class ChargingStationBlock extends MORotatableBlock<ChargingStationTile> 
 
 
     @Override
-    public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
-        super.setPlacedBy(world, pos, state, entity, stack);
-        if (!world.isClientSide()) {
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
+        super.setPlacedBy(level, pos, state, entity, stack);
+        if (!level.isClientSide()) {
             for (int i = 0; i < 2; i++) {
-                world.setBlock(BlockPos.of(BlockPos.offset(i + 1, Direction.UP)), MOBlocks.BOUNDING_BOX.get().defaultBlockState(), 3);
-                MOTileHelper.getTileEntity(world, BlockPos.of(BlockPos.offset(i + 1, Direction.UP)), BoundingBoxTile.class).ifPresent(boundingBoxTile -> {
-                    boundingBoxTile.setParent(pos);
-                });
+                BlockPos bbPos = BlockPos.of(BlockPos.offset(i + 1, Direction.UP));
+                level.setBlock(bbPos, MOBlocks.BOUNDING_BOX.get().defaultBlockState(), 3);
+                BoundingBoxBlock bbBlock = (BoundingBoxBlock) level.getBlockState(bbPos).getBlock();
+                bbBlock.setParentPos(pos);
             }
         }
     }
@@ -57,7 +56,10 @@ public class ChargingStationBlock extends MORotatableBlock<ChargingStationTile> 
         super.onRemove(state, level, pos, newState, isMoving);
         if (!level.isClientSide()) {
             for (int i = 0; i < 2; i++) {
-                level.setBlock(BlockPos.of(BlockPos.offset(i + 1, Direction.UP)), Blocks.AIR.defaultBlockState(), 3);
+                BlockPos bbPos = BlockPos.of(BlockPos.offset(i + 1, Direction.UP));
+                if (level.getBlockState(bbPos).getBlock() instanceof BoundingBoxBlock) {
+                    level.setBlock(bbPos, Blocks.AIR.defaultBlockState(), 3);
+                }
             }
         }
     }
