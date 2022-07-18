@@ -10,8 +10,6 @@ package com.hrznstudio.matteroverdrive.client.renderer.tile;
 
 import com.hrznstudio.matteroverdrive.MatterOverdrive;
 import com.hrznstudio.matteroverdrive.block.tile.AndroidStationTile;
-import com.hrznstudio.matteroverdrive.block.tile.ChargingStationTile;
-import com.hrznstudio.matteroverdrive.reference.ReferenceClient;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -28,8 +26,6 @@ import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.player.Player;
 
 public class RenderAndroidStation extends RenderStation<AndroidStationTile> {
 
@@ -43,7 +39,6 @@ public class RenderAndroidStation extends RenderStation<AndroidStationTile> {
                     RenderSystem.disableBlend();
                     RenderSystem.defaultBlendFunc();
                 }))
-                //.alphaState(new RenderStateShard.TransparencyStateShard().AlphaState(0.003921569F))
                 .createCompositeState(true);
         return RenderType.create("android_station", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, true, state);
     }

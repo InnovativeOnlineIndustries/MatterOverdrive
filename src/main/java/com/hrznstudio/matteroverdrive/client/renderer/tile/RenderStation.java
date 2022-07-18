@@ -47,8 +47,8 @@ public class RenderStation<T extends BaseStationTile<T>> implements BlockEntityR
         }, () -> {
             RenderSystem.disableBlend();
             RenderSystem.defaultBlendFunc();
-        })).createCompositeState(true);
-        return RenderType.create("render_station", DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.TRIANGLE_FAN, 256, false, true, state);
+        })).createCompositeState(false);
+        return RenderType.create("render_station", DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS, 256, false, true, state);
     }
 
     public RenderStation(BlockEntityRenderDispatcher rendererDispatcherIn) {
@@ -117,9 +117,9 @@ public class RenderStation<T extends BaseStationTile<T>> implements BlockEntityR
             RenderSystem.blendFunc(GL_ONE, GL_ONE);
             stack.translate( 0.5,  0.5,  0.5);
             stack.mulPose(Vector3f.YP.rotationDegrees(180));
-            float playerPosX = (float) Mth.clampedLerp((float) player.xo, (float) player.getX(), partialTicks);
-            float playerPosZ = (float) Mth.clampedLerp((float) player.zo, (float) player.getZ(), partialTicks);
-            float angle = (float) Math.toDegrees(Math.atan2(playerPosX - (tile.getBlockPos().getX() + 0.5), playerPosZ - (tile.getBlockPos().getZ() + 0.5)) + Math.PI);
+//            float playerPosX = (float) Mth.clampedLerp((float) player.xo, (float) player.getX(), partialTicks);
+//            float playerPosZ = (float) Mth.clampedLerp((float) player.zo, (float) player.getZ(), partialTicks);
+//            float angle = (float) Math.toDegrees(Math.atan2(playerPosX - (tile.getBlockPos().getX() + 0.5), playerPosZ - (tile.getBlockPos().getZ() + 0.5)) + Math.PI);
             stack.mulPose(Vector3f.YP.rotationDegrees(tile.getLevel().getGameTime() % 360));
 
             RenderSystem.disableCull();
