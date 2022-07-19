@@ -27,6 +27,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
@@ -73,7 +74,7 @@ public class RenderAndroidStation extends RenderStation<AndroidStationTile> {
             stack.mulPose(Vector3f.YN.rotationDegrees(angle));
             VertexConsumer consumer = bufferIn.getBuffer(ANDROID);
             float multiply = 0.35f + (tile.getLevel().getGameTime() % (tile.getLevel().random.nextInt(70) + 1) == 0 ? (0.05f * tile.getLevel().random.nextFloat()) : 0.05f);
-            playerModel.renderToBuffer(stack, consumer ,0, 0, multiply, multiply, multiply, 0.625F);
+            playerModel.renderToBuffer(stack, consumer, 15728640, OverlayTexture.NO_OVERLAY, ReferenceClient.Colors.HOLO.getRed(), ReferenceClient.Colors.HOLO.getBlue(), ReferenceClient.Colors.HOLO.getGreen(), 0.625F);
 
             RenderSystem.enableCull();
             RenderSystem.depthMask(false);
