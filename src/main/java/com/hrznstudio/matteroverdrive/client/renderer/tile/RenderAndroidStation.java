@@ -21,15 +21,22 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityType;
+
+import java.sql.Ref;
 
 public class RenderAndroidStation extends RenderStation<AndroidStationTile> {
 
@@ -47,12 +54,12 @@ public class RenderAndroidStation extends RenderStation<AndroidStationTile> {
         return RenderType.create("android_station", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, true, state);
     }
 
-    public PlayerModel playerModel;
+    private final PlayerModel<?> playerModel;
 
     public RenderAndroidStation(BlockEntityRendererProvider.Context rendererContext) {
         super(rendererContext.getBlockEntityRenderDispatcher());
-        playerModel = new PlayerModel(rendererContext.bakeLayer(ModelLayers.PLAYER), false);
-        playerModel.young = false;
+        this.playerModel = new PlayerModel<>(rendererContext.bakeLayer(ModelLayers.PLAYER), false);
+        this.playerModel.young = false;
     }
 
     @Override
@@ -65,7 +72,7 @@ public class RenderAndroidStation extends RenderStation<AndroidStationTile> {
             RenderSystem.disableCull();
             RenderSystem.depthMask(false);
 
-            RenderSystem.setShaderColor(ReferenceClient.Colors.HOLO.getRed(), ReferenceClient.Colors.HOLO.getGreen(), ReferenceClient.Colors.HOLO.getBlue(), 1.0f);
+            RenderSystem.setShaderColor(ReferenceClient.Colors.HOLO.getRed(), ReferenceClient.Colors.HOLO.getGreen(), ReferenceClient.Colors.HOLO.getBlue(), 0.625f);
             float playerPosX = (float) Mth.clampedLerp((float) player.xo, (float) player.position().x, partialTicks);
             float playerPosZ = (float) Mth.clampedLerp((float) player.zo, (float) player.position().z, partialTicks);
             float angle = (float) Math.toDegrees(Math.atan2(playerPosX - (tile.getBlockPos().getX() + 0.5), playerPosZ - (tile.getBlockPos().getZ() + 0.5)) + Math.PI);
@@ -73,8 +80,7 @@ public class RenderAndroidStation extends RenderStation<AndroidStationTile> {
             stack.mulPose(Vector3f.YP.rotationDegrees(180));
             stack.mulPose(Vector3f.YN.rotationDegrees(angle));
             VertexConsumer consumer = bufferIn.getBuffer(ANDROID);
-            float multiply = 0.35f + (tile.getLevel().getGameTime() % (tile.getLevel().random.nextInt(70) + 1) == 0 ? (0.05f * tile.getLevel().random.nextFloat()) : 0.05f);
-            playerModel.renderToBuffer(stack, consumer, 15728640, OverlayTexture.NO_OVERLAY, ReferenceClient.Colors.HOLO.getRed(), ReferenceClient.Colors.HOLO.getBlue(), ReferenceClient.Colors.HOLO.getGreen(), 0.625F);
+            playerModel.renderToBuffer(stack, consumer, 0, 0, ReferenceClient.Colors.HOLO.getRed() / 255f, ReferenceClient.Colors.HOLO.getBlue() / 255f, ReferenceClient.Colors.HOLO.getGreen() / 255f, 0.625F);
 
             RenderSystem.enableCull();
             RenderSystem.depthMask(false);

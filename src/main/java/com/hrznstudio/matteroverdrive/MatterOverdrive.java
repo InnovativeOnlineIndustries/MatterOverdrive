@@ -33,6 +33,7 @@ public class MatterOverdrive {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         eventBus.addListener(this::clientSetup);
         eventBus.addListener(this::setup);
+        eventBus.addListener(MOClientModEvents::colorHandlerEvent);
         eventBus.addListener(MOClientModEvents::registerKeyBinds);
         eventBus.addListener(MOShaders::onRegisterShaders);
 
