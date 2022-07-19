@@ -1,4 +1,4 @@
-package com.hrznstudio.matteroverdrive.datagen.client.renderer.entity.projectile;
+package com.hrznstudio.matteroverdrive.client.renderer.entity.projectile;
 
 import com.hrznstudio.matteroverdrive.MatterOverdrive;
 import com.hrznstudio.matteroverdrive.entity.projectile.KunaiEntity;

@@ -2,10 +2,10 @@ package com.hrznstudio.matteroverdrive;
 
 import com.hrznstudio.matteroverdrive.android.perks.PerkTree;
 import com.hrznstudio.matteroverdrive.block.MOBlocks;
-import com.hrznstudio.matteroverdrive.datagen.client.MOClientModEvents;
-import com.hrznstudio.matteroverdrive.datagen.client.MOShaders;
-import com.hrznstudio.matteroverdrive.datagen.client.screen.AndroidHudScreen;
-import com.hrznstudio.matteroverdrive.datagen.client.screen.AndroidStationScreen;
+import com.hrznstudio.matteroverdrive.client.MOClientModEvents;
+import com.hrznstudio.matteroverdrive.client.MOShaders;
+import com.hrznstudio.matteroverdrive.client.screen.AndroidHudScreen;
+import com.hrznstudio.matteroverdrive.client.screen.AndroidStationScreen;
 import com.hrznstudio.matteroverdrive.entity.MOEntities;
 import com.hrznstudio.matteroverdrive.item.MOItems;
 import com.hrznstudio.matteroverdrive.network.PacketHandler;

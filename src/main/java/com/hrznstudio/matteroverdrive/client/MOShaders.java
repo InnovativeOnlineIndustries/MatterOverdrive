@@ -1,4 +1,4 @@
-package com.hrznstudio.matteroverdrive.datagen.client;
+package com.hrznstudio.matteroverdrive.client;
 
 import com.hrznstudio.matteroverdrive.MatterOverdrive;
 import com.mojang.blaze3d.shaders.Shader;

@@ -5,9 +5,9 @@
  * This means no, you cannot steal this code. This is licensed for sole use by Horizon Studio and its subsidiaries, you MUST be granted specific written permission by Horizon Studio to use this code, thinking you have permission IS NOT PERMISSION!
  */
 
-package com.hrznstudio.matteroverdrive.datagen.client.animation;
+package com.hrznstudio.matteroverdrive.client.animation;
 
-import com.hrznstudio.matteroverdrive.datagen.client.animation.segment.AnimationSegment;
+import com.hrznstudio.matteroverdrive.client.animation.segment.AnimationSegment;
 
 import java.util.ArrayList;
 import java.util.List;

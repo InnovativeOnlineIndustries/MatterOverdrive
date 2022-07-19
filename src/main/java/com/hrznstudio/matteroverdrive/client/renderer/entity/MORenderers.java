@@ -1,9 +1,9 @@
-package com.hrznstudio.matteroverdrive.datagen.client.renderer.entity;
+package com.hrznstudio.matteroverdrive.client.renderer.entity;
 
 import com.hrznstudio.matteroverdrive.MatterOverdrive;
 import com.hrznstudio.matteroverdrive.block.MOBlocks;
-import com.hrznstudio.matteroverdrive.datagen.client.renderer.entity.projectile.KunaiRenderer;
-import com.hrznstudio.matteroverdrive.datagen.client.renderer.tile.RenderAndroidStation;
+import com.hrznstudio.matteroverdrive.client.renderer.entity.projectile.KunaiRenderer;
+import com.hrznstudio.matteroverdrive.client.renderer.tile.RenderAndroidStation;
 import com.hrznstudio.matteroverdrive.entity.MOEntities;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;

@@ -1,4 +1,4 @@
-package com.hrznstudio.matteroverdrive.datagen.client.screen;
+package com.hrznstudio.matteroverdrive.client.screen;
 
 import com.hrznstudio.matteroverdrive.MatterOverdrive;
 import com.hrznstudio.matteroverdrive.android.perks.PerkTree;
@@ -6,10 +6,10 @@ import com.hrznstudio.matteroverdrive.api.android.IAndroid;
 import com.hrznstudio.matteroverdrive.api.android.gui.IHudElement;
 import com.hrznstudio.matteroverdrive.capabilities.MOCapabilities;
 import com.hrznstudio.matteroverdrive.capabilities.android.AndroidData;
-import com.hrznstudio.matteroverdrive.datagen.client.animation.AnimationConsole;
-import com.hrznstudio.matteroverdrive.datagen.client.animation.segment.AnimationSegmentText;
-import com.hrznstudio.matteroverdrive.datagen.client.screen.elements.PerksHudElement;
-import com.hrznstudio.matteroverdrive.datagen.client.screen.elements.StatsHudElement;
+import com.hrznstudio.matteroverdrive.client.animation.AnimationConsole;
+import com.hrznstudio.matteroverdrive.client.animation.segment.AnimationSegmentText;
+import com.hrznstudio.matteroverdrive.client.screen.elements.PerksHudElement;
+import com.hrznstudio.matteroverdrive.client.screen.elements.StatsHudElement;
 import com.hrznstudio.matteroverdrive.reference.ReferenceClient;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;

@@ -5,10 +5,10 @@
  * This means no, you cannot steal this code. This is licensed for sole use by Horizon Studio and its subsidiaries, you MUST be granted specific written permission by Horizon Studio to use this code, thinking you have permission IS NOT PERMISSION!
  */
 
-package com.hrznstudio.matteroverdrive.datagen.client.renderer.tile;
+package com.hrznstudio.matteroverdrive.client.renderer.tile;
 
 import com.hrznstudio.matteroverdrive.block.tile.BaseStationTile;
-import com.hrznstudio.matteroverdrive.datagen.client.MOShaders;
+import com.hrznstudio.matteroverdrive.client.MOShaders;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
