@@ -20,6 +20,7 @@
     "gui.android_hud.transforming.line.9": "> Y",
     "gui.android_hud.transforming.line.final": "Transformation in Progress",
     "gui.android_station.parent": "Parent: ",
+    "gui.matteroverdrive.androidstation": "Android Upgrade Station",
     "matteroverdrive.perk.level": "Level: ",
     "matteroverdrive.perk.nanobots.name": "Nanobots",
     "matteroverdrive.perk.nanobots.desc.0": "Heals wounds using Energy §a1.0/s§r. Increases Health by §a+5",

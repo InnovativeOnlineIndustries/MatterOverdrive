@@ -8,6 +8,7 @@
 package com.hrznstudio.matteroverdrive.client.renderer.tile;
 
 import com.hrznstudio.matteroverdrive.block.tile.BaseStationTile;
+import com.hrznstudio.matteroverdrive.client.MOShaders;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -41,13 +42,15 @@ public class RenderStation<T extends BaseStationTile<T>> implements BlockEntityR
     public static RenderType TYPE = createRenderType();
 
     public static RenderType createRenderType() {
-        RenderType.CompositeState state = RenderType.CompositeState.builder().setTextureState(new RenderStateShard.TextureStateShard(glowTexture, false, false)).setTransparencyState(new RenderStateShard.TransparencyStateShard("translucent_transparency", () -> {
+        RenderType.CompositeState state = RenderType.CompositeState.builder()
+                .setTextureState(new RenderStateShard.TextureStateShard(glowTexture, false, false))
+                .setTransparencyState(new RenderStateShard.TransparencyStateShard("translucent_transparency", () -> {
             RenderSystem.enableBlend();
             RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
         }, () -> {
             RenderSystem.disableBlend();
             RenderSystem.defaultBlendFunc();
-        })).createCompositeState(false);
+        })).setShaderState(new RenderStateShard.ShaderStateShard(MOShaders::getRenderStationShader)).createCompositeState(false);
         return RenderType.create("render_station", DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS, 256, false, true, state);
     }
 

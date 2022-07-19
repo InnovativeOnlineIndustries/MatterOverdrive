@@ -32,7 +32,7 @@ public class MOBlocks {
     public static RegistryObject<AndroidStationBlock> ANDROID_STATION = block("android_station", AndroidStationBlock::new);
     public static RegistryObject<BlockItem> ANDROID_STATION_ITEM = blockItem("android_station", ANDROID_STATION);
     public static RegistryObject<BlockEntityType<AndroidStationTile>> ANDROID_STATION_TILE = blockEntity("android_station", AndroidStationTile::new, ANDROID_STATION);
-    public static RegistryObject<MenuType<AndroidStationMenu>> ANDROID_CONTAINER = container("android_station", () -> IForgeMenuType.create(((windowId, inv, data) -> new AndroidStationMenu(windowId, inv))));
+    public static RegistryObject<MenuType<AndroidStationMenu>> ANDROID_CONTAINER = container("android_station", () -> IForgeMenuType.create((AndroidStationMenu::new)));
 
     //Charging Station
     public static RegistryObject<ChargingStationBlock> CHARGING_STATION = block("charging_station", ChargingStationBlock::new);

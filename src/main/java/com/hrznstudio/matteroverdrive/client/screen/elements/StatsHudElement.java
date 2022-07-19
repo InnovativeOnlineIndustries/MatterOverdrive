@@ -17,6 +17,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 
 import java.awt.*;
 import java.text.DecimalFormat;
+import java.util.Locale;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -128,6 +129,6 @@ public class StatsHudElement extends HudElement {
     }
 
     private int renderIconWithPercent(PoseStack stack, ResourceLocation holoIcon, double amount, int x, int y, int iconOffsetX, int iconOffsetY, boolean leftSided, Color fromColor, Color toColor, int iconWidth, int iconHeight, float backgroundAlpha) {
-        return this.renderIconWithInfo(stack, holoIcon, DecimalFormat.getPercentInstance().format(amount), MORenderUtil.lerp(fromColor, toColor, Mth.clamp((float) amount, 0, 1)), x, y, iconOffsetX, iconOffsetY, leftSided, iconWidth, iconHeight, backgroundAlpha);
+        return renderIconWithInfo(stack, holoIcon, DecimalFormat.getPercentInstance(Locale.ROOT).format(amount), MORenderUtil.lerp(fromColor, toColor, Mth.clamp((float) amount, 0, 1)), x, y, iconOffsetX, iconOffsetY, leftSided, iconWidth, iconHeight, backgroundAlpha);
     }
 }

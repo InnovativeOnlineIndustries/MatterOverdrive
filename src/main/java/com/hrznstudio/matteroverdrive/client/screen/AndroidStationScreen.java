@@ -50,7 +50,7 @@ public class AndroidStationScreen extends AbstractContainerScreen<AndroidStation
         yStart = (int) (this.height * (size/6f));
         IAndroidPerk.PERKS.values().forEach(perk -> {
             if (perk.getParent() == null){
-                addWidget(new PerkButton(
+                addRenderableWidget(new PerkButton(
                         perk,
                         xStart + leftSize + 32 * perk.getAndroidStationLocation().getX(),
                         yStart + cornerHeights + 32*perk.getAndroidStationLocation().getY(),
@@ -168,6 +168,7 @@ public class AndroidStationScreen extends AbstractContainerScreen<AndroidStation
 
     @Override
     public void render(PoseStack poseStack, int x, int y, float partial) {
+        super.render(poseStack, x, y, partial);
         for (Widget button : this.renderables) {
             if (button instanceof PerkButton && ((PerkButton) button).isHoveredOrFocused()){
                 this.renderComponentTooltip(poseStack, ((PerkButton) button).getTooltipLines(), x - this.getGuiLeft(), y - this.getGuiTop());
@@ -181,13 +182,13 @@ public class AndroidStationScreen extends AbstractContainerScreen<AndroidStation
                 for (int i = 0; i < perk.getChild().size(); i++) {
                     double perkX = x + 84;
                     double perkY = y + 30 * i;
-                    addWidget(new PerkButton(perk.getChild().get(i), perkX, perkY, 18, 18, Component.literal(""), this::getScissors));
+                    addRenderableWidget(new PerkButton(perk.getChild().get(i), perkX, perkY, 18, 18, Component.literal(""), this::getScissors));
                     addChildPerks(perk.getChild().get(i), perkX, perkY);
                 }
             } else {
                 double perkX = x + 53;
                 double perkY = y;
-                addWidget(new PerkButton(perk.getChild().get(0), perkX, perkY, 18, 18, Component.literal(""), this::getScissors));
+                addRenderableWidget(new PerkButton(perk.getChild().get(0), perkX, perkY, 18, 18, Component.literal(""), this::getScissors));
                 addChildPerks(perk.getChild().get(0), perkX, perkY);
             }
         }

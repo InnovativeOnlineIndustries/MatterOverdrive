@@ -10,30 +10,31 @@ import com.hrznstudio.matteroverdrive.network.PacketHandler;
 import com.hrznstudio.matteroverdrive.network.c2s.AndroidPerkTogglePacket;
 import com.hrznstudio.matteroverdrive.sounds.MOSounds;
 import com.hrznstudio.matteroverdrive.util.IHasColor;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = MatterOverdrive.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-@OnlyIn(Dist.CLIENT)
+import java.io.IOException;
 public class MOClientModEvents {
 
-    @SubscribeEvent
     public static void colorHandlerEvent(RegisterColorHandlersEvent.Item event) {
         event.register((stack, tint) -> ((IHasColor) stack.getItem()).getColor(tint),
                 MOItems.ANDROID_PILL_RED.get(), MOItems.ANDROID_PILL_BLUE.get(), MOItems.ANDROID_PILL_YELLOW.get());
     }
 
-
-    @SubscribeEvent
     public static void registerKeyBinds(RegisterKeyMappingsEvent keyMappingsEvent) {
         IAndroidPerk.PERKS.forEach((s, perk) -> {
             if (perk.canBeToggled()) {

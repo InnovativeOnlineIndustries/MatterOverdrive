@@ -95,7 +95,14 @@ public class PerkButton extends AbstractWidget {
             list.add(Component.literal(perk.getDisplayName(iAndroid, 0).getString()).withStyle(perk.getParent() == null || iAndroid.getPerkManager().hasPerk(perk.getParent()) ? ChatFormatting.AQUA : ChatFormatting.RED));
             list.add(Component.translatable("matteroverdrive.perk." + perk.getName() + ".desc" + (perk.getMaxLevel() > 1 ? "." + iAndroid.getPerkManager().getLevel(perk) : "")).withStyle(ChatFormatting.GRAY));
             if (perk.getMaxLevel() > 1){
-                list.add(Component.translatable("matteroverdrive.perk.level").withStyle(ChatFormatting.DARK_AQUA).append(Component.literal(iAndroid.getPerkManager().getLevel(perk) + "§6/§r" + perk.getMaxLevel()).withStyle(ChatFormatting.WHITE)));
+                list.add(
+                        Component.translatable("matteroverdrive.perk.level")
+                                .withStyle(ChatFormatting.DARK_AQUA)
+                                .append(Component.literal(String.valueOf(iAndroid.getPerkManager().getLevel(perk)))
+                                        .append(Component.literal("/").withStyle(ChatFormatting.GOLD))
+                                        .append(Component.literal(String.valueOf(perk.getMaxLevel())).withStyle(ChatFormatting.RESET))
+                                )
+                );
             }
             if (perk.getParent() != null) list.add(Component.translatable("gui.android_station.parent").withStyle(ChatFormatting.GOLD).append(Component.literal(perk.getParent().getDisplayName(iAndroid, 0).getString()).withStyle(ChatFormatting.WHITE)));
             if ((!iAndroid.getPerkManager().hasPerk(perk) || iAndroid.getPerkManager().getLevel(perk) < perk.getMaxLevel()) && perk.getRequiredXP(iAndroid, 0) > 0){

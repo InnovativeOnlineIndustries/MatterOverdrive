@@ -31,9 +31,8 @@ public class AndroidStationTile extends BaseStationTile<AndroidStationTile> {
         if (super.onActivated(player, hand, hitDirection, hitX, hitY, hitZ) == InteractionResult.SUCCESS) {
             return InteractionResult.SUCCESS;
         }
-        if (isServer()) {
-            openMenu(player);
-        }
+        openMenu(player);
+
         return InteractionResult.SUCCESS;
     }
 

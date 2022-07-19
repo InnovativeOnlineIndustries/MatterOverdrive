@@ -10,6 +10,7 @@ package com.hrznstudio.matteroverdrive.client.renderer.tile;
 
 import com.hrznstudio.matteroverdrive.MatterOverdrive;
 import com.hrznstudio.matteroverdrive.block.tile.AndroidStationTile;
+import com.hrznstudio.matteroverdrive.client.MOShaders;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -39,7 +40,7 @@ public class RenderAndroidStation extends RenderStation<AndroidStationTile> {
                     RenderSystem.disableBlend();
                     RenderSystem.defaultBlendFunc();
                 }))
-                .createCompositeState(true);
+                .setShaderState(new RenderStateShard.ShaderStateShard(MOShaders::getAndroidShader)).createCompositeState(true);
         return RenderType.create("android_station", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, true, state);
     }
 
@@ -72,7 +73,7 @@ public class RenderAndroidStation extends RenderStation<AndroidStationTile> {
             stack.mulPose(Vector3f.YN.rotationDegrees(tile.getLevel().getGameTime() % 360));
             VertexConsumer consumer = bufferIn.getBuffer(ANDROID);
             float multiply = 0.35f + (tile.getLevel().getGameTime() % (tile.getLevel().random.nextInt(70) + 1) == 0 ? (0.05f * tile.getLevel().random.nextFloat()) : 0.05f);
-            playerModel.renderToBuffer(stack, consumer ,0, 0, multiply, multiply, multiply, 0.0625F);
+            playerModel.renderToBuffer(stack, consumer ,0, 0, multiply, multiply, multiply, 0.003921569F);
 
             RenderSystem.enableCull();
             RenderSystem.depthMask(false);

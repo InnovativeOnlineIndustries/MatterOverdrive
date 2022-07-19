@@ -30,8 +30,8 @@ public class ExtendableAdvancementProvider extends AdvancementProvider {
             Path path = outputFolder.resolve("data/" + advancement.getId().getNamespace() + "/advancements/" + advancement.getId().getPath() + ".json");
             try {
                 DataProvider.saveStable(cache, advancement.deconstruct().serializeToJson(), path);
-            } catch (IOException e) {
-                MatterOverdrive.LOGGER.info(e);
+            } catch (IOException err) {
+                MatterOverdrive.LOGGER.info(err.getMessage());
             }
         };
         addAdvancements(consumer);
