@@ -5,10 +5,10 @@
  * This means no, you cannot steal this code. This is licensed for sole use by Horizon Studio and its subsidiaries, you MUST be granted specific written permission by Horizon Studio to use this code, thinking you have permission IS NOT PERMISSION!
  */
 
-package com.hrznstudio.matteroverdrive.client.renderer.tile;
+package com.hrznstudio.matteroverdrive.datagen.client.renderer.tile;
 
 import com.hrznstudio.matteroverdrive.block.tile.BaseStationTile;
-import com.hrznstudio.matteroverdrive.client.MOShaders;
+import com.hrznstudio.matteroverdrive.datagen.client.MOShaders;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -120,17 +120,17 @@ public class RenderStation<T extends BaseStationTile<T>> implements BlockEntityR
             RenderSystem.blendFunc(GL_ONE, GL_ONE);
             stack.translate( 0.5,  0.5,  0.5);
             stack.mulPose(Vector3f.YP.rotationDegrees(180));
-//            float playerPosX = (float) Mth.clampedLerp((float) player.xo, (float) player.getX(), partialTicks);
-//            float playerPosZ = (float) Mth.clampedLerp((float) player.zo, (float) player.getZ(), partialTicks);
-//            float angle = (float) Math.toDegrees(Math.atan2(playerPosX - (tile.getBlockPos().getX() + 0.5), playerPosZ - (tile.getBlockPos().getZ() + 0.5)) + Math.PI);
-            stack.mulPose(Vector3f.YP.rotationDegrees(tile.getLevel().getGameTime() % 360));
+            float playerPosX = (float) Mth.clampedLerp((float) player.xo, (float) player.getX(), partialTicks);
+            float playerPosZ = (float) Mth.clampedLerp((float) player.zo, (float) player.getZ(), partialTicks);
+            float angle = (float) Math.toDegrees(Math.atan2(playerPosX - (tile.getBlockPos().getX() + 0.5), playerPosZ - (tile.getBlockPos().getZ() + 0.5)) + Math.PI);
+            stack.mulPose(Vector3f.YP.rotationDegrees(angle));
 
             RenderSystem.disableCull();
 
             stack.mulPose(Vector3f.XP.rotationDegrees(180));
 
             stack.scale(0.02f, 0.02f, 0.02f);
-            String[] info = "Access Denied".split(" "); //TODO Translate
+            String[] info = "Access Denied".split(" ");
             for (int i = 0; i < info.length; i++) {
                 int width = Minecraft.getInstance().font.width(info[i]);
                 stack.pushPose();
@@ -145,9 +145,7 @@ public class RenderStation<T extends BaseStationTile<T>> implements BlockEntityR
         }
     }
 
-    public void drawAdditional(PoseStack stack, MultiBufferSource bufferIn, T tile, double x, double y, double z, float partialTicks) {
-
-    }
+    public void drawAdditional(PoseStack stack, MultiBufferSource bufferIn, T tile, double x, double y, double z, float partialTicks) {}
 
     @Override
     public void render(T tile, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int combinedLightIn, int combinedOverlayIn) {

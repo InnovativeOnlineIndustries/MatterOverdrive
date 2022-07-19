@@ -6,6 +6,7 @@ import com.hrznstudio.matteroverdrive.capabilities.android.AndroidEnergy;
 import com.hrznstudio.matteroverdrive.event.EventManager;
 import com.hrznstudio.matteroverdrive.item.food.AndroidPillItem;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -13,6 +14,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 
@@ -148,10 +150,12 @@ public class PerkTree {
                 });
 
 
-        //Cancel healing when android
+        //Cancel healing if they're an android.
         EventManager.forge(LivingHealEvent.class).process(livingHealEvent -> {
-            //livingHealEvent.getEntityLiving().getCapability(MOCapabilities.ANDROID_DATA).ifPresent(iAndroid -> livingHealEvent.setCanceled(true));
+            livingHealEvent.getEntity().getCapability(MOCapabilities.ANDROID_DATA).ifPresent(iAndroid -> livingHealEvent.setCanceled(true));
         }).subscribe();
+
+        // Stop Androids from eating if they have the "ZERO_CALORIES" perk.
         EventManager.forge(LivingEntityUseItemEvent.Start.class).process(livingEntityUseItemEvent -> {
             livingEntityUseItemEvent.getEntity().getCapability(MOCapabilities.ANDROID_DATA).ifPresent(iAndroid -> {
                 if (iAndroid.getPerkManager().hasPerk(ZERO_CALORIES) && !(livingEntityUseItemEvent.getItem().getItem() instanceof AndroidPillItem)) {
@@ -160,7 +164,6 @@ public class PerkTree {
                 }
             });
         }).subscribe();
-        //TODO Make androids drown
     }
 
 }

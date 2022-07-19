@@ -5,12 +5,13 @@
  * This means no, you cannot steal this code. This is licensed for sole use by Horizon Studio and its subsidiaries, you MUST be granted specific written permission by Horizon Studio to use this code, thinking you have permission IS NOT PERMISSION!
  */
 
-package com.hrznstudio.matteroverdrive.client.renderer.tile;
+package com.hrznstudio.matteroverdrive.datagen.client.renderer.tile;
 
 
 import com.hrznstudio.matteroverdrive.MatterOverdrive;
 import com.hrznstudio.matteroverdrive.block.tile.AndroidStationTile;
-import com.hrznstudio.matteroverdrive.client.MOShaders;
+import com.hrznstudio.matteroverdrive.datagen.client.MOShaders;
+import com.hrznstudio.matteroverdrive.reference.ReferenceClient;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -27,6 +28,7 @@ import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 
 public class RenderAndroidStation extends RenderStation<AndroidStationTile> {
 
@@ -52,8 +54,6 @@ public class RenderAndroidStation extends RenderStation<AndroidStationTile> {
         playerModel.young = false;
     }
 
-
-
     @Override
     public void drawAdditional(PoseStack stack, MultiBufferSource bufferIn, AndroidStationTile tile, double x, double y, double z, float partialTicks) {
         LocalPlayer player = Minecraft.getInstance().player;
@@ -64,16 +64,16 @@ public class RenderAndroidStation extends RenderStation<AndroidStationTile> {
             RenderSystem.disableCull();
             RenderSystem.depthMask(false);
 
-//            RenderSystem.setShaderColor(ReferenceClient.Colors.HOLO.getRed(), ReferenceClient.Colors.HOLO.getGreen(), ReferenceClient.Colors.HOLO.getBlue(), 1.0f);
-//            float playerPosX = (float) Mth.clampedLerp((float) player.xo, (float) player.position().x, partialTicks);
-//            float playerPosZ = (float) Mth.clampedLerp((float) player.zo, (float) player.position().z, partialTicks);
-//            float angle = (float) Math.toDegrees(Math.atan2(playerPosX - (tile.getBlockPos().getX() + 0.5), playerPosZ - (tile.getBlockPos().getZ() + 0.5)) + Math.PI);
+            RenderSystem.setShaderColor(ReferenceClient.Colors.HOLO.getRed(), ReferenceClient.Colors.HOLO.getGreen(), ReferenceClient.Colors.HOLO.getBlue(), 1.0f);
+            float playerPosX = (float) Mth.clampedLerp((float) player.xo, (float) player.position().x, partialTicks);
+            float playerPosZ = (float) Mth.clampedLerp((float) player.zo, (float) player.position().z, partialTicks);
+            float angle = (float) Math.toDegrees(Math.atan2(playerPosX - (tile.getBlockPos().getX() + 0.5), playerPosZ - (tile.getBlockPos().getZ() + 0.5)) + Math.PI);
 
             stack.mulPose(Vector3f.YP.rotationDegrees(180));
-            stack.mulPose(Vector3f.YN.rotationDegrees(tile.getLevel().getGameTime() % 360));
+            stack.mulPose(Vector3f.YN.rotationDegrees(angle));
             VertexConsumer consumer = bufferIn.getBuffer(ANDROID);
             float multiply = 0.35f + (tile.getLevel().getGameTime() % (tile.getLevel().random.nextInt(70) + 1) == 0 ? (0.05f * tile.getLevel().random.nextFloat()) : 0.05f);
-            playerModel.renderToBuffer(stack, consumer ,0, 0, multiply, multiply, multiply, 0.003921569F);
+            playerModel.renderToBuffer(stack, consumer ,0, 0, multiply, multiply, multiply, 0.625F);
 
             RenderSystem.enableCull();
             RenderSystem.depthMask(false);

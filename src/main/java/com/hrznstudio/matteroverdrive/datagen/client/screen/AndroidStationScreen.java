@@ -1,8 +1,8 @@
-package com.hrznstudio.matteroverdrive.client.screen;
+package com.hrznstudio.matteroverdrive.datagen.client.screen;
 
 import com.hrznstudio.matteroverdrive.MatterOverdrive;
 import com.hrznstudio.matteroverdrive.api.android.perk.IAndroidPerk;
-import com.hrznstudio.matteroverdrive.client.screen.elements.PerkButton;
+import com.hrznstudio.matteroverdrive.datagen.client.screen.elements.PerkButton;
 import com.hrznstudio.matteroverdrive.menu.AndroidStationMenu;
 import com.hrznstudio.matteroverdrive.util.MOColorUtil;
 import com.mojang.blaze3d.systems.RenderSystem;

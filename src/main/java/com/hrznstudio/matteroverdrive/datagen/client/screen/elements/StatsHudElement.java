@@ -1,4 +1,4 @@
-package com.hrznstudio.matteroverdrive.client.screen.elements;
+package com.hrznstudio.matteroverdrive.datagen.client.screen.elements;
 
 import com.hrznstudio.matteroverdrive.api.android.IAndroid;
 import com.hrznstudio.matteroverdrive.api.android.gui.HudElement;
