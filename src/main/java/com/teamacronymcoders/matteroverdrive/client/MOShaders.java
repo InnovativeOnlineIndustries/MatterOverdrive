@@ -5,6 +5,8 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.RegisterShadersEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -12,6 +14,8 @@ public class MOShaders {
 
   private static ShaderInstance androidShader;
   private static ShaderInstance renderStationShader;
+
+  public static final Logger LOGGER = LoggerFactory.getLogger("Matter Overdrive: Shaders");
 
   public static void onRegisterShaders(RegisterShadersEvent event) {
     try {
@@ -22,7 +26,7 @@ public class MOShaders {
         renderStationShader = e;
       });
     } catch (IOException err) {
-      MatterOverdrive.LOGGER.warn(err.getMessage());
+      LOGGER.warn(err.getMessage());
     }
   }
 

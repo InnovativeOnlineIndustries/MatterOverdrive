@@ -4,8 +4,8 @@
     "srcrgb": "srcalpha",
     "dstrgb": "1-srcalpha"
   },
-  "vertex": "android_station_shader",
-  "fragment": "android_station_shader",
+  "vertex": "matteroverdrive:android_station_shader",
+  "fragment": "matteroverdrive:android_station_shader",
   "attributes": [
     "Position",
     "Color",
