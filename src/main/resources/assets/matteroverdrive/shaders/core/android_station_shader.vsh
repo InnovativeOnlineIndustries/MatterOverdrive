@@ -13,9 +13,7 @@ uniform sampler2D Sampler1;
 
 uniform mat4 ModelViewMat;
 uniform mat4 ProjMat;
-
-uniform vec3 Light0_Direction;
-uniform vec3 Light1_Direction;
+uniform float GameTime;
 
 out float vertexDistance;
 out vec4 vertexColor;
@@ -23,11 +21,24 @@ out vec4 overlayColor;
 out vec2 texCoord0;
 out vec4 normal;
 
+float rNoise(float x, float y)
+{
+    return fract(sin(dot(vec2(x, y), vec2(12.9898, 78.233))) * 43758.5453);
+}
+
 void main() {
-    gl_Position = ProjMat * ModelViewMat * vec4(Position, 1.0);
+
+    float noiseSpeed = GameTime * 0.1 + Position.x + Position.z + Position.y;
+
+    gl_Position = ProjMat * ModelViewMat * (vec4(Position, 1.0));
+
+    if(step(0.9985, rNoise(noiseSpeed * 100 + 100, 2.0)) == 1) {
+        gl_Position += vec4(rNoise(noiseSpeed * 100 + 123, 2.0) * 0.1, rNoise(noiseSpeed * 100 + 125, 2.0) * 0.1, rNoise(noiseSpeed * 523 + 300, 2.0) * 0.1, 0.0);
+    }
 
     vertexDistance = length((ModelViewMat * vec4(Position, 1.0)).xyz);
     vertexColor = Color; //minecraft_mix_light(Light0_Direction, Light1_Direction, Normal, Color);
+    vertexColor *= 0.95 + (step(0.998, rNoise(noiseSpeed, 2.0)) * 0.2) + (step(0.999, rNoise(noiseSpeed + 100, 2.0)) * 0.15);
     overlayColor = texelFetch(Sampler1, UV1, 0);
     texCoord0 = UV0;
     normal = ProjMat * ModelViewMat * vec4(Normal, 0.0);

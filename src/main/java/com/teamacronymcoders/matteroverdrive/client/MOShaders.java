@@ -22,7 +22,7 @@ public class MOShaders {
       event.registerShader(new ShaderInstance(event.getResourceManager(), new ResourceLocation(MatterOverdrive.MOD_ID, "android_station_shader"), DefaultVertexFormat.NEW_ENTITY), e -> {
         androidShader = e;
       });
-      event.registerShader(new ShaderInstance(event.getResourceManager(), new ResourceLocation(MatterOverdrive.MOD_ID, "render_station_shader"), DefaultVertexFormat.NEW_ENTITY), e -> {
+      event.registerShader(new ShaderInstance(event.getResourceManager(), new ResourceLocation(MatterOverdrive.MOD_ID, "render_station_shader"), DefaultVertexFormat.POSITION_TEX_COLOR), e -> {
         renderStationShader = e;
       });
     } catch (IOException err) {

@@ -45,11 +45,15 @@ public class RenderStation<T extends BaseStationTile<T>> implements BlockEntityR
                 .setTextureState(new RenderStateShard.TextureStateShard(glowTexture, false, false))
                 .setTransparencyState(new RenderStateShard.TransparencyStateShard("translucent_transparency", () -> {
             RenderSystem.enableBlend();
-            RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
+            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.SRC_ALPHA);
         }, () -> {
             RenderSystem.disableBlend();
             RenderSystem.defaultBlendFunc();
-        })).setShaderState(new RenderStateShard.ShaderStateShard(MOShaders::getRenderStationShader)).createCompositeState(false);
+        }))
+                .setLightmapState(new RenderStateShard.LightmapStateShard(true))
+                .setShaderState(new RenderStateShard.ShaderStateShard(MOShaders::getRenderStationShader))
+                .setOverlayState(new RenderStateShard.OverlayStateShard(true))
+                .createCompositeState(false);
         return RenderType.create("render_station", DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS, 256, false, true, state);
     }
 
@@ -73,6 +77,7 @@ public class RenderStation<T extends BaseStationTile<T>> implements BlockEntityR
 
         stack.pushPose();
         stack.translate(0,  height, 0);
+
         VertexConsumer consumer = bufferIn.getBuffer(TYPE);
 
         Color color;
@@ -82,32 +87,58 @@ public class RenderStation<T extends BaseStationTile<T>> implements BlockEntityR
             color = MOColorUtil.INVALID_HOLO_COLOR;
         }
 
-        float multiply = 0.5f + (tile.getLevel().getGameTime() % (random.nextInt(70) + 1) == 0 ? (0.05f * random.nextFloat()) : 0.05f);
+        var red = color.getRed() / 255f;
+        var green = color.getGreen() / 255f;
+        var blue = color.getBlue() / 255f;
+
+        var hologramTop = height + hologramHeight;
 
         Matrix4f matrix = stack.last().pose();
 
-        consumer.vertex(matrix, offset, 0, offset).uv(1, 1).color(color.getRed() * multiply / 255f, color.getGreen() * multiply / 255f, color.getBlue() * multiply / 255f, 1.0f).endVertex();
-        consumer.vertex(matrix,-topSize, height + hologramHeight, -topSize).uv(1, 0).color(color.getRed() * multiply / 255f, color.getGreen() * multiply / 255f, color.getBlue() * multiply / 255f, 1.0f).endVertex();
-        consumer.vertex(matrix,size + topSize, height + hologramHeight, -topSize).uv(0, 0).color(color.getRed() * multiply / 255f, color.getGreen() * multiply / 255f, color.getBlue() * multiply / 255f, 1.0f).endVertex();
-        consumer.vertex(matrix,size, 0, offset).uv(0, 1).color(color.getRed() * multiply / 255f, color.getGreen() * multiply / 255f, color.getBlue() * multiply / 255f, 1.0f).endVertex();
+        this.addVertex(consumer, matrix, offset, 0f, offset,1, 1, red, green, blue, 1.0f);
+        this.addVertex(consumer, matrix,-topSize, hologramTop, -topSize,1, 0, red, green, blue, 1.0f);
+        this.addVertex(consumer, matrix,size + topSize, hologramTop, -topSize,0, 0, red, green, blue, 1.0f);
+        this.addVertex(consumer, matrix, size, 0f, offset,0, 1, red, green, blue, 1.0f);
 
-        consumer.vertex(matrix,size, 0, offset).uv(1, 1).color(color.getRed() * multiply / 255f, color.getGreen() * multiply / 255f, color.getBlue() * multiply / 255f, 1.0f).endVertex();
-        consumer.vertex(matrix,size + topSize, height + hologramHeight, -topSize).uv(1, 0).color(color.getRed() * multiply / 255f, color.getGreen() * multiply / 255f, color.getBlue() * multiply / 255f, 1.0f).endVertex();
-        consumer.vertex(matrix,size + topSize, height + hologramHeight, 1 + topSize).uv(0, 0).color(color.getRed() * multiply / 255f, color.getGreen() * multiply / 255f, color.getBlue() * multiply / 255f, 1.0f).endVertex();
-        consumer.vertex(matrix,size, 0, size).uv(0, 1).color(color.getRed() * multiply / 255f, color.getGreen() * multiply / 255f, color.getBlue() * multiply / 255f, 1.0f).endVertex();
+        this.addVertex(consumer, matrix,size, 0f, offset,1, 1, red, green, blue, 1.0f);
+        this.addVertex(consumer, matrix,size + topSize, hologramTop, -topSize,1, 0, red, green, blue, 1.0f);
+        this.addVertex(consumer, matrix,size + topSize, hologramTop, 1 + topSize,0, 0, red, green, blue, 1.0f);
+        this.addVertex(consumer, matrix,size, 0f, size,0, 1, red, green, blue, 1.0f);
 
-        consumer.vertex(matrix,size, 0, size).uv(1, 1).color(color.getRed() * multiply / 255f, color.getGreen() * multiply / 255f, color.getBlue() * multiply / 255f, 1.0f).endVertex();
-        consumer.vertex(matrix,size + topSize, height + hologramHeight, 1 + topSize).uv(1, 0).color(color.getRed() * multiply / 255f, color.getGreen() * multiply / 255f, color.getBlue() * multiply / 255f, 1.0f).endVertex();
-        consumer.vertex(matrix,-topSize, height + hologramHeight, 1 + topSize).uv(0, 0).color(color.getRed() * multiply / 255f, color.getGreen() * multiply / 255f, color.getBlue() * multiply / 255f, 1.0f).endVertex();
-        consumer.vertex(matrix,offset, 0, size).uv(0, 1).color(color.getRed() * multiply / 255f, color.getGreen() * multiply / 255f, color.getBlue() * multiply / 255f, 1.0f).endVertex();
+        this.addVertex(consumer, matrix, size, 0f, size,1, 1, red, green, blue, 1.0f);
+        this.addVertex(consumer, matrix,size + topSize, hologramTop, 1 + topSize,1, 0, red, green, blue, 1.0f);
+        this.addVertex(consumer, matrix,-topSize, hologramTop, 1 + topSize,0, 0, red, green, blue, 1.0f);
+        this.addVertex(consumer, matrix,offset, 0f, size,0, 1, red, green, blue, 1.0f);
 
-        consumer.vertex(matrix,offset, 0, size).uv(1, 1).color(color.getRed() * multiply / 255f, color.getGreen() * multiply / 255f, color.getBlue() * multiply / 255f, 1.0f).endVertex();
-        consumer.vertex(matrix,-topSize, height + hologramHeight, 1 + topSize).uv(1, 0).color(color.getRed() * multiply / 255f, color.getGreen() * multiply / 255f, color.getBlue() * multiply / 255f, 1.0f).endVertex();
-        consumer.vertex(matrix,-topSize, height + hologramHeight, -topSize).uv(0, 0).color(color.getRed() * multiply / 255f, color.getGreen() * multiply / 255f, color.getBlue() * multiply / 255f, 1.0f).endVertex();
-        consumer.vertex(matrix,offset, 0, offset).uv(0, 1).color(color.getRed() * multiply / 255f, color.getGreen() * multiply / 255f, color.getBlue() * multiply / 255f, 1.0f).endVertex();
+        this.addVertex(consumer, matrix, offset, 0f, size,1, 1, red, green, blue, 1.0f);
+        this.addVertex(consumer, matrix,-topSize, hologramTop, 1 + topSize,1, 0, red, green, blue, 1.0f);
+        this.addVertex(consumer, matrix,-topSize, hologramTop, -topSize,0, 0, red, green, blue, 1.0f);
+        this.addVertex(consumer, matrix,offset, 0f, offset,0, 1, red, green, blue, 1.0f);
         RenderSystem.enableCull();
         RenderSystem.depthMask(false);
         stack.popPose();
+    }
+
+    /**
+     *
+     * This method was created due to data being sent over to the vertex consumer in the wrong order.
+     *
+     * To try and debug or fix the problems.
+     *
+     * @param consumer
+     * @param matrix
+     * @param x coordinates
+     * @param y coordinates
+     * @param z coordinates
+     * @param ux uv x position 0-1
+     * @param uy uv y position 0-1
+     * @param red color 0-1
+     * @param green color 0-1
+     * @param blue color 0-1
+     * @param alpha color 0-1
+     */
+    private void addVertex(VertexConsumer consumer, Matrix4f matrix, float x, float y, float z, float ux, float uy, float red, float green, float blue, float alpha) {
+        consumer.vertex(matrix, x, y, z).uv(ux, uy).color(red, green, blue, alpha).endVertex();
     }
 
 
