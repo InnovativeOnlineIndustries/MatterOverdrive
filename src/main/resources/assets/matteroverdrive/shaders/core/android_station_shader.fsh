@@ -7,6 +7,7 @@ uniform sampler2D Sampler0;
 uniform vec4 ColorModulator;
 uniform float FogStart;
 uniform float FogEnd;
+uniform vec4 FogColor;
 
 in float vertexDistance;
 in vec4 vertexColor;
@@ -22,6 +23,7 @@ void main() {
         discard;
     }
     color *= vertexColor * ColorModulator;
-    color.rgb = mix(overlayColor.rgb, color.rgb, overlayColor.a);
-    fragColor = color * linear_fog_fade(vertexDistance, FogStart, FogEnd);
+    //color.rgb = mix(overlayColor.rgb, color.rgb * 3, overlayColor.a);
+    color.rgb = mix(overlayColor.rgb, color.rgb * 3, overlayColor.a);
+    fragColor = color * linear_fog(color, vertexDistance, FogStart, FogEnd, FogColor);
 }

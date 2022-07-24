@@ -38,13 +38,15 @@ public class RenderAndroidStation extends RenderStation<AndroidStationTile> {
     public static RenderType createRenderAndroidType() {
         RenderType.CompositeState state = RenderType.CompositeState.builder().setTextureState(new RenderStateShard.TextureStateShard(location, false, false)).setTransparencyState(new RenderStateShard.TransparencyStateShard("translucent_transparency", () -> {
                     RenderSystem.enableBlend();
-                    RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
+                    RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
                 }, () -> {
                     RenderSystem.disableBlend();
                     RenderSystem.defaultBlendFunc();
                 }))
+                .setCullState(new RenderStateShard.CullStateShard(false))
+                .setLightmapState(new RenderStateShard.LightmapStateShard(true))
                 .setOverlayState(new RenderStateShard.OverlayStateShard(true))
-                .setShaderState(new RenderStateShard.ShaderStateShard(MOShaders::getAndroidShader)).createCompositeState(true);
+                .setShaderState(new RenderStateShard.ShaderStateShard(MOShaders::getAndroidShader)).createCompositeState(false);
         return RenderType.create("android_station", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, true, state);
     }
 
@@ -64,20 +66,24 @@ public class RenderAndroidStation extends RenderStation<AndroidStationTile> {
             stack.translate(0.5,  2,  0.5);
             stack.mulPose(Vector3f.XP.rotationDegrees(180));
             RenderSystem.disableCull();
-            RenderSystem.depthMask(false);
+            //RenderSystem.depthMask(false);
 
             RenderSystem.setShaderColor(ReferenceClient.Colors.HOLO.getRed(), ReferenceClient.Colors.HOLO.getGreen(), ReferenceClient.Colors.HOLO.getBlue(), 0.625f);
-            float playerPosX = (float) Mth.clampedLerp((float) player.xo, (float) player.position().x, partialTicks);
-            float playerPosZ = (float) Mth.clampedLerp((float) player.zo, (float) player.position().z, partialTicks);
+            float playerPosX = Mth.clampedLerp((float) player.xo, (float) player.position().x, partialTicks);
+            float playerPosZ = Mth.clampedLerp((float) player.zo, (float) player.position().z, partialTicks);
             float angle = (float) Math.toDegrees(Math.atan2(playerPosX - (tile.getBlockPos().getX() + 0.5), playerPosZ - (tile.getBlockPos().getZ() + 0.5)) + Math.PI);
 
             stack.mulPose(Vector3f.YP.rotationDegrees(180));
             stack.mulPose(Vector3f.YN.rotationDegrees(angle));
+            /**
+             * {@link RenderType#ITEM_ENTITY_TRANSLUCENT_CULL}
+             */
             VertexConsumer consumer = bufferIn.getBuffer(ANDROID);
-            playerModel.renderToBuffer(stack, consumer, 0, OverlayTexture.NO_OVERLAY, ReferenceClient.Colors.HOLO.getRed() / 255f, ReferenceClient.Colors.HOLO.getBlue() / 255f, ReferenceClient.Colors.HOLO.getGreen() / 255f, 0.625F);
+
+            playerModel.renderToBuffer(stack, consumer, 0, OverlayTexture.NO_OVERLAY, ReferenceClient.Colors.HOLO.getRed() / 255f, ReferenceClient.Colors.HOLO.getBlue() / 255f, ReferenceClient.Colors.HOLO.getGreen() / 255f, 0.625F);//0.625F);
 
             RenderSystem.enableCull();
-            RenderSystem.depthMask(true);
+            //RenderSystem.depthMask(true);
             stack.popPose();
         }
     }
