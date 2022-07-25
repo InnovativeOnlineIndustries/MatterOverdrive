@@ -11,14 +11,24 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class BoundingBoxBlock extends MOBaseBlock {
 
+    private final VoxelShape boundingBox;
     private BlockPos parentPos;
 
     public BoundingBoxBlock() {
         super(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK));
+        boundingBox = Shapes.block();
+    }
+
+    public BoundingBoxBlock(VoxelShape boundingBox) {
+        super(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK));
+        this.boundingBox = boundingBox;
     }
 
     @Override

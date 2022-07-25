@@ -4,8 +4,10 @@ import com.teamacronymcoders.matteroverdrive.api.misc.RotationType;
 import com.teamacronymcoders.matteroverdrive.block.extendable.block.MORotatableBlock;
 import com.teamacronymcoders.matteroverdrive.block.tile.ChargingStationTile;
 import com.teamacronymcoders.matteroverdrive.util.MOBlockUtil;
+import net.minecraft.SharedConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -40,25 +42,22 @@ public class ChargingStationBlock extends MORotatableBlock<ChargingStationTile> 
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
         super.setPlacedBy(level, pos, state, entity, stack);
-        if (!level.isClientSide()) {
-            for (int i = 0; i < 2; i++) {
-                BlockPos bbPos = BlockPos.of(BlockPos.offset(i + 1, Direction.UP));
-                level.setBlock(bbPos, MOBlocks.BOUNDING_BOX.get().defaultBlockState(), 3);
-                BoundingBoxBlock bbBlock = (BoundingBoxBlock) level.getBlockState(bbPos).getBlock();
-                bbBlock.setParentPos(pos);
-            }
+        BlockPos offsetPos = pos;
+        for (int i = 0; i < 2; i++) {
+            offsetPos = BlockPos.of(BlockPos.offset(offsetPos.asLong(), Direction.UP));
+            level.setBlockAndUpdate(offsetPos, MOBlocks.BOUNDING_BOX.get().defaultBlockState());
+            BoundingBoxBlock bbBlock = (BoundingBoxBlock) level.getBlockState(offsetPos).getBlock();
+            bbBlock.setParentPos(pos);
         }
     }
 
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         super.onRemove(state, level, pos, newState, isMoving);
-        if (!level.isClientSide()) {
-            for (int i = 0; i < 2; i++) {
-                BlockPos bbPos = BlockPos.of(BlockPos.offset(i + 1, Direction.UP));
-                if (level.getBlockState(bbPos).getBlock() instanceof BoundingBoxBlock) {
-                    level.setBlock(bbPos, Blocks.AIR.defaultBlockState(), 3);
-                }
+        for (int i = 0; i < 2; i++) {
+            BlockPos bbPos = BlockPos.of(BlockPos.offset(i + 1, Direction.UP));
+            if (level.getBlockState(bbPos).getBlock() instanceof BoundingBoxBlock) {
+                level.setBlock(bbPos, Blocks.AIR.defaultBlockState(), 3);
             }
         }
     }
