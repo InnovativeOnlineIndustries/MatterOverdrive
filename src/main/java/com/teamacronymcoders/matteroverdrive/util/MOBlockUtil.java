@@ -9,8 +9,10 @@ import net.minecraft.world.level.block.Block;
 public class MOBlockUtil {
 
     public static boolean checkDirectionForState(Level level, BlockPos current, Direction direction, Block block, int amount) {
+        BlockPos offsetPos = current;
         for (int i = 0; i < amount; i++) {
-            if (!level.getBlockState(BlockPos.of(BlockPos.offset( i + 1, direction))).is(block)) return false;
+            offsetPos = BlockPos.of(BlockPos.offset(offsetPos.asLong(), direction));
+            if (!level.getBlockState(offsetPos).is(block)) return false;
         }
         return true;
     }
