@@ -66,7 +66,6 @@ public class RenderAndroidStation extends RenderStation<AndroidStationTile> {
             stack.pushPose();
             stack.translate(0.5,  2,  0.5);
             stack.mulPose(Vector3f.XP.rotationDegrees(180));
-            RenderSystem.disableCull();
             //RenderSystem.depthMask(false);
 
             RenderSystem.setShaderColor(ReferenceClient.Colors.HOLO.getRed(), ReferenceClient.Colors.HOLO.getGreen(), ReferenceClient.Colors.HOLO.getBlue(), 0.625f);
@@ -92,8 +91,6 @@ public class RenderAndroidStation extends RenderStation<AndroidStationTile> {
 
             // This fixes mojank ;) we don't actually use it. This forces a upload to buffer so the values are not lost.
             bufferIn.getBuffer(RenderType.translucentMovingBlock());
-
-            RenderSystem.enableCull();
             //RenderSystem.depthMask(true);
             modelStack.popPose();
             RenderSystem.applyModelViewMatrix();

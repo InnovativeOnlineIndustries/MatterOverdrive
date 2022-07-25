@@ -50,6 +50,7 @@ public class RenderStation<T extends BaseStationTile<T>> implements BlockEntityR
             RenderSystem.disableBlend();
             RenderSystem.defaultBlendFunc();
         }))
+                .setCullState(new RenderStateShard.CullStateShard(false))
                 .setLightmapState(new RenderStateShard.LightmapStateShard(true))
                 .setShaderState(new RenderStateShard.ShaderStateShard(MOShaders::getRenderStationShader))
                 .setOverlayState(new RenderStateShard.OverlayStateShard(true))
