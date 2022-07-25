@@ -15,6 +15,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,6 +52,13 @@ public class AndroidStationTile extends BaseStationTile<AndroidStationTile> {
     @Override
     public AndroidStationTile getSelf() {
         return this;
+    }
+
+
+    public static final AABB RENDER_AABB = new net.minecraft.world.phys.AABB(-1, 0, -1, 2, 3, 2);
+    @Override
+    public AABB getRenderBoundingBox() {
+        return RENDER_AABB.move(this.worldPosition);
     }
 
     public void openMenu(Player player) {
