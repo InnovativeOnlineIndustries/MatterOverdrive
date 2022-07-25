@@ -32,7 +32,12 @@ import javax.annotation.Nullable;
 public class AndroidData implements IAndroid, ICapabilityProvider {
     private final LazyOptional<IAndroid> holder = LazyOptional.of(() -> this);
 
-    public static final int TURNING_TIME = 30 * 21;
+
+    /**
+     * The time it takes for the Android Transformation animation to take.
+     * By default, it's 630 ticks or 31.5 seconds to finish.
+     */
+    public static final int TURNING_TIME = 630;
 
     private static final String IS_ANDROID_NBT = "isAndroid";
     private static final String TRANSFORMATION_TIME_NBT = "transformationTime";

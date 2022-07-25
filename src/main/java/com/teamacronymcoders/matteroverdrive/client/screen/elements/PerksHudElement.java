@@ -9,6 +9,7 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
+import com.teamacronymcoders.matteroverdrive.util.MORenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.ResourceLocation;
@@ -74,7 +75,7 @@ public class PerksHudElement extends HudElement {
             //RenderSystem.blendFunc(GL_SRC_ALPHA, GL_ONE);
             RenderSystem.setShaderColor(baseColor.getRed() / 255f, baseColor.getGreen() / 255f, baseColor.getBlue() / 255f, baseColor.getAlpha() / 255f);
             RenderSystem.setShaderTexture(0, StatsHudElement.BAR_RL);
-            Screen.blit(stack, x, (int) (y + (getHeight(resolution, androidPlayer) - 11) * getPosition().getY()), 0, 0, 174, 11, 174, 11);
+            //Screen.blit(stack, x, (int) (y + (getHeight(resolution, androidPlayer) - 11) * getPosition().getY()), 0, 0, 174, 11, 174, 11);
             y += 10 - 5 * getPosition().getY();
             x += 5;
             int statsX = x;
@@ -103,6 +104,10 @@ public class PerksHudElement extends HudElement {
             stack.translate(x + 11 + (getWidth(resolution, androidPlayer) - 11) * getPosition().getX(), y, 0);
             stack.mulPose(Vector3f.ZP.rotationDegrees(90));
             RenderSystem.setShaderTexture(0, StatsHudElement.BAR_RL);
+            // TODO: Work on a configurable background system.
+            // Draw Shaded Background
+            //Color colorIn = new Color(0, 0, 0, backgroundAlpha);
+            //MORenderUtil.fillRect(stack, x, y - 1, x + width + 2 + width + 2, y + height, colorIn.getRGB(), colorIn.getAlpha());
             Screen.blit(stack, 0, 0, 0, 0, 174, 11, 174, 11);
             stack.popPose();
             y += 86;

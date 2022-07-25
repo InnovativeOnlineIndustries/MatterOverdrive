@@ -90,7 +90,7 @@ public abstract class EnergyWeapon extends Item implements IMOWeapon, ICapabilit
   }
 
   @Override
-  public void appendHoverText(ItemStack stack, @org.jetbrains.annotations.Nullable Level level, List<Component> tooltips, TooltipFlag flag) {
+  public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltips, TooltipFlag flag) {
     IEnergyStorage storage = getStorage(stack);
     tooltips.add(Component.translatable("tooltip.matteroverdrive.charge", storage.getEnergyStored(), storage.getMaxEnergyStored()).withStyle(ChatFormatting.YELLOW));
   }

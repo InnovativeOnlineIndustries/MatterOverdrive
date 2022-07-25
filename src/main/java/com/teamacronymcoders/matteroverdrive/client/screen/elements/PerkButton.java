@@ -39,11 +39,17 @@ public class PerkButton extends AbstractWidget {
         this.runnable = supplier;
     }
 
+    private boolean blink = false;
+    private int count = 0;
+
     @Override
     public void renderButton(PoseStack stack, int mouseX, int mouseY, float partial) {
         runnable.get().run();
-        AtomicReference<Color> color = new AtomicReference<>(MOColorUtil.HOLO_COLOR.darker());
+        AtomicReference<Color> color = new AtomicReference<>(MOColorUtil.HOLO_COLOR.darker().darker());
+
+        // Grabs the color for the button
         if (perk.getParent() != null){
+
             Minecraft.getInstance().player.getCapability(MOCapabilities.ANDROID_DATA).ifPresent(iAndroid -> {
                 if (!iAndroid.getPerkManager().hasPerk(perk.getParent())){
                     color.set(MOColorUtil.INVALID_HOLO_COLOR);
@@ -55,11 +61,36 @@ public class PerkButton extends AbstractWidget {
                 color.set(MOColorUtil.HOLO_COLOR);
             }
         });
+
+        // Blinks the locked traits
+        // TODO: Discuss with Sekwah on how to make this fade the colors between darker and brighter to indicate it being unlockable.
+//        Color unaltered = color.get();
+//        if (color.get().equals(MOColorUtil.HOLO_COLOR.darker().darker())) {
+//            count += 1;
+//            if (count == 20) {
+//                if (!blink) {
+//                    color.set(color.get().darker());
+//                    blink = true;
+//                } else {
+//                    blink = false;
+//                }
+//            }
+//            if (count == 100) {
+//                count = 0;
+//            }
+//        }
+
+        // Sets the Color and Texture of the Button
         RenderSystem.setShaderColor(color.get().getRed() / 255f, color.get().getGreen()/ 255f, color.get().getBlue()  / 255f, 1.0f);
         RenderSystem.setShaderTexture(0, BG_BUTTON);
+        // Draws the Button Background
         blit(stack, x,y, 0,0, 18,18, 18, 18 );
+        // Sets and Draws the Button Icon
         RenderSystem.setShaderTexture(0, perk.getIcon());
         blit(stack, x,y, 0,0, 18,18, 18, 18 );
+
+        // Draws connections
+        //RenderSystem.setShaderColor(unaltered.getRed() / 255f, unaltered.getGreen()/ 255f, unaltered.getBlue()  / 255f, 1.0f);
         if (perk.getChild().size() > 0){
             RenderSystem.setShaderTexture(0, LINE_BUTTON_RIGHT);
             blit(stack, x + 22,y + 6, 0,0, 30, 7, 30, 7);
@@ -74,7 +105,8 @@ public class PerkButton extends AbstractWidget {
                 }
             }
         }
-        if (perk.getMaxLevel() > 0){
+        // If the perk is an upgradable perk, then render a dark circle with the number in the bottom-right corner
+        if (perk.getMaxLevel() > 1){
             Minecraft.getInstance().player.getCapability(MOCapabilities.ANDROID_DATA).ifPresent(iAndroid -> {
                 if (iAndroid.getPerkManager().hasPerk(perk)){
                     RenderSystem.setShaderTexture(0, CIRCLE);
@@ -114,7 +146,7 @@ public class PerkButton extends AbstractWidget {
     }
 
     @Override
-    public void onClick(double p_230982_1_, double p_230982_3_) {
+    public void onClick(double mouseX, double mouseY) {
         PacketHandler.MO_CHANNEL.sendToServer(new AndroidPerkAttemptBuyPacket(perk.getName()));
     }
 

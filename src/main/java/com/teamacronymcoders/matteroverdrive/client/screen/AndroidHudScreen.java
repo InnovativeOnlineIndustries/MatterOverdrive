@@ -15,10 +15,12 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
+import com.teamacronymcoders.matteroverdrive.util.MORenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
@@ -54,7 +56,7 @@ public class AndroidHudScreen{
         MinecraftForge.EVENT_BUS.addListener(this::renderGameOverlay);
         this.opacity = 0.5f;
         this.baseGuiColor = ReferenceClient.Colors.HOLO;
-        this.opacityBackground = 0f;
+        this.opacityBackground = Minecraft.getInstance().options.textBackgroundOpacity().get().floatValue();
         this.shaderEnabled = false;
         this.elementList = new ArrayList<>();
         this.elementList.add(new StatsHudElement());
@@ -108,8 +110,8 @@ public class AndroidHudScreen{
         }
         if (event.getOverlay() == VanillaGuiOverlay.TITLE_TEXT.type()) {
             PoseStack stack = event.getPoseStack();
-            int centerX = event.getWindow().getWidth() / 2;
-            int centerY = event.getWindow().getHeight() / 2;
+            int centerX = event.getWindow().getGuiScaledWidth() / 2;
+            int centerY = event.getWindow().getGuiScaledHeight() / 2;
             //CROSSHAIR
             RenderSystem.setShaderTexture(0, CROSS_HAIR_RL);
             stack.pushPose();
@@ -144,8 +146,8 @@ public class AndroidHudScreen{
 
     private void onTransforming(RenderGuiOverlayEvent.Pre event, IAndroid data){
         PoseStack stack = event.getPoseStack();
-        int centerX = event.getWindow().getWidth() / 2;
-        int centerY = event.getWindow().getHeight() / 2;
+        int centerX = event.getWindow().getGuiScaledWidth() / 2;
+        int centerY = event.getWindow().getGuiScaledHeight() / 2;
         int maxTime = AndroidData.TURNING_TIME;
         int time = maxTime - data.getTurningTime();
         animationConsole.setTime(time);
@@ -154,7 +156,6 @@ public class AndroidHudScreen{
         String[] split = infos.split("\n");
         stack.pushPose();
         stack.translate(10, 40, 0);
-        //stack.scale(0.75f, 0.75f, 0.75f);
         for (int i = 0; i < split.length; i++) {
             String info = split[i];
             Minecraft.getInstance().font.drawShadow(stack, info, 0, i * 9, ReferenceClient.Colors.HOLO.getRGB());
@@ -176,26 +177,22 @@ public class AndroidHudScreen{
         RenderSystem.setShaderTexture(0, location);
         stack.pushPose();
         RenderSystem.enableBlend();
-        //RenderSystem.enableAlphaTest();
         stack.translate(centerX, centerY, 0);
         stack.mulPose(Vector3f.ZP.rotation(Minecraft.getInstance().level.getGameTime()/ 90f * mult * (invert ? 1 : -1)));
         stack.translate(-spinnerSize / 2, -spinnerSize / 2, 0);
         Screen.blit(stack, 0, 0, 0, 0, spinnerSize, spinnerSize, spinnerSize, spinnerSize);
         RenderSystem.disableBlend();
-        //RenderSystem.disableAlphaTest();
         stack.popPose();
     }
 
     public void renderGlitch(RenderGuiOverlayEvent event) {
         event.getPoseStack().pushPose();
         RenderSystem.enableBlend();
-        //RenderSystem.enableAlphaTest();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
         RenderSystem.setShaderColor(1, 1, 1, 1);
         RenderSystem.setShaderTexture(0, glitch_tex);
         Screen.blit(event.getPoseStack(),0, 0,  0,0, 1280, 720, event.getWindow().getWidth(), event.getWindow().getHeight());
         RenderSystem.disableBlend();
-        //RenderSystem.disableAlphaTest();
         event.getPoseStack().popPose();
     }
 
