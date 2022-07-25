@@ -15,6 +15,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -39,13 +40,12 @@ public class PerkButton extends AbstractWidget {
         this.runnable = supplier;
     }
 
-    private boolean blink = false;
     private int count = 0;
 
     @Override
     public void renderButton(PoseStack stack, int mouseX, int mouseY, float partial) {
         runnable.get().run();
-        AtomicReference<Color> color = new AtomicReference<>(MOColorUtil.HOLO_COLOR.darker().darker());
+        AtomicReference<Color> color = new AtomicReference<>(MOColorUtil.HOLO_COLOR.darker().darker().darker());
 
         // Grabs the color for the button
         if (perk.getParent() != null){
@@ -63,22 +63,20 @@ public class PerkButton extends AbstractWidget {
         });
 
         // Blinks the locked traits
-        // TODO: Discuss with Sekwah on how to make this fade the colors between darker and brighter to indicate it being unlockable.
-//        Color unaltered = color.get();
-//        if (color.get().equals(MOColorUtil.HOLO_COLOR.darker().darker())) {
-//            count += 1;
-//            if (count == 20) {
-//                if (!blink) {
-//                    color.set(color.get().darker());
-//                    blink = true;
-//                } else {
-//                    blink = false;
-//                }
-//            }
-//            if (count == 100) {
-//                count = 0;
-//            }
-//        }
+        Color unaltered = color.get();
+        Color brighter = color.get().brighter();
+        if (color.get().equals(MOColorUtil.HOLO_COLOR.darker().darker().darker())) {
+            if (!Minecraft.getInstance().isPaused()) count += 1;
+            float colorTimeOffset = Mth.clamp(Mth.sin(2 * Mth.PI * (count / 120f)), 0, 1);
+            float r = Mth.clamp(Mth.lerp(colorTimeOffset, brighter.getRed(), unaltered.getRed()), 0, 255) / 255f;
+            float g = Mth.clamp(Mth.lerp(colorTimeOffset, brighter.getGreen(), unaltered.getGreen()), 0, 255) / 255f;
+            float b = Mth.clamp(Mth.lerp(colorTimeOffset, brighter.getBlue(), unaltered.getBlue()), 0, 255) / 255f;
+            Color sinColor = new Color(r, g, b, unaltered.getAlpha() / 255f);
+            color.set(sinColor);
+            if (count == 60) {
+                count = 0;
+            }
+        }
 
         // Sets the Color and Texture of the Button
         RenderSystem.setShaderColor(color.get().getRed() / 255f, color.get().getGreen()/ 255f, color.get().getBlue()  / 255f, 1.0f);
@@ -90,7 +88,6 @@ public class PerkButton extends AbstractWidget {
         blit(stack, x,y, 0,0, 18,18, 18, 18 );
 
         // Draws connections
-        //RenderSystem.setShaderColor(unaltered.getRed() / 255f, unaltered.getGreen()/ 255f, unaltered.getBlue()  / 255f, 1.0f);
         if (perk.getChild().size() > 0){
             RenderSystem.setShaderTexture(0, LINE_BUTTON_RIGHT);
             blit(stack, x + 22,y + 6, 0,0, 30, 7, 30, 7);
