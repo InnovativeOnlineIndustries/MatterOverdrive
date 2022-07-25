@@ -26,7 +26,6 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
@@ -66,7 +65,6 @@ public class RenderAndroidStation extends RenderStation<AndroidStationTile> {
             stack.pushPose();
             stack.translate(0.5,  2,  0.5);
             stack.mulPose(Vector3f.XP.rotationDegrees(180));
-            //RenderSystem.depthMask(false);
 
             RenderSystem.setShaderColor(ReferenceClient.Colors.HOLO.getRed(), ReferenceClient.Colors.HOLO.getGreen(), ReferenceClient.Colors.HOLO.getBlue(), 0.625f);
             float playerPosX = Mth.clampedLerp((float) player.xo, (float) player.position().x, partialTicks);
@@ -75,9 +73,7 @@ public class RenderAndroidStation extends RenderStation<AndroidStationTile> {
 
             stack.mulPose(Vector3f.YP.rotationDegrees(180));
             stack.mulPose(Vector3f.YN.rotationDegrees(angle));
-            /**
-             * {@link RenderType#ITEM_ENTITY_TRANSLUCENT_CULL}
-             */
+
             VertexConsumer consumer = bufferIn.getBuffer(ANDROID);
 
             var modelStack = RenderSystem.getModelViewStack();
@@ -91,7 +87,7 @@ public class RenderAndroidStation extends RenderStation<AndroidStationTile> {
 
             // This fixes mojank ;) we don't actually use it. This forces a upload to buffer so the values are not lost.
             bufferIn.getBuffer(RenderType.translucentMovingBlock());
-            //RenderSystem.depthMask(true);
+
             modelStack.popPose();
             RenderSystem.applyModelViewMatrix();
             stack.popPose();

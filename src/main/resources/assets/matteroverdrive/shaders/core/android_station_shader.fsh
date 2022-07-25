@@ -28,7 +28,6 @@ void main() {
 
     float timer = (sin(GameTime * 2400 * 0.5) + 1) / 4 + 0.7;
 
-    // float scanLineOffset = texCoord0.y * 300.0;
     float scanLineOffset = scanLine * 50.0;
 
     float brightness = (pow((color.r + color.g + color.b) / 3.0, 3) * 3.5 + 0.1) * timer + clamp((sin(scanLineOffset + GameTime* 4400) * 0.8) - 0.2, 0, 0.3);
