@@ -117,6 +117,7 @@ public abstract class MOBaseTile<T extends MOBaseTile<T>> extends BlockEntity im
   @Nullable
   @Override
   public AbstractContainerMenu createMenu(int menuId, Inventory inventory, Player player) {
+    // TODO: Reimplement Charging Station GUI
     return null;
   }
 

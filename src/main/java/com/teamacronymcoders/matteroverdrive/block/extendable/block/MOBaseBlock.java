@@ -102,26 +102,11 @@ public abstract class MOBaseBlock extends Block {
 
   @Override
   @SuppressWarnings("deprecation")
-  public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+  public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
     if (!state.is(newState.getBlock())) {
-      Containers.dropContents(worldIn, pos, getDynamicDrops(state, worldIn, pos, newState, isMoving));
-      worldIn.updateNeighbourForOutputSignal(pos, this);
+      level.updateNeighbourForOutputSignal(pos, this);
     }
-    super.onRemove(state, worldIn, pos, newState, isMoving);
-  }
-
-  public NonNullList<ItemStack> getDynamicDrops(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-    NonNullList<ItemStack> stacks = NonNullList.create();
-    BlockEntity blockEntity = worldIn.getBlockEntity(pos);
-    // TODO: Fix the below code
-//    if (blockEntity instanceof ActiveTile && ((ActiveTile<?>) blockEntity).getMultiInventoryComponent() != null) {
-//      for (InventoryComponent<?> inventoryHandler : ((ActiveTile<?>) blockEntity).getMultiInventoryComponent().getInventoryHandlers()) {
-//        for (int i = 0; i < inventoryHandler.getSlots(); i++) {
-//          stacks.add(inventoryHandler.getStackInSlot(i));
-//        }
-//      }
-//    }
-    return stacks;
+    super.onRemove(state, level, pos, newState, isMoving);
   }
 
   public boolean hasIndividualRenderVoxelShape() {
