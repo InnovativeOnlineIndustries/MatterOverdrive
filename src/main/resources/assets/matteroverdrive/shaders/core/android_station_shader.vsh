@@ -29,7 +29,7 @@ float rNoise(float x, float y)
 
 void main() {
 
-    float noiseSpeed = GameTime * 0.1 + Position.x + Position.z + Position.y;
+    float noiseSpeed = GameTime * 0.1 + length(ModelViewMat * vec4(Position, 1.0));
 
     gl_Position = ProjMat * ModelViewMat * (vec4(Position, 1.0));
 
