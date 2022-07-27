@@ -1,0 +1,11 @@
+{
+  "__comment": "Add the following line on the same level as a 'model' declaration.",
+  "loader": "forge:obj",
+  "render_type": "cutout",
+  "flip_v": true,
+  "model": "matteroverdrive:models/block/charging_station_bot.obj",
+  "textures": {
+    "texture0": "matteroverdrive:blocks/charging_station",
+    "particle": "matteroverdrive:blocks/charging_station"
+  }
+}
