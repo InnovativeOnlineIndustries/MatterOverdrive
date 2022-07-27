@@ -4,13 +4,20 @@ import com.teamacronymcoders.matteroverdrive.block.tile.AndroidStationTile;
 import com.teamacronymcoders.matteroverdrive.block.tile.ChargingStationTile;
 import com.teamacronymcoders.matteroverdrive.menu.AndroidStationMenu;
 import com.teamacronymcoders.matteroverdrive.item.MOItems;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -22,6 +29,11 @@ import java.util.function.Supplier;
 import static com.teamacronymcoders.matteroverdrive.MatterOverdrive.MOD_ID;
 
 public class MOBlocks {
+
+    /**
+     * Doesn't block light as these are not full blocks
+     */
+    public static final Material METAL_MACHINE = (new Material.Builder(MaterialColor.METAL).nonSolid().notSolidBlocking()).build();
 
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MOD_ID);
     public static final DeferredRegister<Item> BLOCK_ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID);
@@ -35,12 +47,19 @@ public class MOBlocks {
     public static RegistryObject<MenuType<AndroidStationMenu>> ANDROID_CONTAINER = container("android_station", () -> IForgeMenuType.create((AndroidStationMenu::new)));
 
     //Charging Station
-    public static RegistryObject<ChargingStationBlock> CHARGING_STATION = block("charging_station", ChargingStationBlock::new);
+    public static RegistryObject<ChargingStationBlock> CHARGING_STATION = block("charging_station", () -> {
+        return new ChargingStationBlock(BlockBehaviour.Properties.of(METAL_MACHINE, MaterialColor.METAL).noOcclusion().isSuffocating(MOBlocks::never).isViewBlocking(MOBlocks::never));
+    });
     public static RegistryObject<BlockItem> CHARGING_STATION_ITEM = BLOCK_ITEMS.register("charging_station", () -> new ChargingStationBlock.Item(CHARGING_STATION.get(), new Item.Properties().tab(MOItems.MATTER_OVERDRIVE)));
     public static RegistryObject<BlockEntityType<ChargingStationTile>> CHARGING_STATION_TILE = blockEntity("charging_station", ChargingStationTile::new, CHARGING_STATION);
 
     //Bounding Box
     public static RegistryObject<BoundingBoxBlock> BOUNDING_BOX = block("bounding_box", BoundingBoxBlock::new);
+
+
+    private static boolean never(BlockState p_50806_, BlockGetter p_50807_, BlockPos p_50808_) {
+        return false;
+    }
 
     public static void register(IEventBus eventBus) {
         BLOCKS.register(eventBus);

@@ -10,7 +10,6 @@ in ivec2 UV1;
 in vec3 Normal;
 
 uniform sampler2D Sampler0;
-uniform sampler2D Sampler1;
 uniform float GameTime;
 
 uniform mat4 ModelViewMat;

@@ -1,19 +1,50 @@
 {
   "variants": {
-    "subfacing=north": {
-      "model": "matteroverdrive:block/charging_station",
+    "subfacing=north,middle=false,top=false": {
+      "model": "matteroverdrive:block/charging_station_bot",
       "y": 270
     },
-    "subfacing=south": {
-      "model": "matteroverdrive:block/charging_station",
+    "subfacing=south,middle=false,top=false": {
+      "model": "matteroverdrive:block/charging_station_bot",
       "y": 90
     },
-    "subfacing=west": {
-      "model": "matteroverdrive:block/charging_station",
+    "subfacing=west,middle=false,top=false": {
+      "model": "matteroverdrive:block/charging_station_bot",
       "y": 180
     },
-    "subfacing=east": {
-      "model": "matteroverdrive:block/charging_station"
+    "subfacing=east,middle=false,top=false": {
+      "model": "matteroverdrive:block/charging_station_bot"
+    },
+    "subfacing=north,middle=true,top=false": {
+      "model": "matteroverdrive:block/charging_station_mid",
+      "y": 270
+    },
+    "subfacing=south,middle=true,top=false": {
+      "model": "matteroverdrive:block/charging_station_mid",
+      "y": 90
+    },
+    "subfacing=west,middle=true,top=false": {
+      "model": "matteroverdrive:block/charging_station_mid",
+      "y": 180
+    },
+    "subfacing=east,middle=true,top=false": {
+      "model": "matteroverdrive:block/charging_station_mid"
+    },
+
+    "subfacing=north,middle=false,top=true": {
+      "model": "matteroverdrive:block/charging_station_top",
+      "y": 270
+    },
+    "subfacing=south,middle=false,top=true": {
+      "model": "matteroverdrive:block/charging_station_top",
+      "y": 90
+    },
+    "subfacing=west,middle=false,top=true": {
+      "model": "matteroverdrive:block/charging_station_top",
+      "y": 180
+    },
+    "subfacing=east,middle=false,top=true": {
+      "model": "matteroverdrive:block/charging_station_top"
     }
   }
 }
