@@ -20,6 +20,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,18 +32,21 @@ public class MatterOverdrive {
 
     public MatterOverdrive() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        eventBus.addListener(this::clientSetup);
         eventBus.addListener(this::setup);
-        eventBus.addListener(MOClientModEvents::colorHandlerEvent);
-        eventBus.addListener(MOClientModEvents::registerKeyBinds);
-        eventBus.addListener(MOShaders::onRegisterShaders);
+
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            eventBus.addListener(this::clientSetup);
+            eventBus.addListener(MOClientModEvents::colorHandlerEvent);
+            eventBus.addListener(MOClientModEvents::registerKeyBinds);
+            eventBus.addListener(MOShaders::onRegisterShaders);
+
+            DistExecutor.safeCallWhenOn(Dist.CLIENT, () -> AndroidHudScreen::new);
+        }
 
         MOItems.register(eventBus);
         MOBlocks.register(eventBus);
         MOEntities.register(eventBus);
         MOSounds.register(eventBus);
-
-        DistExecutor.safeCallWhenOn(Dist.CLIENT, () -> AndroidHudScreen::new);
 
         PerkTree.poke();
     }

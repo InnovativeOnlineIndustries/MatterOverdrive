@@ -4,7 +4,6 @@ import com.teamacronymcoders.matteroverdrive.api.android.IAndroid;
 import com.teamacronymcoders.matteroverdrive.block.MOBlocks;
 import com.teamacronymcoders.matteroverdrive.capabilities.MOCapabilities;
 import com.teamacronymcoders.matteroverdrive.menu.AndroidStationMenu;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -38,7 +37,7 @@ public class AndroidStationTile extends BaseStationTile<AndroidStationTile> {
     }
 
     @Override
-    public boolean isUsableByPlayer(LocalPlayer player) {
+    public boolean isUsableByPlayer(Player player) {
         return player.getCapability(MOCapabilities.ANDROID_DATA).map(IAndroid::isAndroid).orElse(false);
     }
 

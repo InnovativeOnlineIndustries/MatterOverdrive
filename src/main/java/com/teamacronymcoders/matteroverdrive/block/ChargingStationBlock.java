@@ -1,8 +1,8 @@
 package com.teamacronymcoders.matteroverdrive.block;
 
+import com.sekwah.sekclib.util.VoxelShapeUtils;
 import com.teamacronymcoders.matteroverdrive.api.misc.RotationType;
 import com.teamacronymcoders.matteroverdrive.block.extendable.block.MOPoweredMultiBlock;
-import com.teamacronymcoders.matteroverdrive.block.extendable.block.MORotatableBlock;
 import com.teamacronymcoders.matteroverdrive.block.extendable.tile.MOPoweredMultiBlockTile;
 import com.teamacronymcoders.matteroverdrive.block.tile.ChargingStationTile;
 import com.teamacronymcoders.matteroverdrive.util.MOBlockUtil;
@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -86,13 +87,21 @@ public class ChargingStationBlock extends MOPoweredMultiBlock<ChargingStationTil
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter blockGetter, BlockPos pos, CollisionContext context) {
         Vec3 vector3d = state.getOffset(blockGetter, pos);
-        VoxelShape shape = Shapes.or(Block.box(1.56D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D));
+        var shape = VoxelShapeUtils.scale(Shapes.or(
+                Block.box(0.0D, 1.8D, 0.1D, 1D, 2.3D, 0.9D),
+                Block.box(0.5D, 1.7D, 0.1D, 0.75D, 2.3D, 0.9D),
+                Block.box(0.25D, 1.6D, 0.1D, 0.5D, 2.3D, 0.9D),
+                Block.box(0.0D, 1.5D, 0.1D, 0.25D, 2.3D, 0.9D),
+                Block.box(0.6584D, 0.7D, 0.4D, 0.8316D, 2.0D, 0.6D),
+                Block.box(0.1D, 0.7D, 0.3D, 0.5D, 2.0D, 0.7D),
+                Block.box(0.0D, 0.0D, 0.1D, 1D, 0.7D, 0.9D)
+        ), 16.0f);
         if (state.getValue(MIDDLE).booleanValue()) {
-            return Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D).move(vector3d.x, vector3d.y, vector3d.z);
+            return Shapes.join(shape, Block.box(0.0D, 0D, 0D, 16D, 16D, 16D).move(0,1,0), BooleanOp.AND).move(vector3d.x, vector3d.y - 1, vector3d.z).optimize();
         } else if(state.getValue(TOP).booleanValue()) {
-            return Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D).move(vector3d.x, vector3d.y, vector3d.z);
+            return Shapes.join(shape, Block.box(0.0D, 0D, 0D, 16D, 16D, 16D).move(0,2,0), BooleanOp.AND).move(vector3d.x, vector3d.y - 2, vector3d.z).optimize();
         }
-        return Shapes.or(Block.box(1.56D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)).move(vector3d.x, vector3d.y, vector3d.z);
+        return Shapes.join(shape, Block.box(0.0D, 0D, 0D, 16D, 16D, 16D), BooleanOp.AND).move(vector3d.x, vector3d.y, vector3d.z).optimize();
     }
 
     @Override

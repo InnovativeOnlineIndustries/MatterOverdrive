@@ -19,7 +19,6 @@ import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import com.teamacronymcoders.matteroverdrive.util.MOColorUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
@@ -27,6 +26,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
 
 import java.awt.*;
 import java.util.Random;
@@ -144,7 +144,7 @@ public class RenderStation<T extends BaseStationTile<T>> implements BlockEntityR
 
 
     public void drawHoloText(PoseStack stack, T tile, double x, double y, double z, float partialTicks) {
-        LocalPlayer player = Minecraft.getInstance().player;
+        Player player = Minecraft.getInstance().player;
         if (!tile.isUsableByPlayer(player)) {
             stack.pushPose();
             RenderSystem.enableBlend();
